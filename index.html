@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متابعة التلاميذ</title>
+    <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --accent: #27ae60;
+            --bg: #f4f7f6;
+            --text: #333;
+            --border: #ddd;
+        }
+        body { font-family: 'Tajawal', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 0; }
+        header { background-color: var(--primary); color: white; padding: 1.5rem 1rem; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);}
+        header h1 { margin: 0; font-size: 1.5rem; }
+        nav { display: flex; justify-content: center; background: var(--secondary); padding: 0.5rem; gap: 8px; flex-wrap: wrap;}
+        nav button { background: rgba(255,255,255,0.1); border: 1px solid transparent; color: white; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-family: inherit; font-size: 1rem; transition: 0.3s;}
+        nav button.active { background: var(--accent); border-color: var(--accent); font-weight: bold;}
+        .container { padding: 20px; max-width: 800px; margin: auto; }
+        .controls { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);}
+        select, input[type="date"], input[type="file"], button { padding: 10px; font-family: inherit; border: 1px solid var(--border); border-radius: 5px; font-size: 1rem;}
+        select { flex-grow: 1; min-width: 200px;}
+        button.btn-primary { background-color: var(--accent); color: white; border: none; cursor: pointer; font-weight: bold; transition: 0.3s;}
+        button.btn-primary:hover { background-color: #219653; }
+        button.btn-whatsapp { background-color: #25D366; color: white; border: none; cursor: pointer; font-weight: bold; }
+        button.btn-download { background-color: #3498db; color: white; border: none; cursor: pointer; font-weight: bold; }
+        .student-row { background: white; padding: 15px; margin-bottom: 12px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 12px; border-right: 4px solid var(--primary);}
+        .student-name { font-weight: bold; font-size: 1.2rem; color: var(--primary); }
+        .options-group { display: flex; gap: 15px; flex-wrap: wrap; align-items: center; background: #f9f9f9; padding: 8px; border-radius: 5px;}
+        .options-group strong { min-width: 80px; color: #555; font-size: 0.95rem;}
+        .options-group label { font-size: 0.95rem; display: flex; align-items: center; gap: 5px; cursor: pointer;}
+        .section { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .section.active { display: block; }
+        .management-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 20px;}
+        .management-card h3 { margin-top: 0; color: var(--primary); border-bottom: 2px solid var(--bg); padding-bottom: 10px;}
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>دفتر الأستاذ الرقمي</h1>
+</header>
+<nav>
+    <button class="active" onclick="switchTab('tracking')">تتبع الأداء</button>
+    <button onclick="switchTab('reports')">التقارير اليومية</button>
+    <button onclick="switchTab('management')">إدارة الأقسام</button>
+</nav>
+
+<div class="container">
+    <div id="tracking" class="section active">
+        <div class="controls">
+            <input type="date" id="recordDate" onchange="loadStudents()">
+            <select id="classSelect" onchange="loadStudents()">
+                <option value="">-- اختر القسم --</option>
+            </select>
+            <button class="btn-primary" onclick="saveData()">💾 حفظ البيانات</button>
+        </div>
+        <div id="studentsList">
+            <p style="text-align: center; color: #777; padding: 20px;">المرجو اختيار التاريخ والقسم لعرض لائحة التلاميذ.</p>
+        </div>
+    </div>
+
+    <div id="reports" class="section">
+        <div class="management-card">
+            <h3>استخراج تقرير حصة</h3>
+            <div class="controls">
+                <input type="date" id="reportDate">
+                <select id="reportClassSelect">
+                    <option value="">-- اختر القسم --</option>
+                </select>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
+                <button class="btn-whatsapp" onclick="generateReport('whatsapp')">📱 إرسال عبر واتساب</button>
+                <button class="btn-download" onclick="generateReport('download')">⬇️ تحميل كملف نصي</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="management" class="section">
+        <div class="management-card">
+            <h3>📥 استيراد لائحة تلاميذ (ملف txt)</h3>
+            <div class="controls" style="flex-direction: column; align-items: stretch;">
+                <select id="manageClassSelect"></select>
+                <input type="file" id="fileInput" accept=".txt">
+                <button class="btn-primary" onclick="importStudents()">استيراد وحفظ اللائحة</button>
+            </div>
+            <ul style="font-size: 0.9rem; color: #555; line-height: 1.6;">
+                <li>يجب أن يحتوي الملف على اسم كل تلميذ في سطر مستقل.</li>
+                <li>استيراد ملف جديد لنفس القسم سيقوم بتحديث اللائحة السابقة.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
