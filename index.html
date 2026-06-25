@@ -6,51 +6,70 @@
     <title>مساجلة - تطبيق المساجلة الشعرية الذكي</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&display=swap');
         body { font-family: 'Cairo', sans-serif; }
+        .pulse-ring { animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.4; } 50% { transform: scale(1.2); opacity: 0; } }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
 
-    <header class="bg-emerald-700 text-white py-4 px-6 shadow-md flex justify-between items-center">
-        <div>
-            <h1 class="text-2xl font-bold">🎙️ تطبيق مُسَاجَلَة</h1>
-            <p class="text-xs text-emerald-100">نافس النظام في فصاحة الشعر العربي</p>
+    <!-- شريط القيادة والنقاط التنافسية -->
+    <header class="bg-emerald-800 text-white py-4 px-6 shadow-md flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <span class="text-2xl">🎙️</span>
+            <div>
+                <h1 class="text-xl font-black tracking-wide">تطبيق مُسَاجَلَة</h1>
+                <p class="text-[10px] text-emerald-200 font-medium">ميدان الفصاحة والذكاء الاصطناعي</p>
+            </div>
         </div>
-        <a href="admin.html" class="bg-emerald-600 hover:bg-emerald-500 text-xs font-bold py-2 px-4 rounded-lg transition">
-            ⚙️ لوحة التحكم
-        </a>
+        
+        <!-- لوحة النتيجة الحية -->
+        <div class="flex items-center gap-4 bg-emerald-900 px-4 py-1.5 rounded-xl border border-emerald-700 shadow-inner">
+            <div class="text-center"><p class="text-[10px] text-emerald-300 font-bold">نقاطك</p><p id="user-score" class="text-lg font-black text-amber-400">0</p></div>
+            <div class="text-emerald-600 font-bold">:</div>
+            <div class="text-center"><p class="text-[10px] text-emerald-300 font-bold">النظام</p><p id="app-score" class="text-lg font-black text-slate-300">0</p></div>
+        </div>
+        
+        <a href="admin.html" class="bg-emerald-700 hover:bg-emerald-600 text-xs font-bold py-2 px-3 rounded-lg transition shadow-sm">⚙️ لوحة التحكم</a>
     </header>
 
-    <main class="max-w-2xl w-full mx-auto p-4 flex-grow flex flex-col justify-center gap-6">
+    <!-- سياق المساجلة الرئيسي -->
+    <main class="max-w-2xl w-full mx-auto p-4 flex-grow flex flex-col justify-center gap-4">
         
-        <div id="arena" class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm min-h-[350px] flex flex-col justify-end gap-4 overflow-y-auto">
+        <!-- ساحة العرض والرسائل المتبادلة -->
+        <div id="arena" class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm min-h-[380px] flex flex-col justify-end gap-4 overflow-y-auto">
             <div class="text-center text-slate-400 my-auto italic" id="welcome-msg">
-                اضغط على الميكروفون وابدأ بإلقاء بيتك الشعري...
+                اضغط على الميكروفون وابدأ بإلقاء بيتك الشعري الأول بالفصحى...
             </div>
         </div>
 
-        <div class="text-center">
-            <span id="target-letter-badge" class="hidden bg-amber-100 text-amber-800 font-bold px-4 py-2 rounded-full border border-amber-300">
-                الحرف المطلوب تبدأ به: <span id="target-letter" class="text-xl text-emerald-700"></span>
+        <!-- شارة توجيه المستخدم للحرف المطلوب -->
+        <div class="text-center min-h-[40px]">
+            <span id="target-letter-badge" class="hidden bg-amber-50 text-amber-900 font-bold px-5 py-2 rounded-full border border-amber-200 text-sm shadow-sm">
+                الحرف المطلوب تبدأ به الآن: <span id="target-letter" class="text-2xl text-emerald-700 font-black mx-1"></span>
             </span>
         </div>
 
-        <div class="flex flex-col items-center gap-3">
-            <button id="mic-btn" class="bg-emerald-600 hover:bg-emerald-500 text-white w-20 h-20 rounded-full flex items-center justify-center shadow-lg transition-all transform active:scale-95 cursor-pointer">
-                <svg id="mic-icon" class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
-                </svg>
-            </button>
-            <p id="status-text" class="text-sm font-medium text-slate-500">اضغط للتحدث</p>
+        <!-- أزرار التسجيل والموجة البصرية التفاعلية -->
+        <div class="flex flex-col items-center gap-3 my-2">
+            <div class="relative flex items-center justify-center">
+                <div id="visualizer" class="absolute w-24 h-24 rounded-full bg-red-500 hidden pulse-ring"></div>
+                <button id="mic-btn" class="relative z-10 bg-emerald-600 hover:bg-emerald-500 text-white w-20 h-20 rounded-full flex items-center justify-center shadow-lg transition-all transform active:scale-95 cursor-pointer">
+                    <svg id="mic-icon" class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                    </svg>
+                </button>
+            </div>
+            <p id="status-text" class="text-xs font-bold text-slate-400 tracking-wide">اضغط لبدء الإلقاء</p>
         </div>
-
     </main>
 
-    <footer class="text-center py-4 text-xs text-slate-400 border-t border-slate-200">
-        جميع الحقوق محفوظة © 2026 - تطبيق المساجلة الشعرية
+    <footer class="text-center py-3 text-[11px] text-slate-400 border-t border-slate-200 bg-white">
+        تمت مراجعة الهياكل العروضية التامة للمادة الشعرية كاملة © 2026
     </footer>
 
+    <!-- استدعاء ملفات التحكم بالترتيب الصحيح -->
     <script src="js/database.js"></script>
     <script src="js/app.js"></script>
 </body>

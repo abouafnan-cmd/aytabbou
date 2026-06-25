@@ -2,15 +2,19 @@ let poetryDB = getPoetryDatabase();
 let usedVerses = new Set();
 let nextRequiredLetter = "";
 
+let userScore = 0;
+let appScore = 0;
+
 const micBtn = document.getElementById('mic-btn');
-const micIcon = document.getElementById('mic-icon');
 const statusText = document.getElementById('status-text');
 const arena = document.getElementById('arena');
 const welcomeMsg = document.getElementById('welcome-msg');
 const targetLetterBadge = document.getElementById('target-letter-badge');
 const targetLetterSpan = document.getElementById('target-letter');
+const visualizer = document.getElementById('visualizer');
+const userScoreEme = document.getElementById('user-score');
+const appScoreEme = document.getElementById('app-score');
 
-// ضبط محرك التعرف على الصوت
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 let recognition;
 let isListening = false;
@@ -22,14 +26,18 @@ if (SpeechRecognition) {
 
     recognition.onstart = () => {
         isListening = true;
-        statusText.innerText = "جاري الاستماع... ألقِ بيتك الآن";
+        statusText.innerText = "أنا أستمع إليك.. ألقِ البيت";
+        statusText.classList.add('text-red-500');
         micBtn.classList.replace('bg-emerald-600', 'bg-red-600');
+        visualizer.classList.remove('hidden');
     };
 
     recognition.onend = () => {
         isListening = false;
-        statusText.innerText = "اضغط للتحدث";
+        statusText.innerText = "اضغط لبدء الإلقاء";
+        statusText.classList.remove('text-red-500');
         micBtn.classList.replace('bg-red-600', 'bg-emerald-600');
+        visualizer.classList.add('hidden');
     };
 
     recognition.onresult = (event) => {
@@ -38,10 +46,10 @@ if (SpeechRecognition) {
     };
 
     recognition.onerror = () => {
-        statusText.innerText = "تعذر التقاط الصوت، حاول مجدداً";
+        statusText.innerText = "أعد المحاولة بوضوح من فضلك";
     };
 } else {
-    statusText.innerText = "المتصفح لا يدعم ميزة التعرف على الصوت الفوري.";
+    statusText.innerText = "المتصفح لا يدعم التسجيل الفوري";
     micBtn.disabled = true;
 }
 
@@ -56,43 +64,59 @@ micBtn.addEventListener('click', () => {
 });
 
 function handleUserTurn(userText) {
-    const cleanText = userText.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()؟?]/g, "").trim();
+    // تصفية الحركات والرموز لتحديد العروض الإملائي
+    const cleanText = userText.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()؟?]/g, "").replace(/[ًٌٍَُِّْ]/g, "").trim();
     if (!cleanText) return;
 
-    const firstLetter = cleanText.charAt(0);
-    const lastLetter = cleanText.charAt(cleanText.length - 1);
+    let firstLetter = cleanText.charAt(0);
+    if (cleanText.startsWith("ال") && cleanText.length > 2) {
+        firstLetter = cleanText.charAt(2);
+    }
+
+    let lastLetter = cleanText.charAt(cleanText.length - 1);
+    
+    // تفعيل شروط إسقاط حروف المد وهاء الغائب المتفق عليها عروضياً
+    if (["ا", "و", "ي"].includes(lastLetter) && cleanText.length > 1) {
+        lastLetter = cleanText.charAt(cleanText.length - 2);
+    }
+    if (lastLetter === "ه" && cleanText.length > 1) {
+        lastLetter = cleanText.charAt(cleanText.length - 2);
+    }
 
     if (nextRequiredLetter && firstLetter !== nextRequiredLetter) {
-        appendMessage('system', `خطأ! يجب أن تبدأ بحرف (${nextRequiredLetter}). لقد بدأت بحرف (${firstLetter}).`);
-        speakText(`عذراً، يجب أن تبدأ بحرف ${nextRequiredLetter}`);
+        appendMessage('system', `خطأ في الروي! يجب أن تبدأ بحرف (${nextRequiredLetter}). أنت بدأت بحرف (${firstLetter}).`);
+        speakText(`يجب أن تبدأ بحرف ${nextRequiredLetter}`);
+        appScore += 1;
+        appScoreEme.innerText = appScore;
         return;
     }
 
     appendMessage('user', userText);
+    userScore += 1;
+    userScoreEme.innerText = userScore;
 
     setTimeout(() => {
         appReply(lastLetter);
-    }, 1200);
+    }, 1400);
 }
 
 function appReply(letter) {
-    // تحديث قاعدة البيانات في حال تمت إضافات من لوحة التحكم
     poetryDB = getPoetryDatabase();
-    
     const match = poetryDB.find(v => v.first === letter && !usedVerses.has(v.id));
 
     if (match) {
         usedVerses.add(match.id);
-        const poetInfo = match.poet ? ` [${match.poet}]` : '';
-        appendMessage('app', match.text + poetInfo);
+        appendMessage('app', match.text);
         speakText(match.text);
 
         nextRequiredLetter = match.rawiyy;
         targetLetterSpan.innerText = nextRequiredLetter;
         targetLetterBadge.classList.remove('hidden');
     } else {
-        appendMessage('app', `ما شاء الله! لم أجد بيتاً يبدأ بحرف (${letter}). تفوّقت عليّ! 🏆`);
-        speakText("أحسنت، لقد فزت في هذه الجولة");
+        appendMessage('app', `لله درّك! لم أجد بيتاً يبدأ بحرف (${letter}). لقد غلبتني في هذه الجولة! 🏆`);
+        speakText("ما شاء الله، لقد فزت علي في هذه الجولة");
+        userScore += 5;
+        userScoreEme.innerText = userScore;
         nextRequiredLetter = "";
         targetLetterBadge.classList.add('hidden');
     }
@@ -100,10 +124,10 @@ function appReply(letter) {
 
 function appendMessage(sender, text) {
     const msgDiv = document.createElement('div');
-    msgDiv.className = `p-3 rounded-xl max-w-[85%] text-sm md:text-base ${
-        sender === 'user' ? 'bg-emerald-100 text-emerald-900 self-start' : 
-        sender === 'app' ? 'bg-blue-100 text-blue-900 self-end text-left font-bold' : 
-        'bg-rose-100 text-rose-900 self-center text-center text-xs'
+    msgDiv.className = `p-3.5 rounded-2xl max-w-[85%] text-sm md:text-base shadow-sm border ${
+        sender === 'user' ? 'bg-emerald-50 border-emerald-100 text-emerald-900 self-start' : 
+        sender === 'app' ? 'bg-slate-800 border-slate-700 text-slate-100 self-end text-left font-medium tracking-wide' : 
+        'bg-rose-50 border-rose-100 text-rose-800 self-center text-center text-xs'
     }`;
     msgDiv.innerText = text;
     arena.appendChild(msgDiv);
@@ -112,9 +136,16 @@ function appendMessage(sender, text) {
 
 function speakText(text) {
     if ('speechSynthesis' in window) {
-        const cleanSpeech = text.split('[')[0].replace('*', ' '); // عزل اسم الشاعر عن النطق
+        const cleanSpeech = text.replace('*', ' ');
         const utterance = new SpeechSynthesisUtterance(cleanSpeech);
-        utterance.lang = 'ar-EG'; 
+        
+        const voices = window.speechSynthesis.getVoices();
+        const arabicVoice = voices.find(voice => voice.lang.startsWith('ar'));
+        if (arabicVoice) utterance.voice = arabicVoice;
+
+        utterance.lang = 'ar-SA';
+        utterance.rate = 0.78; // خفض السرعة ليصبح الإلقاء فخماً ورزيناً
+        utterance.pitch = 1.0; 
         window.speechSynthesis.speak(utterance);
     }
 }
