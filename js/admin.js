@@ -19,7 +19,6 @@ function checkAuth() {
 }
 
 loginBtn.addEventListener('click', () => {
-    // تفعيل قفل الحماية بكلمة المرور المشترطة
     if (passwordInput.value === '1982') {
         sessionStorage.setItem('admin_authenticated', 'true');
         loginError.classList.add('hidden');
@@ -38,9 +37,15 @@ logoutBtn.addEventListener('click', () => {
     window.location.reload();
 });
 
+// جلب وحفظ الأبيات الإضافية المخصصة
+function getCustomDatabase() {
+    const localData = localStorage.getItem('custom_musajala_db');
+    return localData ? JSON.parse(localData) : [];
+}
+
 function renderTable() {
     if (sessionStorage.getItem('admin_authenticated') !== 'true') return;
-    const db = getPoetryDatabase();
+    const db = getCustomDatabase();
     totalCountSpan.innerText = db.length;
     tableBody.innerHTML = '';
 
@@ -61,30 +66,29 @@ function renderTable() {
 
 form.addEventListener('submit', (e) => {
     e.preventDefault();
-    const db = getPoetryDatabase();
+    const db = getCustomDatabase();
     const newVerse = {
         id: Date.now(),
         text: document.getElementById('verse-text').value.trim(),
         first: document.getElementById('first-letter').value.trim(),
-        rawiyy: document.getElementById('rawiyy-letter').value.trim(),
-        poet: document.getElementById('poet-name').value.trim()
+        rawiyy: document.getElementById('rawiyy-letter').value.trim()
     };
     db.push(newVerse);
-    savePoetryDatabase(db);
+    localStorage.setItem('custom_musajala_db', JSON.stringify(db));
     form.reset();
     renderTable();
 });
 
 window.deleteVerse = function(id) {
-    let db = getPoetryDatabase();
+    let db = getCustomDatabase();
     db = db.filter(v => v.id !== id);
-    savePoetryDatabase(db);
+    localStorage.setItem('custom_musajala_db', JSON.stringify(db));
     renderTable();
 };
 
 resetBtn.addEventListener('click', () => {
-    if(confirm('هل أنت متأكد من العودة للقاعدة الافتراضية؟')) {
-        localStorage.removeItem('musajala_db');
+    if(confirm('هل أنت متأكد من مسح جميع الأبيات الإضافية المضافة يدوياً؟')) {
+        localStorage.removeItem('custom_musajala_db');
         renderTable();
     }
 });
