@@ -1,46 +1,64 @@
-<!-- Navbar الموحد لصفحات التلميذ لحل مشكلة العودة للرئيسية -->
-<header class="bg-emerald-600 text-white shadow-md py-4 px-6 flex justify-between items-center">
-    <h1 class="text-base md:text-xl font-bold">منصة اللغة العربية | فضاء التلميذ</h1>
-    <nav class="space-x-4 space-x-reverse text-xs md:text-sm font-semibold">
-        <!-- رابط صريح للعودة إلى الصفحة الرئيسية واستبدال المستوى -->
-        <a href="../index.html" class="bg-emerald-700 hover:bg-emerald-800 px-3 py-1.5 rounded-lg border border-emerald-500">تغيير المستوى 🏠</a>
-        <a href="library.html" class="hover:underline">المكتبة</a>
-        <a href="assignments.html" class="hover:underline">التكليفات</a>
-        <a href="quizzes.html" class="font-bold underline">الاختبارات</a>
-    </nav>
-</header>
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التلميذ الرئيسية</title>
+    <title>فضاء التلميذ | منصة اللغة العربية</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style> body { font-family: 'Cairo', sans-serif; } </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
+<body class="bg-gray-50 min-h-screen text-gray-800">
 
-    <header class="bg-emerald-600 text-white py-4 px-6 shadow-md flex justify-between items-center">
-        <h1 class="font-bold text-lg">فضاء التلميذ | الرئيسية</h1>
-        <nav class="space-x-4 space-x-reverse text-xs">
-            <a href="dashboard.html" class="font-bold underline">الرئيسية</a>
-            <a href="library.html" class="hover:underline">المكتبة</a>
-            <a href="assignments.html" class="hover:underline">التكليفات</a>
-            <a href="performance.html" class="hover:underline">نتائجي</a>
-        </nav>
-    </header>
-
-    <main class="max-w-5xl mx-auto my-8 p-4 space-y-6">
-        
-        <div class="bg-emerald-700 text-white p-6 rounded-2xl shadow-sm flex justify-between items-center">
-            <div>
-                <h2 class="text-xl font-bold">أهلاً بك، أحمد! 👋</h2>
-                <p class="text-xs text-emerald-100 mt-1">تفقد الدروس الجديدة والتكليفات المطلوبة لهذا الأسبوع.</p>
-            </div>
-            <a href="assignments.html" class="px-4 py-2 bg-white text-emerald-800 rounded-lg text-xs font-bold hover:bg-emerald-50">عرض التكليفات</a>
+    <!-- Auth Box (if not logged in) -->
+    <div id="login-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div class="bg-white max-w-md w-full p-6 rounded-2xl shadow-xl space-y-4">
+            <h2 class="text-lg font-bold text-center text-gray-800">تسجيل الدخول للمنصة</h2>
+            <p class="text-xs text-gray-500 text-center">أدخل المعرف الشخصي الخاص بك للوصول إلى دروسك والتكليفات</p>
+            <input type="text" id="student-code-input" placeholder="أدخل المعرف الشخصي (مثال: K130092)" class="w-full p-3 border rounded-xl text-center font-mono outline-none focus:ring-2 focus:ring-emerald-500">
+            <p id="login-error" class="text-xs text-red-600 text-center font-bold hidden">المعرف الشخصي غير موجود في لائحة هذا المستوى!</p>
+            <button onclick="loginStudent()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-md">تأكيد الدخول</button>
         </div>
+    </div>
 
-    </main>
+    <!-- Main Content (Shown after login) -->
+    <div id="main-student-content" class="hidden">
+        <header class="bg-emerald-600 text-white shadow-md py-4 px-6 flex justify-between items-center">
+            <h1 class="text-lg font-bold">منصة اللغة العربية | فضاء التلميذ</h1>
+            <a href="../index.html" class="bg-emerald-700 hover:bg-emerald-800 px-3 py-1.5 rounded-lg text-xs font-bold">تغيير المستوى 🏠</a>
+        </header>
 
+        <main class="max-w-4xl mx-auto my-8 p-4 space-y-6">
+            <!-- Welcome Header -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100 flex justify-between items-center">
+                <div>
+                    <h2 class="text-xl font-bold text-emerald-800" id="welcome-msg">مرحباً بالتلميذ(ة): ...</h2>
+                    <p class="text-xs text-gray-500 mt-1">تمنياتنا لك بالتوفيق والنجاح في مسارك الدراسي.</p>
+                </div>
+                <span class="text-3xl">🎓</span>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function loginStudent() {
+            const code = document.getElementById('student-code-input').value.trim();
+            const urlParams = new URLSearchParams(window.location.search);
+            const level = urlParams.get('level') || 'common-sci';
+
+            const allStudents = JSON.parse(localStorage.getItem('edu_students') || '{}');
+            const levelStudents = allStudents[level] || [];
+
+            const foundStudent = levelStudents.find(s => s.code === code);
+
+            if (foundStudent) {
+                document.getElementById('login-modal').classList.add('hidden');
+                document.getElementById('main-student-content').classList.remove('hidden');
+                document.getElementById('welcome-msg').innerText = `مرحباً بالتلميذ(ة): ${foundStudent.name}`;
+            } else {
+                document.getElementById('login-error').classList.remove('hidden');
+            }
+        }
+    </script>
 </body>
 </html>
