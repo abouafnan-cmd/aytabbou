@@ -8,17 +8,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Cairo', sans-serif; }
-        /* إخفاء شريط التمرير مع الإبقاء على فعاليته للهواتف */
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        /* تأثيرات الظهور السلس */
         .fade-in { animation: fadeIn 0.3s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-800 pb-12">
 
-    <!-- الترويسة العلوية العصرية -->
+    <!-- الترويسة العلوية -->
     <header class="bg-indigo-700 text-white shadow-lg sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
@@ -34,7 +32,7 @@
 
     <main class="max-w-7xl mx-auto mt-6 px-4 sm:px-6 lg:px-8 space-y-6">
 
-        <!-- شريط التبويبات المتجاوب مع الهواتف (قابل للتمرير الأفقي) -->
+        <!-- شريط التبويبات -->
         <div class="flex gap-2 overflow-x-auto hide-scrollbar border-b border-slate-200 pb-2">
             <button onclick="switchTab('announcements-tab', this)" class="tab-btn active-tab whitespace-nowrap px-5 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-bold shadow-md transition-all">📢 الإخبارات والإعلانات</button>
             <button onclick="switchTab('quizzes-tab', this)" class="tab-btn whitespace-nowrap px-5 py-2.5 bg-white text-slate-600 hover:bg-slate-100 rounded-xl text-sm font-bold border border-slate-200 transition-all">📝 الاختبارات</button>
@@ -42,7 +40,7 @@
             <button onclick="switchTab('lessons-tab', this)" class="tab-btn whitespace-nowrap px-5 py-2.5 bg-white text-slate-600 hover:bg-slate-100 rounded-xl text-sm font-bold border border-slate-200 transition-all">📚 الدروس والمكونات</button>
         </div>
 
-        <!-- ==================== TAB 1: إدارة الإخبارات والإعلانات ==================== -->
+        <!-- ==================== TAB 1: الإخبارات والإعلانات ==================== -->
         <section id="announcements-tab" class="tab-content fade-in space-y-6">
             <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100">
                 <h2 class="text-lg md:text-xl font-bold text-indigo-900 border-b border-slate-100 pb-4 mb-5">إدارة الإخبارات والإعلانات</h2>
@@ -105,29 +103,62 @@
             <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100">
                 <h2 class="text-lg md:text-xl font-bold text-indigo-900 border-b border-slate-100 pb-4 mb-5">إدارة لوائح التلاميذ والمعرفات الشخصية</h2>
 
+                <!-- 1. تحديد المستوى والقسم -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
                     <div>
                         <label class="block text-sm font-semibold mb-2 text-slate-700">اختيار المستوى الدراسي</label>
-                        <select id="student-level-select" class="w-full p-3.5 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-sm">
-                            <option>جذع مشترك علوم</option>
-                            <option>جذع مشترك آداب</option>
-                            <option>الأولى باكلوريا علوم</option>
-                            <option>الأولى باكلوريا آداب</option>
-                            <option>الثانية باكلوريا علوم</option>
-                            <option>الثانية باكلوريا آداب</option>
+                        <select id="student-level-select" onchange="loadStudentsList()" class="w-full p-3.5 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-sm">
+                            <option value="common-sci">جذع مشترك علوم</option>
+                            <option value="common-lit">جذع مشترك آداب</option>
+                            <option value="1bac-sci">الأولى باكلوريا علوم</option>
+                            <option value="1bac-lit">الأولى باكلوريا آداب</option>
+                            <option value="2bac-sci">الثانية باكلوريا علوم</option>
+                            <option value="2bac-lit">الثانية باكلوريا آداب</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold mb-2 text-slate-700">رقم / اسم القسم</label>
-                        <input type="text" id="student-class-input" placeholder="مثال: 1 أو 2 أو أ" class="w-full p-3.5 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 focus:bg-white text-sm">
+                        <label class="block text-sm font-semibold mb-2 text-slate-700">رقم / اسم القسم (لتحديد اللائحة)</label>
+                        <input type="text" id="student-class-input" onkeyup="loadStudentsList()" placeholder="مثال: 1 أو 2 أو أ" class="w-full p-3.5 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 focus:bg-white text-sm">
                     </div>
                 </div>
 
-                <div class="p-5 bg-indigo-50/50 rounded-2xl border border-indigo-100 space-y-3">
-                    <h3 class="text-sm font-bold text-indigo-900">رفع لائحة قسم كامل عبر ملف TXT:</h3>
-                    <p class="text-xs text-slate-500 leading-relaxed">تأكد من اختيار المستوى ورقم القسم أعلاه أولاً. صيغة السطر: <code class="bg-white px-2 py-0.5 border border-slate-200 rounded shadow-sm text-indigo-600">الاسم الكامل, المعرف الشخصي</code></p>
-                    <input type="file" accept=".txt" class="block w-full text-sm text-slate-500 file:ml-3 file:py-2.5 file:px-5 file:rounded-xl file:border-0 file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 cursor-pointer transition-all">
+                <!-- 2. الإضافة الفردية اليدوية -->
+                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-4 mb-6">
+                    <h3 class="text-sm font-bold text-indigo-900">إضافة تلميذ بشكل فردي ويدوي:</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <input type="text" id="single-student-name" placeholder="الاسم الكامل للتلميذ(ة)" class="w-full p-3 border border-slate-300 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                        <input type="text" id="single-student-code" placeholder="المعرف الشخصي (مثال: K130092)" class="w-full p-3 border border-slate-300 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                        <button onclick="addSingleStudent()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-sm transition-all text-sm py-3">إضافة التلميذ</button>
+                    </div>
                 </div>
+
+                <!-- 3. رفع لائحة txt -->
+                <div class="p-5 bg-indigo-50/50 rounded-2xl border border-indigo-100 space-y-3 mb-6">
+                    <h3 class="text-sm font-bold text-indigo-900">أو رفع لائحة قسم كامل عبر ملف TXT:</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">صيغة السطر يجب أن تكون: <code class="bg-white px-2 py-0.5 border border-slate-200 rounded shadow-sm text-indigo-600">الاسم الكامل, المعرف الشخصي</code></p>
+                    <input type="file" accept=".txt" onchange="handleTxtUpload(event)" class="block w-full text-sm text-slate-500 file:ml-3 file:py-2.5 file:px-5 file:rounded-xl file:border-0 file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 cursor-pointer transition-all">
+                </div>
+
+                <!-- 4. جدول استعراض التلاميذ -->
+                <div>
+                    <h3 class="font-bold text-sm text-slate-700 mb-3 border-b pb-2">لائحة تلاميذ القسم المحدد:</h3>
+                    <div class="overflow-x-auto bg-white border border-slate-200 rounded-xl shadow-sm">
+                        <table class="w-full text-right text-sm">
+                            <thead class="bg-slate-50 text-slate-600 border-b border-slate-200">
+                                <tr>
+                                    <th class="p-4 font-bold">الاسم الكامل</th>
+                                    <th class="p-4 font-bold">المعرف الشخصي</th>
+                                    <th class="p-4 font-bold text-center">إجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="students-table-body" class="divide-y divide-slate-100">
+                                <!-- سيتم تحميل أسماء التلاميذ هنا تلقائياً -->
+                                <tr><td colspan="3" class="p-4 text-center text-slate-400">المرجو تحديد القسم لإظهار اللائحة أو إضافة تلاميذ.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
             </div>
         </section>
 
@@ -171,7 +202,7 @@
 
     </main>
 
-    <!-- سكربت التحكم بالواجهة (تبويبات وأسئلة) -->
+    <!-- سكربت التحكم بالواجهة (تبويبات وأسئلة والتلاميذ) -->
     <script>
         function switchTab(tabId, btnElement) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
@@ -183,6 +214,7 @@
             btnElement.className = "tab-btn active-tab whitespace-nowrap px-5 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-bold shadow-md transition-all";
         }
 
+        // ------------------ صانع الأسئلة ------------------
         function generateQuestionsForm() {
             const count = parseInt(document.getElementById('quiz-count').value);
             const container = document.getElementById('questions-builder-container');
@@ -232,17 +264,135 @@
             }
         }
 
+        // ------------------ إدارة التلاميذ ------------------
+        
+        // جلب مفتاح القسم الحالي لتخزين بياناته بمعزل عن الأقسام الأخرى
+        function getCurrentClassKey() {
+            const level = document.getElementById('student-level-select').value;
+            const className = document.getElementById('student-class-input').value.trim() || 'عام';
+            return `students_${level}_${className}`;
+        }
+
+        // تحديث وعرض لائحة التلاميذ
+        function loadStudentsList() {
+            const key = getCurrentClassKey();
+            const students = JSON.parse(localStorage.getItem(key) || '[]');
+            const tbody = document.getElementById('students-table-body');
+            
+            tbody.innerHTML = '';
+            
+            if (students.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-center text-slate-400">لا يوجد تلاميذ مسجلين في هذا القسم حالياً.</td></tr>';
+                return;
+            }
+
+            students.forEach((student, index) => {
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 transition-all">
+                        <td class="p-4 font-semibold text-slate-800">${student.name}</td>
+                        <td class="p-4 text-indigo-600 font-mono font-bold">${student.code}</td>
+                        <td class="p-4 text-center">
+                            <button onclick="deleteStudent(${index})" class="text-rose-500 hover:text-rose-700 font-bold text-xs bg-rose-50 px-3 py-1 rounded-lg transition-all">حذف</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // الإضافة اليدوية لتلميذ واحد
+        function addSingleStudent() {
+            const name = document.getElementById('single-student-name').value.trim();
+            const code = document.getElementById('single-student-code').value.trim();
+            const className = document.getElementById('student-class-input').value.trim();
+
+            if (!className) {
+                alert("المرجو كتابة رقم أو اسم القسم أولاً.");
+                return;
+            }
+            if (!name || !code) {
+                alert("المرجو إدخال الاسم والمعرف الشخصي للتلميذ.");
+                return;
+            }
+
+            const key = getCurrentClassKey();
+            const students = JSON.parse(localStorage.getItem(key) || '[]');
+            
+            students.push({ name: name, code: code });
+            localStorage.setItem(key, JSON.stringify(students));
+            
+            document.getElementById('single-student-name').value = '';
+            document.getElementById('single-student-code').value = '';
+            
+            loadStudentsList();
+        }
+
+        // استيراد لائحة كاملة عبر TXT
+        function handleTxtUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const className = document.getElementById('student-class-input').value.trim();
+            if (!className) {
+                alert("المرجو كتابة رقم أو اسم القسم قبل رفع الملف.");
+                event.target.value = ''; // تفريغ حقل الملف
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const lines = e.target.result.split('\n');
+                const key = getCurrentClassKey();
+                const students = JSON.parse(localStorage.getItem(key) || '[]');
+                
+                let addedCount = 0;
+
+                lines.forEach(line => {
+                    const parts = line.split(',');
+                    // التأكد من أن السطر يحتوي على اسم ومعرف
+                    if (parts.length >= 2) {
+                        students.push({ 
+                            name: parts[0].trim(), 
+                            code: parts[1].trim() 
+                        });
+                        addedCount++;
+                    }
+                });
+
+                if (addedCount > 0) {
+                    localStorage.setItem(key, JSON.stringify(students));
+                    loadStudentsList();
+                    alert(`تم استيراد ${addedCount} تلميذاً بنجاح إلى هذا القسم!`);
+                } else {
+                    alert("لم يتم العثور على بيانات صالحة. تأكد من أن الملف بصيغة (الاسم, المعرف)");
+                }
+                
+                event.target.value = ''; // تفريغ حقل الملف للاستخدام اللاحق
+            };
+            reader.readAsText(file);
+        }
+
+        // حذف تلميذ
+        function deleteStudent(index) {
+            if(confirm("هل أنت متأكد من حذف هذا التلميذ من القسم؟")) {
+                const key = getCurrentClassKey();
+                const students = JSON.parse(localStorage.getItem(key) || '[]');
+                students.splice(index, 1);
+                localStorage.setItem(key, JSON.stringify(students));
+                loadStudentsList();
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             generateQuestionsForm();
             document.getElementById('announcement-date').valueAsDate = new Date();
+            loadStudentsList(); // تحميل اللائحة فور فتح الصفحة
         });
     </script>
 
-    <!-- سكربت الربط مع Firebase (Module) -->
+    <!-- سكربت الربط مع Firebase (لإرسال الإعلانات) -->
     <script type="module">
         import { db, collection, addDoc } from '../assets/js/firebase-config.js';
 
-        // دالة نشر الإعلان وربطها بالزر
         window.publishAnnouncement = async function() {
             const text = document.getElementById('announcement-text').value;
             const date = document.getElementById('announcement-date').value;
@@ -253,7 +403,6 @@
             }
 
             try {
-                // حفظ البيانات في قاعدة البيانات Firestore
                 await addDoc(collection(db, "announcements"), {
                     content: text,
                     publishDate: date,
@@ -261,11 +410,11 @@
                 });
 
                 alert('تم نشر الإعلان بنجاح في المنصة!');
-                document.getElementById('announcement-text').value = ''; // إفراغ الخانة
+                document.getElementById('announcement-text').value = '';
                 
             } catch (error) {
-                console.error("حدث خطأ أثناء النشر: ", error);
-                alert('تعذر نشر الإعلان، تحقق من اتصالك بالإنترنت وتأكد من إعدادات Firebase.');
+                console.error("خطأ: ", error);
+                alert('تعذر نشر الإعلان، يرجى التأكد من إعدادات Firebase الخاصة بك.');
             }
         }
     </script>
