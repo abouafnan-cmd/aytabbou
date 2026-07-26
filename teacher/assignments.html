@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة التكليفات - لوحة الأستاذ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+    <header class="bg-indigo-700 text-white py-4 px-6 shadow-md flex justify-between items-center">
+        <h1 class="font-bold text-lg">إدارة التكليفات والواجبات</h1>
+        <a href="dashboard.html" class="text-xs bg-indigo-800 px-3 py-1.5 rounded-lg">العودة للوحة التحكّم</a>
+    </header>
+
+    <main class="max-w-5xl mx-auto my-8 p-4 md:p-6 space-y-6">
+        
+        <!-- Add New Assignment -->
+        <div class="bg-white p-6 rounded-xl border shadow-sm space-y-4">
+            <h2 class="font-bold text-indigo-900 border-b pb-2">وضع واجب منزل جديد</h2>
+            <form class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold mb-1">عنوان التكليف</label>
+                    <input type="text" placeholder="مثال: تطبيق في الإعراب والصرف" class="w-full p-2.5 border rounded-lg text-sm outline-none">
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold mb-1">تاريخ آخر أجل (Deadline)</label>
+                        <input type="date" class="w-full p-2.5 border rounded-lg text-sm outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold mb-1">السلم التنقيطي</label>
+                        <input type="number" value="20" class="w-full p-2.5 border rounded-lg text-sm outline-none">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold mb-1">تفاصيل التكليف والتعليمات</label>
+                    <textarea rows="3" placeholder="اكتب التعليمات للتلاميذ..." class="w-full p-2.5 border rounded-lg text-sm outline-none"></textarea>
+                </div>
+                <button type="submit" class="px-6 py-2.5 bg-indigo-600 text-white font-bold text-xs rounded-lg hover:bg-indigo-700">نشر التكليف</button>
+            </form>
+        </div>
+
+    </main>
+
+</body>
+</html>
