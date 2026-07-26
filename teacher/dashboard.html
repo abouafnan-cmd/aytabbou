@@ -126,16 +126,19 @@
                 <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-4 mb-6">
                     <h3 class="text-sm font-bold text-indigo-900">إضافة تلميذ بشكل فردي ويدوي:</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <input type="text" id="single-student-name" placeholder="الاسم الكامل للتلميذ(ة)" class="w-full p-3 border border-slate-300 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
-                        <input type="text" id="single-student-code" placeholder="المعرف الشخصي (مثال: K130092)" class="w-full p-3 border border-slate-300 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                        <input type="text" id="single-student-code" placeholder="المعرف الشخصي (مثال: G141078429)" class="w-full p-3 border border-slate-300 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                        <input type="text" id="single-student-name" placeholder="الاسم الكامل (مثال: الحصيني مروة)" class="w-full p-3 border border-slate-300 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
                         <button onclick="addSingleStudent()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-sm transition-all text-sm py-3">إضافة التلميذ</button>
                     </div>
                 </div>
 
-                <!-- 3. رفع لائحة txt -->
+                <!-- 3. رفع لائحة txt بالصيغة المطلوبة -->
                 <div class="p-5 bg-indigo-50/50 rounded-2xl border border-indigo-100 space-y-3 mb-6">
                     <h3 class="text-sm font-bold text-indigo-900">أو رفع لائحة قسم كامل عبر ملف TXT:</h3>
-                    <p class="text-xs text-slate-500 leading-relaxed">صيغة السطر يجب أن تكون: <code class="bg-white px-2 py-0.5 border border-slate-200 rounded shadow-sm text-indigo-600">الاسم الكامل, المعرف الشخصي</code></p>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        صيغة السطر يجب أن تكون: <code class="bg-white px-2 py-0.5 border border-slate-200 rounded shadow-sm text-indigo-700 font-bold">المعرف الشخصي ثم مسافة (أو Tab) ثم الاسم الكامل</code>
+                        <br>مثال: <code class="bg-white px-2 py-0.5 border border-slate-200 rounded shadow-sm text-emerald-600 font-bold mt-1 inline-block">G141078429    الحصيني مروة</code>
+                    </p>
                     <input type="file" accept=".txt" onchange="handleTxtUpload(event)" class="block w-full text-sm text-slate-500 file:ml-3 file:py-2.5 file:px-5 file:rounded-xl file:border-0 file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 cursor-pointer transition-all">
                 </div>
 
@@ -146,8 +149,8 @@
                         <table class="w-full text-right text-sm">
                             <thead class="bg-slate-50 text-slate-600 border-b border-slate-200">
                                 <tr>
-                                    <th class="p-4 font-bold">الاسم الكامل</th>
                                     <th class="p-4 font-bold">المعرف الشخصي</th>
+                                    <th class="p-4 font-bold">الاسم الكامل</th>
                                     <th class="p-4 font-bold text-center">إجراءات</th>
                                 </tr>
                             </thead>
@@ -266,7 +269,7 @@
 
         // ------------------ إدارة التلاميذ ------------------
         
-        // جلب مفتاح القسم الحالي لتخزين بياناته بمعزل عن الأقسام الأخرى
+        // جلب مفتاح القسم الحالي
         function getCurrentClassKey() {
             const level = document.getElementById('student-level-select').value;
             const className = document.getElementById('student-class-input').value.trim() || 'عام';
@@ -289,8 +292,8 @@
             students.forEach((student, index) => {
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50 transition-all">
-                        <td class="p-4 font-semibold text-slate-800">${student.name}</td>
                         <td class="p-4 text-indigo-600 font-mono font-bold">${student.code}</td>
+                        <td class="p-4 font-semibold text-slate-800">${student.name}</td>
                         <td class="p-4 text-center">
                             <button onclick="deleteStudent(${index})" class="text-rose-500 hover:text-rose-700 font-bold text-xs bg-rose-50 px-3 py-1 rounded-lg transition-all">حذف</button>
                         </td>
@@ -299,7 +302,7 @@
             });
         }
 
-        // الإضافة اليدوية لتلميذ واحد
+        // الإضافة اليدوية
         function addSingleStudent() {
             const name = document.getElementById('single-student-name').value.trim();
             const code = document.getElementById('single-student-code').value.trim();
@@ -326,7 +329,7 @@
             loadStudentsList();
         }
 
-        // استيراد لائحة كاملة عبر TXT
+        // استيراد لائحة كاملة عبر TXT مع استخراج المعرف أولاً ثم الاسم
         function handleTxtUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -334,7 +337,7 @@
             const className = document.getElementById('student-class-input').value.trim();
             if (!className) {
                 alert("المرجو كتابة رقم أو اسم القسم قبل رفع الملف.");
-                event.target.value = ''; // تفريغ حقل الملف
+                event.target.value = ''; 
                 return;
             }
 
@@ -347,12 +350,19 @@
                 let addedCount = 0;
 
                 lines.forEach(line => {
-                    const parts = line.split(',');
-                    // التأكد من أن السطر يحتوي على اسم ومعرف
-                    if (parts.length >= 2) {
+                    const trimmedLine = line.trim();
+                    if (!trimmedLine) return;
+
+                    // استخراج المعرف (أول كلمة قبل المسافة أو الـ Tab) ثم الباقي هو الاسم
+                    const match = trimmedLine.match(/^([^\s,]+)[\s,]+(.+)$/);
+
+                    if (match && match.length === 3) {
+                        const extractedCode = match[1].trim();
+                        const extractedName = match[2].trim();
+                        
                         students.push({ 
-                            name: parts[0].trim(), 
-                            code: parts[1].trim() 
+                            code: extractedCode,
+                            name: extractedName 
                         });
                         addedCount++;
                     }
@@ -363,10 +373,10 @@
                     loadStudentsList();
                     alert(`تم استيراد ${addedCount} تلميذاً بنجاح إلى هذا القسم!`);
                 } else {
-                    alert("لم يتم العثور على بيانات صالحة. تأكد من أن الملف بصيغة (الاسم, المعرف)");
+                    alert("لم يتم العثور على بيانات صالحة. تأكد من أن الملف بصيغة (المعرف ثم مسافة ثم الاسم)");
                 }
                 
-                event.target.value = ''; // تفريغ حقل الملف للاستخدام اللاحق
+                event.target.value = ''; 
             };
             reader.readAsText(file);
         }
@@ -385,7 +395,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             generateQuestionsForm();
             document.getElementById('announcement-date').valueAsDate = new Date();
-            loadStudentsList(); // تحميل اللائحة فور فتح الصفحة
+            loadStudentsList();
         });
     </script>
 
