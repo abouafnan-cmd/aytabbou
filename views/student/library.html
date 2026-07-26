@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المكتبة الرقمية - فضاء التلميذ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style> body { font-family: 'Cairo', sans-serif; } </style>
+</head>
+<body class="bg-gray-50 min-h-screen text-gray-800">
+
+    <!-- Student Header -->
+    <header class="bg-emerald-600 text-white shadow-md py-4 px-6 flex justify-between items-center">
+        <h1 class="text-xl font-bold">فضاء التلميذ | المكتبة الرقمية</h1>
+        <nav class="space-x-4 space-x-reverse text-sm">
+            <a href="index.html" class="hover:underline">الرئيسية</a>
+            <a href="library.html" class="font-bold underline">المكتبة الرقمية</a>
+            <a href="assignments.html" class="hover:underline">التكليفات</a>
+            <a href="performance.html" class="hover:underline">نتائجي</a>
+        </nav>
+    </header>
+
+    <main class="max-w-6xl mx-auto my-8 p-4 md:p-6 space-y-6">
+
+        <!-- Search & Filter Bar -->
+        <div class="bg-white p-4 rounded-xl shadow-sm border flex flex-col md:flex-row gap-4 justify-between items-center">
+            <input type="text" placeholder="البحث عن درس..." class="w-full md:w-1/2 p-2.5 border rounded-lg outline-none text-sm focus:ring-2 focus:ring-emerald-500">
+            <div class="flex gap-2 w-full md:w-auto">
+                <button class="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-semibold">الكل</button>
+                <button class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm">النصوص</button>
+                <button class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm">القواعد</button>
+            </div>
+        </div>
+
+        <!-- Lessons Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <!-- Lesson Item 1 -->
+            <div class="bg-white border rounded-xl shadow-sm overflow-hidden flex flex-col justify-between">
+                <div class="p-5 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="bg-red-100 text-red-700 text-xs px-2.5 py-1 rounded-full font-bold">PDF</span>
+                        <span class="text-xs text-gray-400">منذ 2 يوم</span>
+                    </div>
+                    <h3 class="font-bold text-gray-800 text-lg">ظاهرة الشعر الحديث - الجزء الأول</h3>
+                    <p class="text-xs text-gray-500">المادة: اللغات - المكون اللغوي</p>
+                    <p class="text-sm text-gray-600">ملخص مبسط يحتوي على أفكار الفصل الأول مع نماذج للتطبيق.</p>
+                </div>
+                <div class="p-4 bg-gray-50 border-t flex justify-between items-center">
+                    <a href="#" class="text-xs text-emerald-700 font-bold hover:underline">معاينة الملف</a>
+                    <button class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-md">تحميل</button>
+                </div>
+            </div>
+
+            <!-- Lesson Item 2 -->
+            <div class="bg-white border rounded-xl shadow-sm overflow-hidden flex flex-col justify-between">
+                <div class="p-5 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="bg-blue-100 text-blue-700 text-xs px-2.5 py-1 rounded-full font-bold">فيديو</span>
+                        <span class="text-xs text-gray-400">منذ أسبوع</span>
+                    </div>
+                    <h3 class="font-bold text-gray-800 text-lg">شرح الميزان الصرفي وتطبيقاته</h3>
+                    <p class="text-xs text-gray-500">المادة: اللغة العربية</p>
+                    <p class="text-sm text-gray-600">تسجيل مرئي يشرح كيفية وزن الأفعال والأسماء في اللغة العربية.</p>
+                </div>
+                <div class="p-4 bg-gray-50 border-t flex justify-between items-center">
+                    <a href="#" class="text-xs text-blue-700 font-bold hover:underline">مشاهدة الشرح</a>
+                    <span class="text-xs text-gray-400">15 دقيقة</span>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متابعة الأداء والنتائج - فضاء التلميذ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style> body { font-family: 'Cairo', sans-serif; } </style>
+</head>
+<body class="bg-gray-50 min-h-screen text-gray-800">
+
+    <!-- Header -->
+    <header class="bg-emerald-600 text-white shadow-md py-4 px-6 flex justify-between items-center">
+        <h1 class="text-xl font-bold">فضاء التلميذ | نتائج ومتابعة الأداء</h1>
+        <nav class="space-x-4 space-x-reverse text-sm">
+            <a href="../index.html" class="hover:underline">الرئيسية</a>
+            <a href="library.html" class="hover:underline">المكتبة الرقمية</a>
+            <a href="assignments.html" class="hover:underline">التكليفات</a>
+            <a href="performance.html" class="font-bold underline">نتائجي</a>
+        </nav>
+    </header>
+
+    <main class="max-w-5xl mx-auto my-8 p-4 md:p-6 space-y-6">
+
+        <!-- General Overview Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm text-center">
+                <p class="text-xs font-semibold text-gray-500 mb-1">المعدل العام للأنشطة</p>
+                <p class="text-3xl font-bold text-emerald-600">17.5 <span class="text-xs text-gray-400">/ 20</span></p>
+            </div>
+            <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm text-center">
+                <p class="text-xs font-semibold text-gray-500 mb-1">الواجبات المسلمة</p>
+                <p class="text-3xl font-bold text-indigo-600">4 <span class="text-xs text-gray-400">/ 5</span></p>
+            </div>
+            <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm text-center">
+                <p class="text-xs font-semibold text-gray-500 mb-1">الاختبارات المنجزة</p>
+                <p class="text-3xl font-bold text-amber-600">3 <span class="text-xs text-gray-400">اختبارات</span></p>
+            </div>
+        </div>
+
+        <!-- Grades and Feedback Table -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="p-5 border-b bg-gray-50">
+                <h2 class="font-bold text-gray-800">تفاصيل التقييمات والملاحظات</h2>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-right text-sm">
+                    <thead class="bg-gray-100 text-gray-600 text-xs uppercase">
+                        <tr>
+                            <th class="p-4">النشاط / الاختبار</th>
+                            <th class="p-4">التاريخ</th>
+                            <th class="p-4">النقطة</th>
+                            <th class="p-4">ملاحظة الأستاذ</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        <!-- Row 1 -->
+                        <tr class="hover:bg-gray-50">
+                            <td class="p-4 font-semibold text-gray-800">اختبار إلكتروني: القواعد والصرف</td>
+                            <td class="text-xs text-gray-500 p-4">20 يوليو 2026</td>
+                            <td class="p-4 font-bold text-emerald-600">10 / 10</td>
+                            <td class="p-4 text-xs text-gray-600">أداء ممتاز واستيعاب كامل للقواعد.</td>
+                        </tr>
+                        <!-- Row 2 -->
+                        <tr class="hover:bg-gray-50">
+                            <td class="p-4 font-semibold text-gray-800">واجب منزل: إنشاء مقال تحليلي</td>
+                            <td class="text-xs text-gray-500 p-4">15 يوليو 2026</td>
+                            <td class="p-4 font-bold text-indigo-600">18 / 20</td>
+                            <td class="p-4 text-xs text-gray-600">تحليل جيد جداً، انتبه فقط لعلامات الترقيم.</td>
+                        </tr>
+                        <!-- Row 3 -->
+                        <tr class="hover:bg-gray-50">
+                            <td class="p-4 font-semibold text-gray-800">اختبار إلكتروني تشخيصي</td>
+                            <td class="text-xs text-gray-500 p-4">01 يوليو 2026</td>
+                            <td class="p-4 font-bold text-emerald-600">08 / 10</td>
+                            <td class="p-4 text-xs text-gray-600">جيد، يتطلب الأمر مراجعة درس التمييز.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اجتياز الاختبار الإلكتروني - فضاء التلميذ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style> body { font-family: 'Cairo', sans-serif; } </style>
+</head>
+<body class="bg-gray-50 min-h-screen text-gray-800">
+
+    <!-- Header -->
+    <header class="bg-emerald-600 text-white shadow-md py-4 px-6 flex justify-between items-center">
+        <h1 class="text-xl font-bold">فضاء التلميذ | الاختبارات الإلكترونية</h1>
+        <nav class="space-x-4 space-x-reverse text-sm font-semibold">
+            <a href="dashboard.html" class="hover:underline">الرئيسية</a>
+            <a href="library.html" class="hover:underline">المكتبة</a>
+            <a href="assignments.html" class="hover:underline">التكليفات</a>
+            <a href="quizzes.html" class="font-bold underline">الاختبارات</a>
+            <a href="performance.html" class="hover:underline">نتائجي</a>
+        </nav>
+    </header>
+
+    <main class="max-w-4xl mx-auto my-8 p-4 md:p-6 space-y-6">
+
+        <!-- Header Card: Quiz Info & Progress -->
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+                <span class="bg-emerald-100 text-emerald-800 text-xs px-3 py-1 rounded-full font-bold">مكون اللغوي</span>
+                <h2 class="text-xl font-bold text-gray-800 mt-2">اختبار تقويمي: التمييز وأحكامه</h2>
+                <p class="text-xs text-gray-500 mt-1">سلم التنقيط: نقطة واحدة لكل جواب صحيح (المجموع: 10 نقط)</p>
+            </div>
+            <div class="text-left bg-emerald-50 p-3 rounded-xl border border-emerald-100 w-full md:w-auto text-center">
+                <span class="text-xs text-emerald-700 font-semibold block">التقدم في الاختبار</span>
+                <span id="progress-text" class="text-lg font-bold text-emerald-800">السؤال 1 / 10</span>
+            </div>
+        </div>
+
+        <!-- Quiz Container / Form -->
+        <div id="quiz-card" class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100 space-y-6">
+            
+            <!-- Question Box -->
+            <div class="space-y-4">
+                <div class="flex items-center space-x-2 space-x-reverse text-emerald-700 font-bold text-sm">
+                    <span class="w-7 h-7 bg-emerald-100 rounded-full flex items-center justify-center text-xs">1</span>
+                    <span id="question-title">السؤال الأول: ما هو نوع التمييز في جملة "اشتريتُ رَطْلاً عَسَلاً"؟</span>
+                </div>
+
+                <!-- Answer Options -->
+                <div id="options-container" class="space-y-3 pt-2">
+                    <label class="flex items-center space-x-3 space-x-reverse p-3.5 border border-gray-200 rounded-xl hover:bg-emerald-50/50 cursor-pointer transition-all">
+                        <input type="radio" name="quiz-option" value="0" class="accent-emerald-600 w-4 h-4">
+                        <span class="text-sm font-semibold text-gray-700">تمييز ملفوظ (تمييز الوزن)</span>
+                    </label>
+
+                    <label class="flex items-center space-x-3 space-x-reverse p-3.5 border border-gray-200 rounded-xl hover:bg-emerald-50/50 cursor-pointer transition-all">
+                        <input type="radio" name="quiz-option" value="1" class="accent-emerald-600 w-4 h-4">
+                        <span class="text-sm font-semibold text-gray-700">تمييز ملحوظ (تمييز الجملة)</span>
+                    </label>
+
+                    <label class="flex items-center space-x-3 space-x-reverse p-3.5 border border-gray-200 rounded-xl hover:bg-emerald-50/50 cursor-pointer transition-all">
+                        <input type="radio" name="quiz-option" value="2" class="accent-emerald-600 w-4 h-4">
+                        <span class="text-sm font-semibold text-gray-700">حال منصوبة</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="pt-4 border-t flex justify-between items-center">
+                <button id="prev-btn" onclick="prevQuestion()" disabled class="px-5 py-2.5 bg-gray-100 text-gray-400 font-bold text-xs rounded-xl cursor-not-allowed">السابق</button>
+                <button id="next-btn" onclick="nextQuestion()" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-md transition-all">السؤال التالي</button>
+            </div>
+
+        </div>
+
+        <!-- Result Box (Hidden by default) -->
+        <div id="result-card" class="hidden bg-white p-8 rounded-2xl shadow-sm border border-emerald-100 text-center space-y-4">
+            <div class="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-4xl mx-auto font-bold">
+                🎯
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800">أحسنت! تم إنهاء الاختبار بنجاح</h3>
+            <p class="text-sm text-gray-500">تم تسجيل إجاباتك وحساب النتيجة تلقائياً:</p>
+
+            <div class="text-4xl font-extrabold text-emerald-600 my-2">
+                <span id="final-score">9</span> / 10
+            </div>
+
+            <p id="feedback-msg" class="text-xs font-bold text-emerald-700 bg-emerald-50 py-2 px-4 rounded-lg inline-block">
+                ممتاز! استيعابك لقواعد الدرس جاد ومميز.
+            </p>
+
+            <div class="pt-4 flex justify-center gap-3">
+                <a href="performance.html" class="px-5 py-2.5 bg-emerald-600 text-white font-bold text-xs rounded-xl hover:bg-emerald-700">عرض كشف النتائج الكامل</a>
+                <a href="dashboard.html" class="px-5 py-2.5 bg-gray-100 text-gray-700 font-bold text-xs rounded-xl hover:bg-gray-200">العودة للرئيسية</a>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="../assets/js/app.js"></script>
+    <script>
+        // Sample Quiz Questions Data
+        const quizData = [
+            {
+                q: "ما هو نوع التمييز في جملة: 'اشتريتُ رَطْلاً عَسَلاً'؟",
+                options: ["تمييز ملفوظ (تمييز الوزن)", "تمييز ملحوظ (تمييز الجملة)", "حال منصوبة"],
+                correct: 0
+            },
+            {
+                q: "التمييز الملحوظ يكون دائماً:",
+                options: ["مجروراً بالإضافة", "منصوباً", "مرفوعاً"],
+                correct: 1
+            },
+            {
+                q: "في جملة 'حَسُنَ التلميذُ خُلُقاً'، كلمة (خُلُقاً) هي تمييز ملحوظ محول عن:",
+                options: ["مفعول به", "فاعل", "مبتدأ"],
+                correct: 1
+            }
+        ];
+
+        let currentQ = 0;
+        let score = 0;
+        let userAnswers = {};
+
+        function renderQuestion() {
+            const q = quizData[currentQ];
+            document.getElementById('question-title').innerText = `السؤال ${currentQ + 1}: ${q.q}`;
+            document.getElementById('progress-text').innerText = `السؤال ${currentQ + 1} / ${quizData.length}`;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            q.options.forEach((opt, idx) => {
+                const checked = userAnswers[currentQ] === idx ? 'checked' : '';
+                container.innerHTML += `
+                    <label class="flex items-center space-x-3 space-x-reverse p-3.5 border border-gray-200 rounded-xl hover:bg-emerald-50/50 cursor-pointer transition-all">
+                        <input type="radio" name="quiz-option" value="${idx}" ${checked} onchange="selectAnswer(${idx})" class="accent-emerald-600 w-4 h-4">
+                        <span class="text-sm font-semibold text-gray-700">${opt}</span>
+                    </label>
+                `;
+            });
+
+            // Update buttons
+            document.getElementById('prev-btn').disabled = currentQ === 0;
+            document.getElementById('prev-btn').className = currentQ === 0 ? 
+                "px-5 py-2.5 bg-gray-100 text-gray-400 font-bold text-xs rounded-xl cursor-not-allowed" : 
+                "px-5 py-2.5 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold text-xs rounded-xl cursor-pointer";
+
+            if (currentQ === quizData.length - 1) {
+                document.getElementById('next-btn').innerText = "إنهاء الاختبار وتأكيد الإجابات";
+                document.getElementById('next-btn').className = "px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-md transition-all";
+            } else {
+                document.getElementById('next-btn').innerText = "السؤال التالي";
+                document.getElementById('next-btn').className = "px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-md transition-all";
+            }
+        }
+
+        function selectAnswer(index) {
+            userAnswers[currentQ] = index;
+        }
+
+        function nextQuestion() {
+            if (userAnswers[currentQ] === undefined) {
+                alert("يرجى اختيار إجابة قبل الانتقال للسؤال التالي");
+                return;
+            }
+
+            if (currentQ < quizData.length - 1) {
+                currentQ++;
+                renderQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQ > 0) {
+                currentQ--;
+                renderQuestion();
+            }
+        }
+
+        function finishQuiz() {
+            // Calculate Score
+            score = 0;
+            quizData.forEach((q, idx) => {
+                if (userAnswers[idx] === q.correct) score++;
+            });
+
+            document.getElementById('quiz-card').classList.add('hidden');
+            document.getElementById('result-card').classList.remove('hidden');
+            document.getElementById('final-score').innerText = score;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', renderQuestion);
+    </script>
+</body>
+</html>
