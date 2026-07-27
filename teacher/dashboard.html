@@ -22,155 +22,71 @@
                 <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center text-xl backdrop-blur-sm">👨‍🏫</div>
                 <div>
                     <h1 class="text-base md:text-xl font-bold leading-tight">الدكتور عبد المجيد أيت عبو</h1>
-                    <p class="text-xs text-indigo-200">لوحة الإدارة والتحكم (متصل بالسحابة ☁️)</p>
+                    <p class="text-xs text-indigo-200">لوحة الإدارة (متصل بالسحابة ☁️)</p>
                 </div>
             </div>
-            <a href="../index.html" class="bg-indigo-800 hover:bg-indigo-900 px-4 py-2 rounded-xl text-xs md:text-sm font-bold transition-all shadow-inner">خروج 🏠</a>
+            <a href="../index.html" class="bg-indigo-800 hover:bg-indigo-900 px-4 py-2 rounded-xl text-xs md:text-sm font-bold shadow-inner">خروج 🏠</a>
         </div>
     </header>
 
     <main class="max-w-7xl mx-auto mt-6 px-4 sm:px-6 lg:px-8 space-y-6">
 
         <div class="flex gap-2 overflow-x-auto hide-scrollbar border-b border-slate-200 pb-2">
-            <button onclick="switchTab('announcements-tab', this)" class="tab-btn active-tab whitespace-nowrap px-5 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-bold shadow-md transition-all">📢 الإعلانات</button>
-            <button onclick="switchTab('lessons-tab', this)" class="tab-btn whitespace-nowrap px-5 py-2.5 bg-white text-slate-600 hover:bg-slate-100 rounded-xl text-sm font-bold border border-slate-200 transition-all">📚 الدروس</button>
-            <button onclick="switchTab('assignments-tab', this)" class="tab-btn whitespace-nowrap px-5 py-2.5 bg-white text-slate-600 hover:bg-slate-100 rounded-xl text-sm font-bold border border-slate-200 transition-all">📌 التكليفات</button>
-            <button onclick="switchTab('quizzes-tab', this)" class="tab-btn whitespace-nowrap px-5 py-2.5 bg-white text-slate-600 hover:bg-slate-100 rounded-xl text-sm font-bold border border-slate-200 transition-all">📝 الاختبارات</button>
-            <button onclick="switchTab('students-tab', this)" class="tab-btn whitespace-nowrap px-5 py-2.5 bg-white text-slate-600 hover:bg-slate-100 rounded-xl text-sm font-bold border border-slate-200 transition-all">👨‍🎓 التلاميذ</button>
+            <button onclick="switchTab('announcements-tab', this)" class="tab-btn active-tab whitespace-nowrap px-5 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-bold shadow-md">📢 الإعلانات</button>
+            <button onclick="switchTab('lessons-tab', this)" class="tab-btn whitespace-nowrap px-5 py-2.5 bg-white text-slate-600 border border-slate-200 rounded-xl text-sm font-bold">📚 الدروس</button>
+            <button onclick="switchTab('assignments-tab', this)" class="tab-btn whitespace-nowrap px-5 py-2.5 bg-white text-slate-600 border border-slate-200 rounded-xl text-sm font-bold">📌 التكليفات</button>
+            <button onclick="switchTab('quizzes-tab', this)" class="tab-btn whitespace-nowrap px-5 py-2.5 bg-white text-slate-600 border border-slate-200 rounded-xl text-sm font-bold">📝 الاختبارات</button>
+            <button onclick="switchTab('students-tab', this)" class="tab-btn whitespace-nowrap px-5 py-2.5 bg-white text-slate-600 border border-slate-200 rounded-xl text-sm font-bold">👨‍🎓 التلاميذ</button>
         </div>
 
-        <!-- TAB 1: الإعلانات -->
+        <!-- 1: الإعلانات -->
         <section id="announcements-tab" class="tab-content fade-in space-y-6">
             <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100">
-                <h2 class="text-lg md:text-xl font-bold text-indigo-900 border-b border-slate-100 pb-4 mb-5">إدارة الإخبارات والإعلانات</h2>
+                <h2 class="text-lg font-bold text-indigo-900 border-b border-slate-100 pb-4 mb-5">إدارة الإخبارات والإعلانات</h2>
                 <div class="space-y-5">
-                    <div>
-                        <label class="block text-sm font-semibold mb-2 text-slate-700">عنوان الإعلان</label>
-                        <input type="text" id="announcement-title" placeholder="مثال: تأجيل فرض المراقبة المستمرة..." class="w-full p-3.5 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold mb-2 text-slate-700">نص الإخبار أو الإعلان</label>
-                        <textarea id="announcement-text" rows="3" class="w-full p-4 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 resize-none text-sm"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold mb-2 text-slate-700">تاريخ الإعلان</label>
-                        <input type="date" id="announcement-date" class="w-full md:w-1/2 p-3.5 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-sm">
-                    </div>
-                    <div class="pt-2">
-                        <button onclick="publishAnnouncement()" class="w-full md:w-auto px-8 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md transition-all text-sm">نشر الإعلان</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 2: الدروس -->
-        <section id="lessons-tab" class="tab-content hidden fade-in space-y-6">
-            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100">
-                <h2 class="text-lg md:text-xl font-bold text-indigo-900 border-b border-slate-100 pb-4 mb-5">إضافة وتعديل الدروس</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
-                    <div>
-                        <label class="block text-sm font-semibold mb-2 text-slate-700">عنوان الدرس</label>
-                        <input type="text" id="lesson-title" class="w-full p-3.5 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold mb-2 text-slate-700">المكون</label>
-                        <select id="lesson-component" class="w-full p-3.5 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-sm font-bold text-indigo-900">
-                            <option value="texts">النصوص</option>
-                            <option value="language">الدرس اللغوي</option>
-                            <option value="expression">التعبير والإنشاء</option>
-                            <option value="literature">المؤلفات</option>
-                            <option value="support">أنشطة داعمة</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold mb-2 text-slate-700">المستوى الدراسي المستهدف</label>
-                        <select id="lesson-level" class="w-full p-3.5 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-sm">
-                            <option value="common-sci">جذع مشترك علوم</option>
-                            <option value="common-lit">جذع مشترك آداب</option>
-                            <option value="1bac-sci">الأولى باكلوريا علوم</option>
-                            <option value="1bac-lit">الأولى باكلوريا آداب</option>
-                            <option value="2bac-sci">الثانية باكلوريا علوم</option>
-                            <option value="2bac-lit">الثانية باكلوريا آداب</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold mb-2 text-slate-700">طريقة رفع الدرس</label>
-                        <select id="lesson-type" onchange="toggleLessonInput(this.value)" class="w-full p-3.5 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-sm">
-                            <option value="link">رابط (مستند / فيديو / يوتيوب)</option>
-                            <option value="file">رفع ملف (PDF / صورة)</option>
-                        </select>
-                    </div>
-                    <div id="lesson-input-container" class="md:col-span-2">
-                        <label class="block text-sm font-semibold mb-2 text-slate-700">الرابط المرفق</label>
-                        <input type="url" id="lesson-content-link" placeholder="https://..." class="w-full p-3.5 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-sm">
-                    </div>
-                </div>
-                <button class="px-8 py-3.5 bg-indigo-600 text-white font-bold rounded-xl shadow-md hover:bg-indigo-700 text-sm">حفظ ونشر الدرس</button>
-            </div>
-        </section>
-
-        <!-- TAB 3: الواجبات والتكليفات -->
-        <section id="assignments-tab" class="tab-content hidden fade-in space-y-6">
-            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100">
-                <h2 class="text-lg md:text-xl font-bold text-indigo-900 border-b border-slate-100 pb-4 mb-5">إضافة واجب أو تكليف جديد</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
-                    <div>
-                        <label class="block text-sm font-semibold mb-2 text-slate-700">المستوى الدراسي</label>
-                        <select id="assignment-level" class="w-full p-3.5 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-sm">
-                            <option value="common-sci">جذع مشترك علوم</option>
-                            <option value="common-lit">جذع مشترك آداب</option>
-                            <option value="1bac-sci">الأولى باكلوريا علوم</option>
-                            <option value="1bac-lit">الأولى باكلوريا آداب</option>
-                            <option value="2bac-sci">الثانية باكلوريا علوم</option>
-                            <option value="2bac-lit">الثانية باكلوريا آداب</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold mb-2 text-slate-700">القسم (اختياري لتعميم التكليف)</label>
-                        <input type="text" id="assignment-class" list="class-list" placeholder="الكل / أو حدد القسم" class="w-full p-3.5 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold mb-2 text-slate-700">عنوان التكليف</label>
-                        <input type="text" id="assignment-title" class="w-full p-3.5 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold mb-2 text-slate-700">المكون</label>
-                        <select id="assignment-component" class="w-full p-3.5 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-sm font-bold text-indigo-900">
-                            <option value="texts">النصوص</option>
-                            <option value="language">الدرس اللغوي</option>
-                            <option value="expression">التعبير والإنشاء</option>
-                            <option value="literature">المؤلفات</option>
-                        </select>
-                    </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-semibold mb-2 text-slate-700">أسئلة وتفاصيل التكليف</label>
-                        <textarea id="assignment-questions" rows="4" class="w-full p-4 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 resize-none text-sm"></textarea>
-                    </div>
-                    <div class="md:col-span-2 bg-indigo-50/50 p-4 rounded-xl border border-indigo-100">
-                        <label class="block text-sm font-bold mb-3 text-indigo-900">نمط الإجابة المطلوب من التلميذ:</label>
-                        <div class="space-y-3">
-                            <label class="flex items-center gap-3 cursor-pointer"><input type="radio" name="ans-mode" value="notebook" checked class="w-4 h-4 accent-indigo-600"><span class="text-sm font-semibold">الإجابة في دفتر الإعداد القبلي (يراقب في القسم)</span></label>
-                            <label class="flex items-center gap-3 cursor-pointer"><input type="radio" name="ans-mode" value="textbox" class="w-4 h-4 accent-indigo-600"><span class="text-sm font-semibold">الإجابة المباشرة من خلال الكتابة في مربع نص بالمنصة</span></label>
-                            <label class="flex items-center gap-3 cursor-pointer"><input type="radio" name="ans-mode" value="upload" class="w-4 h-4 accent-indigo-600"><span class="text-sm font-semibold">رفع الإجابة المنجزة (صورة أو PDF) وإرسالها</span></label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">عنوان الإعلان</label>
+                            <input type="text" id="announcement-title" placeholder="مثال: تأجيل فرض..." class="w-full p-3.5 border border-slate-200 rounded-xl bg-slate-50 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">المستوى المستهدف</label>
+                            <select id="announcement-level" class="w-full p-3.5 border border-slate-200 rounded-xl bg-slate-50 text-sm">
+                                <option value="common-sci">جذع مشترك علوم</option>
+                                <option value="common-lit">جذع مشترك آداب</option>
+                                <option value="1bac-sci">الأولى باكلوريا علوم</option>
+                                <option value="1bac-lit">الأولى باكلوريا آداب</option>
+                                <option value="2bac-sci">الثانية باكلوريا علوم</option>
+                                <option value="2bac-lit">الثانية باكلوريا آداب</option>
+                                <option value="all">تعميم لجميع المستويات</option>
+                            </select>
                         </div>
                     </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">نص الإخبار</label>
+                        <textarea id="announcement-text" rows="3" class="w-full p-4 border border-slate-200 rounded-xl bg-slate-50 text-sm"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">تاريخ الإعلان</label>
+                        <input type="date" id="announcement-date" class="w-full md:w-1/2 p-3.5 border border-slate-200 rounded-xl bg-slate-50 text-sm">
+                    </div>
+                    <button onclick="publishAnnouncement()" class="px-8 py-3.5 bg-indigo-600 text-white font-bold rounded-xl shadow-md">نشر الإعلان سحابياً</button>
                 </div>
-                <button class="px-8 py-3.5 bg-indigo-600 text-white font-bold rounded-xl shadow-md hover:bg-indigo-700 text-sm">إرسال التكليف</button>
             </div>
         </section>
 
-        <!-- TAB 4: الاختبارات -->
-        <section id="quizzes-tab" class="tab-content hidden fade-in space-y-6">
+        <!-- 2: الدروس -->
+        <section id="lessons-tab" class="tab-content hidden fade-in space-y-6">
             <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100">
-                <h2 class="text-lg md:text-xl font-bold text-indigo-900 border-b border-slate-100 pb-4 mb-5">إنشاء اختبار إلكتروني جديد</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <h2 class="text-lg font-bold text-indigo-900 border-b border-slate-100 pb-4 mb-5">إضافة وتعديل الدروس</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
                     <div>
-                        <label class="block text-sm font-semibold mb-2 text-slate-700">عنوان الاختبار</label>
-                        <input type="text" id="quiz-title" class="w-full p-3.5 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-sm">
+                        <label class="block text-sm font-semibold mb-2">عنوان الدرس</label>
+                        <input type="text" id="lesson-title" class="w-full p-3.5 border border-slate-200 rounded-xl bg-slate-50 text-sm">
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold mb-2 text-slate-700">المستوى الدراسي</label>
-                        <select id="quiz-level" class="w-full p-3.5 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-sm">
+                        <label class="block text-sm font-semibold mb-2">المستوى الدراسي المستهدف</label>
+                        <select id="lesson-level" class="w-full p-3.5 border border-slate-200 rounded-xl bg-slate-50 text-sm">
                             <option value="common-sci">جذع مشترك علوم</option>
                             <option value="common-lit">جذع مشترك آداب</option>
                             <option value="1bac-sci">الأولى باكلوريا علوم</option>
@@ -180,12 +96,88 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold mb-2 text-slate-700">موعد الإغلاق (الـ Deadline)</label>
-                        <input type="datetime-local" id="quiz-deadline" class="w-full p-3.5 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-sm">
+                        <label class="block text-sm font-semibold mb-2">المكون</label>
+                        <select id="lesson-component" class="w-full p-3.5 border border-slate-200 rounded-xl bg-slate-50 text-sm">
+                            <option value="النصوص">النصوص</option>
+                            <option value="الدرس اللغوي">الدرس اللغوي</option>
+                            <option value="التعبير والإنشاء">التعبير والإنشاء</option>
+                            <option value="المؤلفات">المؤلفات</option>
+                            <option value="أنشطة داعمة">أنشطة داعمة</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">محتوى الدرس (رابط مستند / يوتيوب)</label>
+                        <input type="url" id="lesson-link" placeholder="https://..." class="w-full p-3.5 border border-slate-200 rounded-xl bg-slate-50 text-sm">
+                    </div>
+                </div>
+                <button onclick="saveLesson()" class="px-8 py-3.5 bg-indigo-600 text-white font-bold rounded-xl shadow-md">حفظ ونشر الدرس سحابياً</button>
+            </div>
+        </section>
+
+        <!-- 3: التكليفات -->
+        <section id="assignments-tab" class="tab-content hidden fade-in space-y-6">
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100">
+                <h2 class="text-lg font-bold text-indigo-900 border-b border-slate-100 pb-4 mb-5">إضافة واجب أو تكليف جديد</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">المستوى الدراسي</label>
+                        <select id="assignment-level" class="w-full p-3.5 border border-slate-200 rounded-xl bg-slate-50 text-sm">
+                            <option value="common-sci">جذع مشترك علوم</option>
+                            <option value="common-lit">جذع مشترك آداب</option>
+                            <option value="1bac-sci">الأولى باكلوريا علوم</option>
+                            <option value="1bac-lit">الأولى باكلوريا آداب</option>
+                            <option value="2bac-sci">الثانية باكلوريا علوم</option>
+                            <option value="2bac-lit">الثانية باكلوريا آداب</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">عنوان التكليف</label>
+                        <input type="text" id="assignment-title" class="w-full p-3.5 border border-slate-200 rounded-xl bg-slate-50 text-sm">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-semibold mb-2">أسئلة وتفاصيل التكليف</label>
+                        <textarea id="assignment-questions" rows="4" class="w-full p-4 border border-slate-200 rounded-xl bg-slate-50 text-sm"></textarea>
+                    </div>
+                    <div class="md:col-span-2 bg-indigo-50/50 p-4 rounded-xl border border-indigo-100">
+                        <label class="block text-sm font-bold mb-3 text-indigo-900">نمط الإجابة المطلوب:</label>
+                        <select id="assignment-mode" class="w-full p-3.5 border border-slate-200 rounded-xl bg-white text-sm">
+                            <option value="الإجابة في دفتر الإعداد القبلي">الإجابة في دفتر الإعداد القبلي (يراقب في القسم)</option>
+                            <option value="الإجابة المباشرة في مربع نص">الإجابة المباشرة من خلال الكتابة في مربع نص</option>
+                            <option value="رفع ملف (صورة أو PDF)">رفع الإجابة المنجزة (صورة أو PDF) وإرسالها</option>
+                        </select>
+                    </div>
+                </div>
+                <button onclick="saveAssignment()" class="px-8 py-3.5 bg-indigo-600 text-white font-bold rounded-xl shadow-md">إرسال التكليف سحابياً</button>
+            </div>
+        </section>
+
+        <!-- 4: الاختبارات -->
+        <section id="quizzes-tab" class="tab-content hidden fade-in space-y-6">
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100">
+                <h2 class="text-lg font-bold text-indigo-900 border-b border-slate-100 pb-4 mb-5">إنشاء اختبار إلكتروني جديد</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">عنوان الاختبار</label>
+                        <input type="text" id="quiz-title" class="w-full p-3.5 border border-slate-200 rounded-xl bg-slate-50 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">المستوى الدراسي</label>
+                        <select id="quiz-level" class="w-full p-3.5 border border-slate-200 rounded-xl bg-slate-50 text-sm">
+                            <option value="common-sci">جذع مشترك علوم</option>
+                            <option value="common-lit">جذع مشترك آداب</option>
+                            <option value="1bac-sci">الأولى باكلوريا علوم</option>
+                            <option value="1bac-lit">الأولى باكلوريا آداب</option>
+                            <option value="2bac-sci">الثانية باكلوريا علوم</option>
+                            <option value="2bac-lit">الثانية باكلوريا آداب</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">موعد الإغلاق (Deadline)</label>
+                        <input type="datetime-local" id="quiz-deadline" class="w-full p-3.5 border border-slate-200 rounded-xl bg-slate-50 text-sm">
                     </div>
                     <div class="md:col-span-3 border-t border-slate-100 pt-4">
-                        <label class="block text-sm font-semibold mb-2 text-slate-700">عدد الأسئلة</label>
-                        <select id="quiz-count" onchange="generateQuestionsForm()" class="w-full md:w-1/3 p-3.5 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-sm">
+                        <label class="block text-sm font-semibold mb-2">عدد الأسئلة</label>
+                        <select id="quiz-count" onchange="generateQuestionsForm()" class="w-full md:w-1/3 p-3.5 border border-slate-200 rounded-xl bg-slate-50 text-sm">
                             <option value="10" selected>10 أسئلة</option>
                             <option value="20">20 سؤالاً</option>
                             <option value="40">40 سؤالاً</option>
@@ -194,24 +186,20 @@
                 </div>
                 <div id="questions-builder-container" class="space-y-5 pt-6 mt-6 border-t border-slate-100"></div>
                 <div class="pt-4">
-                    <button class="w-full md:w-auto px-8 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md transition-all text-sm">حفظ ونشر الاختبار</button>
+                    <button onclick="saveQuiz()" class="px-8 py-3.5 bg-indigo-600 text-white font-bold rounded-xl shadow-md">حفظ ونشر الاختبار سحابياً</button>
                 </div>
             </div>
         </section>
 
-        <!-- TAB 5: التلاميذ -->
+        <!-- 5: التلاميذ -->
         <section id="students-tab" class="tab-content hidden fade-in space-y-6">
             <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100">
-                <h2 class="text-lg md:text-xl font-bold text-indigo-900 border-b border-slate-100 pb-4 mb-5">إدارة لوائح التلاميذ سحابياً ☁️</h2>
-
-                <datalist id="class-list">
-                    <!-- سيتم تعبئتها آلياً من الأقسام المدخلة سابقاً -->
-                </datalist>
+                <h2 class="text-lg font-bold text-indigo-900 border-b border-slate-100 pb-4 mb-5">إدارة لوائح التلاميذ سحابياً</h2>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
                     <div>
-                        <label class="block text-sm font-semibold mb-2 text-slate-700">المستوى الدراسي</label>
-                        <select id="student-level-select" onchange="loadStudentsList()" class="w-full p-3.5 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-sm">
+                        <label class="block text-sm font-semibold mb-2">المستوى الدراسي</label>
+                        <select id="student-level-select" onchange="loadStudentsList()" class="w-full p-3.5 border border-slate-200 rounded-xl bg-slate-50 text-sm">
                             <option value="common-sci">جذع مشترك علوم</option>
                             <option value="common-lit">جذع مشترك آداب</option>
                             <option value="1bac-sci">الأولى باكلوريا علوم</option>
@@ -221,26 +209,26 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold mb-2 text-slate-700">القسم (رقم أو عبارة)</label>
-                        <input type="text" id="student-class-input" list="class-list" placeholder="اضغط Enter بعد الكتابة لجلب اللائحة" class="w-full p-3.5 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-sm">
+                        <label class="block text-sm font-semibold mb-2">القسم (اضغط Enter بعد الكتابة)</label>
+                        <input type="text" id="student-class-input" placeholder="مثال: 1 أو الأول" class="w-full p-3.5 border border-slate-200 rounded-xl bg-slate-50 text-sm">
                     </div>
                 </div>
 
                 <div class="p-5 bg-indigo-50/50 rounded-2xl border border-indigo-100 space-y-3 mb-6">
                     <h3 class="text-sm font-bold text-indigo-900">رفع لائحة قسم كامل (ملف TXT):</h3>
-                    <p class="text-xs text-slate-600">صيغة السطر: <code class="font-bold text-emerald-600">G141078429    الحصيني مروة</code></p>
-                    <input type="file" accept=".txt" onchange="handleTxtUpload(event)" class="block w-full text-sm text-slate-500 file:ml-3 file:py-2.5 file:px-5 file:rounded-xl file:border-0 file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 cursor-pointer">
+                    <p class="text-xs text-slate-600">تأكد من كتابة القسم أعلاه أولا.</p>
+                    <input type="file" accept=".txt" onchange="handleTxtUpload(event)" class="block w-full text-sm text-slate-500 file:ml-3 file:py-2.5 file:px-5 file:rounded-xl file:border-0 file:bg-indigo-600 file:text-white cursor-pointer">
                 </div>
 
                 <div>
-                    <h3 class="font-bold text-sm text-slate-700 mb-3 border-b pb-2">لائحة تلاميذ القسم السحابية (اضغط على الاسم لعرض النتائج):</h3>
+                    <h3 class="font-bold text-sm text-slate-700 mb-3 border-b pb-2">لائحة تلاميذ القسم السحابية:</h3>
                     <div class="overflow-x-auto bg-white border border-slate-200 rounded-xl shadow-sm">
                         <table class="w-full text-right text-sm">
                             <thead class="bg-slate-50 text-slate-600 border-b border-slate-200">
                                 <tr>
                                     <th class="p-4 font-bold">المعرف الشخصي</th>
                                     <th class="p-4 font-bold">الاسم الكامل</th>
-                                    <th class="p-4 font-bold text-center">إجراءات</th>
+                                    <th class="p-4 font-bold text-center">نتائج التلميذ</th>
                                 </tr>
                             </thead>
                             <tbody id="students-table-body" class="divide-y divide-slate-100">
@@ -254,23 +242,15 @@
 
     </main>
 
+    <!-- سكربت التحكم بالواجهة -->
     <script>
         function switchTab(tabId, btnElement) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById(tabId).classList.remove('hidden');
             document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.className = "tab-btn whitespace-nowrap px-5 py-2.5 bg-white text-slate-600 hover:bg-slate-100 rounded-xl text-sm font-bold border border-slate-200 transition-all";
+                btn.className = "tab-btn whitespace-nowrap px-5 py-2.5 bg-white text-slate-600 border border-slate-200 rounded-xl text-sm font-bold";
             });
-            btnElement.className = "tab-btn active-tab whitespace-nowrap px-5 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-bold shadow-md transition-all";
-        }
-
-        function toggleLessonInput(val) {
-            const container = document.getElementById('lesson-input-container');
-            if(val === 'link') {
-                container.innerHTML = '<label class="block text-sm font-semibold mb-2 text-slate-700">الرابط المرفق</label><input type="url" placeholder="https://..." class="w-full p-3.5 border border-slate-200 rounded-xl text-sm bg-slate-50 outline-none">';
-            } else {
-                container.innerHTML = '<label class="block text-sm font-semibold mb-2 text-slate-700">رفع الملف (PDF / صورة)</label><input type="file" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm bg-slate-50 outline-none">';
-            }
+            btnElement.className = "tab-btn active-tab whitespace-nowrap px-5 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-bold shadow-md";
         }
 
         function generateQuestionsForm() {
@@ -279,44 +259,142 @@
             container.innerHTML = '';
             for (let i = 1; i <= count; i++) {
                 container.innerHTML += `
-                    <div class="p-5 border border-slate-200 rounded-2xl bg-slate-50/50 space-y-4">
-                        <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3">
-                            <span class="font-bold text-sm text-indigo-700 bg-indigo-100 px-3 py-1 rounded-lg w-fit">السؤال ${i}</span>
-                            <select onchange="updateQuestionType(${i}, this.value)" class="text-xs sm:text-sm p-2 border border-slate-200 rounded-xl bg-white outline-none">
-                                <option value="mcq4">اختيار من متعدد (4 إجابات)</option>
-                                <option value="mcq3">اختيار من متعدد (3 إجابات)</option>
+                    <div class="p-5 border border-slate-200 rounded-2xl bg-slate-50/50 space-y-4 quiz-question-block" data-qnum="${i}">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-sm text-indigo-700">السؤال ${i}</span>
+                            <select class="q-type-select text-sm p-2 border border-slate-200 rounded-xl bg-white outline-none">
+                                <option value="mcq">اختيار من متعدد</option>
                                 <option value="tf">صحيح / خطأ</option>
                             </select>
                         </div>
-                        <input type="text" placeholder="اكتب نص السؤال..." class="w-full p-3.5 border border-slate-200 rounded-xl text-sm outline-none bg-white">
-                        <div id="q-options-${i}" class="space-y-2"></div>
+                        <input type="text" class="q-text w-full p-3.5 border border-slate-200 rounded-xl text-sm bg-white" placeholder="اكتب نص السؤال...">
                     </div>`;
-                updateQuestionType(i, 'mcq4');
             }
         }
-
-        function updateQuestionType(qNum, type) {
-            const container = document.getElementById(`q-options-${qNum}`);
-            if (type === 'tf') {
-                container.innerHTML = `<div class="flex gap-6 text-sm font-bold pt-2 px-2"><label class="flex items-center gap-2 text-emerald-700"><input type="radio" name="ans-${qNum}" value="true" checked class="w-4 h-4 accent-emerald-600"> صحيح</label><label class="flex items-center gap-2 text-rose-700"><input type="radio" name="ans-${qNum}" value="false" class="w-4 h-4 accent-rose-600"> خطأ</label></div>`;
-            } else {
-                const count = type === 'mcq3' ? 3 : 4;
-                let html = '<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">';
-                for(let k = 1; k <= count; k++) {
-                    html += `<div class="flex items-center gap-3 bg-white p-2 border border-slate-200 rounded-xl"><input type="radio" name="ans-${qNum}" class="w-4 h-4 accent-indigo-600 ml-1"><input type="text" placeholder="الخيار ${k}" class="w-full outline-none text-sm bg-transparent"></div>`;
-                }
-                container.innerHTML = html + '</div>';
-            }
-        }
-
-        function viewStudentResults(studentName) {
-            alert(`سيتم استعراض النتائج والمسار التراكمي للتلميذ(ة): ${studentName} من قاعدة البيانات هنا.`);
-        }
-
+        
         document.addEventListener('DOMContentLoaded', () => { 
             document.getElementById('announcement-date').valueAsDate = new Date(); 
-            generateQuestionsForm(); // تهيئة الأسئلة عند فتح الصفحة
+            generateQuestionsForm(); 
         });
+    </script>
+
+    <!-- سكربت فايربيس (حفظ كل شيء في السحابة) -->
+    <script type="module">
+        import { db, collection, addDoc, getDocs, query, where, deleteDoc, doc } from '../assets/js/firebase-config.js';
+
+        // 1. نشر الإعلان
+        window.publishAnnouncement = async function() {
+            const title = document.getElementById('announcement-title').value;
+            const text = document.getElementById('announcement-text').value;
+            const date = document.getElementById('announcement-date').value;
+            const level = document.getElementById('announcement-level').value;
+
+            if(!title || !text) return alert('المرجو كتابة عنوان ونص الإعلان!');
+            try {
+                await addDoc(collection(db, "announcements"), { title, content: text, date, level, timestamp: new Date() });
+                alert('تم نشر الإعلان بنجاح وتوجيهه للتلاميذ!');
+                document.getElementById('announcement-title').value = '';
+                document.getElementById('announcement-text').value = '';
+            } catch (e) { alert('خطأ في الاتصال بالسحابة.'); }
+        }
+
+        // 2. نشر الدرس
+        window.saveLesson = async function() {
+            const title = document.getElementById('lesson-title').value;
+            const level = document.getElementById('lesson-level').value;
+            const component = document.getElementById('lesson-component').value;
+            const link = document.getElementById('lesson-link').value;
+
+            if(!title || !link) return alert('المرجو كتابة العنوان ووضع الرابط!');
+            try {
+                await addDoc(collection(db, "lessons"), { title, level, component, link, timestamp: new Date() });
+                alert('تم حفظ ونشر الدرس بنجاح في السحابة!');
+                document.getElementById('lesson-title').value = '';
+                document.getElementById('lesson-link').value = '';
+            } catch (e) { alert('خطأ في الحفظ.'); }
+        }
+
+        // 3. نشر التكليف
+        window.saveAssignment = async function() {
+            const level = document.getElementById('assignment-level').value;
+            const title = document.getElementById('assignment-title').value;
+            const questions = document.getElementById('assignment-questions').value;
+            const mode = document.getElementById('assignment-mode').value;
+            const component = document.getElementById('assignment-component').value;
+
+            if(!title || !questions) return alert('المرجو تعبئة بيانات التكليف!');
+            try {
+                await addDoc(collection(db, "assignments"), { level, title, questions, mode, component, timestamp: new Date() });
+                alert('تم إرسال التكليف بنجاح لتلاميذ هذا المستوى!');
+                document.getElementById('assignment-title').value = '';
+                document.getElementById('assignment-questions').value = '';
+            } catch (e) { alert('خطأ في إرسال التكليف.'); }
+        }
+
+        // 4. نشر الاختبار
+        window.saveQuiz = async function() {
+            const title = document.getElementById('quiz-title').value;
+            const level = document.getElementById('quiz-level').value;
+            const deadline = document.getElementById('quiz-deadline').value;
+
+            if(!title || !deadline) return alert('المرجو كتابة عنوان الاختبار وتحديد الموعد!');
+            try {
+                await addDoc(collection(db, "quizzes"), { title, level, deadline, timestamp: new Date() });
+                alert('تم بناء ونشر الاختبار بنجاح!');
+                document.getElementById('quiz-title').value = '';
+            } catch (e) { alert('خطأ في نشر الاختبار.'); }
+        }
+
+        // 5. إدارة التلاميذ
+        window.loadStudentsList = async function() {
+            const level = document.getElementById('student-level-select').value;
+            const className = document.getElementById('student-class-input').value.trim();
+            if(!className) return;
+
+            const tbody = document.getElementById('students-table-body');
+            tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-center font-bold text-indigo-600">جاري الجلب...</td></tr>';
+
+            try {
+                const q = query(collection(db, "students"), where("level", "==", level), where("className", "==", className));
+                const snap = await getDocs(q);
+                tbody.innerHTML = '';
+                if(snap.empty) { tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-center">لا يوجد تلاميذ في هذا القسم.</td></tr>'; return; }
+
+                snap.forEach(docSnap => {
+                    const st = docSnap.data();
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-slate-50">
+                            <td class="p-4 text-indigo-600 font-mono font-bold">${st.code}</td>
+                            <td class="p-4 font-semibold">${st.name}</td>
+                            <td class="p-4 text-center"><button class="bg-indigo-50 text-indigo-700 px-3 py-1 rounded-lg text-xs font-bold">عرض النتائج</button></td>
+                        </tr>`;
+                });
+            } catch (e) { tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-center text-rose-500">حدث خطأ.</td></tr>'; }
+        }
+        document.getElementById('student-class-input').addEventListener('keypress', e => { if (e.key === 'Enter') window.loadStudentsList(); });
+
+        window.handleTxtUpload = async function(e) {
+            const file = e.target.files[0];
+            const level = document.getElementById('student-level-select').value;
+            const className = document.getElementById('student-class-input').value.trim();
+            if (!className) return alert("اكتب القسم أولاً!");
+
+            const reader = new FileReader();
+            reader.onload = async function(ev) {
+                const lines = ev.target.result.split('\n');
+                let count = 0;
+                for(let line of lines) {
+                    const match = line.trim().match(/^([^\s,]+)[\s,]+(.+)$/);
+                    if (match) {
+                        try { await addDoc(collection(db, "students"), { level, className, code: match[1].trim(), name: match[2].trim() }); count++; } catch(e){}
+                    }
+                }
+                e.target.value = '';
+                window.loadStudentsList();
+                alert(`تم رفع ${count} تلميذ بنجاح!`);
+            };
+            reader.readAsText(file);
+        }
     </script>
 </body>
 </html>
