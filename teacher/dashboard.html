@@ -37,6 +37,7 @@
             <button onclick="switchTab('assignments-tab', this)" class="tab-btn whitespace-nowrap px-5 py-2.5 bg-white text-slate-600 border border-slate-200 rounded-xl text-sm font-bold">📌 التكليفات</button>
             <button onclick="switchTab('quizzes-tab', this)" class="tab-btn whitespace-nowrap px-5 py-2.5 bg-white text-slate-600 border border-slate-200 rounded-xl text-sm font-bold">📝 الاختبارات</button>
             <button onclick="switchTab('students-tab', this)" class="tab-btn whitespace-nowrap px-5 py-2.5 bg-white text-slate-600 border border-slate-200 rounded-xl text-sm font-bold">👨‍🎓 التلاميذ</button>
+            <button onclick="switchTab('reports-tab', this)" class="tab-btn whitespace-nowrap px-5 py-2.5 bg-white text-slate-600 border border-slate-200 rounded-xl text-sm font-bold">📊 التقارير</button>
         </div>
 
         <!-- ==================== 1: الإعلانات ==================== -->
@@ -241,18 +242,20 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
                     <div>
                         <label class="block text-sm font-semibold mb-2">المستوى الدراسي</label>
-                        <select id="student-level-select" onchange="loadStudentsList()" class="w-full p-3.5 border border-slate-200 rounded-xl bg-slate-50 text-sm">
+                        <select id="student-level-select" class="w-full p-3.5 border border-slate-200 rounded-xl bg-slate-50 text-sm">
                             <option value="common-sci">جذع مشترك علوم</option>
                             <option value="common-lit">جذع مشترك آداب</option>
                             <option value="1bac-sci">الأولى باكلوريا علوم</option>
                             <option value="1bac-lit">الأولى باكلوريا آداب</option>
+                            <option value="2bac-sci">الثانية باكلوريا علوم</option>
+                            <option value="2bac-lit">الثانية باكلوريا آداب</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-sm font-semibold mb-2">القسم</label>
                         <div class="flex gap-2">
                             <input type="text" id="student-class-input" placeholder="مثال: 1 أو الأول" class="w-full p-3.5 border border-slate-200 rounded-xl bg-slate-50 text-sm">
-                            <button onclick="loadStudentsList()" class="px-6 bg-emerald-600 text-white font-bold rounded-xl shadow-md hover:bg-emerald-700 whitespace-nowrap">استعراض</button>
+                            <button onclick="loadStudentsList()" class="px-6 bg-emerald-600 text-white font-bold rounded-xl shadow-md hover:bg-emerald-700 whitespace-nowrap">استعراض اللائحة</button>
                         </div>
                     </div>
                 </div>
@@ -263,7 +266,56 @@
                 <div class="overflow-x-auto bg-white border border-slate-200 rounded-xl shadow-sm">
                     <table class="w-full text-right text-sm">
                         <thead class="bg-slate-50 border-b"><tr><th class="p-4">المعرف</th><th class="p-4">الاسم</th><th class="p-4">إجراءات</th></tr></thead>
-                        <tbody id="students-table-body"><tr><td colspan="3" class="p-4 text-center">اضغط استعراض للبحث.</td></tr></tbody>
+                        <tbody id="students-table-body"><tr><td colspan="3" class="p-4 text-center">حدد المستوى والقسم واضغط "استعراض اللائحة".</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== 6: التقارير والنتائج ==================== -->
+        <section id="reports-tab" class="tab-content hidden fade-in space-y-6">
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100">
+                <h2 class="text-lg font-bold text-indigo-900 border-b border-slate-100 pb-4 mb-5">📊 تقارير ونتائج التلاميذ</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+                    <!-- تقرير قسم -->
+                    <div class="p-5 bg-indigo-50/50 rounded-2xl border border-indigo-100 space-y-4">
+                        <h3 class="font-bold text-indigo-900">استعراض نتائج قسم كامل</h3>
+                        <select id="report-level" class="w-full p-3 border border-slate-200 rounded-xl text-sm">
+                            <option value="common-sci">جذع مشترك علوم</option>
+                            <option value="common-lit">جذع مشترك آداب</option>
+                            <option value="1bac-sci">الأولى باكلوريا علوم</option>
+                            <option value="1bac-lit">الأولى باكلوريا آداب</option>
+                            <option value="2bac-sci">الثانية باكلوريا علوم</option>
+                            <option value="2bac-lit">الثانية باكلوريا آداب</option>
+                        </select>
+                        <input type="text" id="report-class" placeholder="رقم أو اسم القسم" class="w-full p-3 border border-slate-200 rounded-xl text-sm">
+                        <button onclick="loadClassReport()" class="w-full px-4 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-md hover:bg-indigo-700">استعراض نتائج القسم</button>
+                    </div>
+                    
+                    <!-- تقرير تلميذ -->
+                    <div class="p-5 bg-emerald-50/50 rounded-2xl border border-emerald-100 space-y-4">
+                        <h3 class="font-bold text-emerald-900">استعراض نتائج تلميذ فردي</h3>
+                        <input type="text" id="report-student-code" placeholder="المعرف الشخصي (مثال: G141078429)" class="w-full p-3 border border-slate-200 rounded-xl text-sm">
+                        <button onclick="loadStudentReport()" class="w-full px-4 py-3 bg-emerald-600 text-white font-bold rounded-xl shadow-md hover:bg-emerald-700 mt-[3.8rem]">استعراض نتائج التلميذ</button>
+                    </div>
+                </div>
+
+                <!-- جدول النتائج -->
+                <div class="overflow-x-auto bg-white border border-slate-200 rounded-xl shadow-sm">
+                    <table class="w-full text-right text-sm">
+                        <thead class="bg-slate-50 border-b">
+                            <tr>
+                                <th class="p-4">المعرف</th>
+                                <th class="p-4">الاسم الكامل</th>
+                                <th class="p-4">الاختبار المنجز</th>
+                                <th class="p-4">النقطة</th>
+                                <th class="p-4">تاريخ الإنجاز</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reports-table-body">
+                            <tr><td colspan="5" class="p-4 text-center">المرجو تحديد قسم أو تلميذ والضغط على استعراض.</td></tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -290,73 +342,78 @@
         document.addEventListener('DOMContentLoaded', () => { document.getElementById('announcement-date').valueAsDate = new Date(); });
     </script>
 
-    <!-- سكربت فايربيس والأرشيف -->
+    <!-- سكربت فايربيس (يتضمن إصلاح الأخطاء، الأرشيف، والتقارير) -->
     <script type="module">
-        import { db, storage, ref, uploadBytes, getDownloadURL, collection, addDoc, getDocs, updateDoc, deleteDoc, doc } from '../assets/js/firebase-config.js';
+        // استدعاء جميع الأدوات في أعلى الصفحة مرة واحدة فقط
+        import { db, storage, ref, uploadBytes, getDownloadURL, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, where } from '../assets/js/firebase-config.js';
 
         let editIds = { ann: null, less: null, ass: null, quiz: null };
 
         // ================== دوال الأرشيف الشاملة ==================
         window.loadAllArchives = async function() {
-            // جلب الإعلانات
-            const annSnap = await getDocs(collection(db, "announcements"));
-            let anns = []; annSnap.forEach(d => anns.push({id: d.id, ...d.data()}));
-            anns.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
-            let annHTML = '';
-            anns.forEach(a => {
-                annHTML += `<tr><td class="py-3 pr-4 font-bold text-indigo-900">${a.title}</td><td class="py-3 text-slate-500">${a.date}</td>
-                <td class="py-3 pl-4 flex gap-2 justify-end">
-                    <button onclick="editItem('ann', '${a.id}')" class="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-bold hover:bg-indigo-100">تعديل</button>
-                    <button onclick="deleteItem('announcements', '${a.id}')" class="px-3 py-1 bg-rose-50 text-rose-600 rounded-lg text-xs font-bold hover:bg-rose-100">حذف</button>
-                </td></tr>`;
-            });
-            document.getElementById('archive-ann').innerHTML = annHTML || '<tr><td colspan="3" class="text-center py-4 text-slate-400">لا يوجد بيانات.</td></tr>';
+            try {
+                // أرشيف الإعلانات
+                const annSnap = await getDocs(collection(db, "announcements"));
+                let anns = []; annSnap.forEach(d => anns.push({id: d.id, ...d.data()}));
+                anns.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+                let annHTML = '';
+                anns.forEach(a => {
+                    annHTML += `<tr><td class="py-3 pr-4 font-bold text-indigo-900">${a.title}</td><td class="py-3 text-slate-500">${a.date}</td>
+                    <td class="py-3 pl-4 flex gap-2 justify-end">
+                        <button onclick="editItem('ann', '${a.id}')" class="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-bold">تعديل</button>
+                        <button onclick="deleteItem('announcements', '${a.id}')" class="px-3 py-1 bg-rose-50 text-rose-600 rounded-lg text-xs font-bold">حذف</button>
+                    </td></tr>`;
+                });
+                document.getElementById('archive-ann').innerHTML = annHTML || '<tr><td colspan="3" class="text-center py-4 text-slate-400">لا يوجد بيانات.</td></tr>';
 
-            // جلب الدروس
-            const lessSnap = await getDocs(collection(db, "lessons"));
-            let less = []; lessSnap.forEach(d => less.push({id: d.id, ...d.data()}));
-            less.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
-            let lessHTML = '';
-            less.forEach(l => {
-                lessHTML += `<tr><td class="py-3 pr-4 font-bold text-indigo-900">${l.title}</td><td class="py-3 text-slate-500">${l.component}</td>
-                <td class="py-3 pl-4 flex gap-2 justify-end">
-                    <button onclick="editItem('less', '${l.id}')" class="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-bold hover:bg-indigo-100">تعديل</button>
-                    <button onclick="deleteItem('lessons', '${l.id}')" class="px-3 py-1 bg-rose-50 text-rose-600 rounded-lg text-xs font-bold hover:bg-rose-100">حذف</button>
-                </td></tr>`;
-            });
-            document.getElementById('archive-less').innerHTML = lessHTML || '<tr><td colspan="3" class="text-center py-4 text-slate-400">لا يوجد بيانات.</td></tr>';
+                // أرشيف الدروس
+                const lessSnap = await getDocs(collection(db, "lessons"));
+                let less = []; lessSnap.forEach(d => less.push({id: d.id, ...d.data()}));
+                less.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+                let lessHTML = '';
+                less.forEach(l => {
+                    lessHTML += `<tr><td class="py-3 pr-4 font-bold text-indigo-900">${l.title}</td><td class="py-3 text-slate-500">${l.component}</td>
+                    <td class="py-3 pl-4 flex gap-2 justify-end">
+                        <button onclick="editItem('less', '${l.id}')" class="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-bold">تعديل</button>
+                        <button onclick="deleteItem('lessons', '${l.id}')" class="px-3 py-1 bg-rose-50 text-rose-600 rounded-lg text-xs font-bold">حذف</button>
+                    </td></tr>`;
+                });
+                document.getElementById('archive-less').innerHTML = lessHTML || '<tr><td colspan="3" class="text-center py-4 text-slate-400">لا يوجد بيانات.</td></tr>';
 
-            // جلب التكليفات
-            const assSnap = await getDocs(collection(db, "assignments"));
-            let asg = []; assSnap.forEach(d => asg.push({id: d.id, ...d.data()}));
-            asg.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
-            let assHTML = '';
-            asg.forEach(a => {
-                assHTML += `<tr><td class="py-3 pr-4 font-bold text-indigo-900">${a.title}</td><td class="py-3 text-slate-500">${a.component}</td>
-                <td class="py-3 pl-4 flex gap-2 justify-end">
-                    <button onclick="editItem('ass', '${a.id}')" class="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-bold hover:bg-indigo-100">تعديل</button>
-                    <button onclick="deleteItem('assignments', '${a.id}')" class="px-3 py-1 bg-rose-50 text-rose-600 rounded-lg text-xs font-bold hover:bg-rose-100">حذف</button>
-                </td></tr>`;
-            });
-            document.getElementById('archive-ass').innerHTML = assHTML || '<tr><td colspan="3" class="text-center py-4 text-slate-400">لا يوجد بيانات.</td></tr>';
+                // أرشيف التكليفات
+                const assSnap = await getDocs(collection(db, "assignments"));
+                let asg = []; assSnap.forEach(d => asg.push({id: d.id, ...d.data()}));
+                asg.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+                let assHTML = '';
+                asg.forEach(a => {
+                    assHTML += `<tr><td class="py-3 pr-4 font-bold text-indigo-900">${a.title}</td><td class="py-3 text-slate-500">${a.component}</td>
+                    <td class="py-3 pl-4 flex gap-2 justify-end">
+                        <button onclick="editItem('ass', '${a.id}')" class="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-bold">تعديل</button>
+                        <button onclick="deleteItem('assignments', '${a.id}')" class="px-3 py-1 bg-rose-50 text-rose-600 rounded-lg text-xs font-bold">حذف</button>
+                    </td></tr>`;
+                });
+                document.getElementById('archive-ass').innerHTML = assHTML || '<tr><td colspan="3" class="text-center py-4 text-slate-400">لا يوجد بيانات.</td></tr>';
 
-            // جلب الاختبارات
-            const quizSnap = await getDocs(collection(db, "quizzes"));
-            let qzs = []; quizSnap.forEach(d => qzs.push({id: d.id, ...d.data()}));
-            qzs.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
-            let quizHTML = '';
-            qzs.forEach(q => {
-                quizHTML += `<tr><td class="py-3 pr-4 font-bold text-indigo-900">${q.title}</td><td class="py-3 text-slate-500 text-xs">موعد: ${q.deadline.replace('T',' ')}</td>
-                <td class="py-3 pl-4 flex gap-2 justify-end">
-                    <button onclick="editItem('quiz', '${q.id}')" class="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-bold hover:bg-indigo-100">تعديل</button>
-                    <button onclick="deleteItem('quizzes', '${q.id}')" class="px-3 py-1 bg-rose-50 text-rose-600 rounded-lg text-xs font-bold hover:bg-rose-100">حذف</button>
-                </td></tr>`;
-            });
-            document.getElementById('archive-quiz').innerHTML = quizHTML || '<tr><td colspan="3" class="text-center py-4 text-slate-400">لا يوجد بيانات.</td></tr>';
+                // أرشيف الاختبارات
+                const quizSnap = await getDocs(collection(db, "quizzes"));
+                let qzs = []; quizSnap.forEach(d => qzs.push({id: d.id, ...d.data()}));
+                qzs.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+                let quizHTML = '';
+                qzs.forEach(q => {
+                    quizHTML += `<tr><td class="py-3 pr-4 font-bold text-indigo-900">${q.title}</td><td class="py-3 text-slate-500 text-xs">موعد: ${q.deadline.replace('T',' ')}</td>
+                    <td class="py-3 pl-4 flex gap-2 justify-end">
+                        <button onclick="editItem('quiz', '${q.id}')" class="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-bold">تعديل</button>
+                        <button onclick="deleteItem('quizzes', '${q.id}')" class="px-3 py-1 bg-rose-50 text-rose-600 rounded-lg text-xs font-bold">حذف</button>
+                    </td></tr>`;
+                });
+                document.getElementById('archive-quiz').innerHTML = quizHTML || '<tr><td colspan="3" class="text-center py-4 text-slate-400">لا يوجد بيانات.</td></tr>';
+            } catch(e) {
+                console.error("خطأ في جلب الأرشيف", e);
+            }
         }
 
         window.deleteItem = async function(collectionName, docId) {
-            if(confirm('هل أنت متأكد من حذف هذا العنصر؟ (سيتم سحبه من صفحة التلميذ فورا)')) {
+            if(confirm('هل أنت متأكد من الحذف؟ (سيُحذف فوراً من صفحة التلميذ)')) {
                 await deleteDoc(doc(db, collectionName, docId));
                 loadAllArchives();
             }
@@ -364,7 +421,6 @@
 
         window.editItem = async function(type, id) {
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            // سيتم جلب بيانات العنصر من الذاكرة الحية وملء الخانات
             const snap = await getDocs(collection(db, type === 'ann' ? 'announcements' : type === 'less' ? 'lessons' : type === 'ass' ? 'assignments' : 'quizzes'));
             let data = null;
             snap.forEach(d => { if(d.id === id) data = d.data(); });
@@ -396,13 +452,13 @@
                 document.getElementById('quiz-title').value = data.title;
                 document.getElementById('quiz-level').value = data.level;
                 document.getElementById('quiz-deadline').value = data.deadline;
-                document.getElementById('quiz-file-container').classList.add('hidden'); // إخفاء رفع الملف عند التعديل
+                document.getElementById('quiz-file-container').classList.add('hidden'); // إخفاء الرفع عند التعديل
                 editIds.quiz = id;
                 document.getElementById('btn-pub-quiz').innerText = "تحديث إعدادات الاختبار";
             }
         }
 
-        // ================== أزرار الحفظ / التحديث ==================
+        // ================== الحفظ والتحديث ==================
         document.getElementById('btn-pub-ann').onclick = async () => {
             const title = document.getElementById('announcement-title').value;
             const text = document.getElementById('announcement-text').value;
@@ -431,7 +487,7 @@
             let finalLink = "";
             const payload = { title, level, component, timestamp: new Date().toISOString() };
 
-            if(!editIds.less) { // في حالة درس جديد، نطلب الرابط أو الملف
+            if(!editIds.less) {
                 if (type === 'link') {
                     finalLink = document.getElementById('lesson-link').value;
                     if(!finalLink) return alert('أدخل الرابط!');
@@ -483,7 +539,6 @@
             if(!title || !deadline) return alert('أكمل البيانات!');
 
             if(editIds.quiz) {
-                // تحديث الإعدادات فقط للاختبار
                 await updateDoc(doc(db, "quizzes", editIds.quiz), { title, level, deadline });
                 alert('تم التحديث بنجاح!');
                 editIds.quiz = null; document.getElementById('btn-pub-quiz').innerText = "نشر الاختبار";
@@ -530,12 +585,11 @@
             reader.readAsText(file);
         };
 
-        // استعراض التلاميذ وإدارتهم
-        import { query, where } from '../assets/js/firebase-config.js';
+        // ================== إدارة التلاميذ ==================
         window.loadStudentsList = async function() {
             const level = document.getElementById('student-level-select').value;
             const className = document.getElementById('student-class-input').value.trim();
-            if(!className) return;
+            if(!className) return alert("المرجو كتابة القسم أولاً");
             const tbody = document.getElementById('students-table-body');
             tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-center">جاري الجلب...</td></tr>';
             try {
@@ -546,16 +600,122 @@
                 snap.forEach(docSnap => {
                     const st = docSnap.data();
                     tbody.innerHTML += `<tr class="hover:bg-slate-50"><td class="p-4 font-mono font-bold">${st.code}</td><td class="p-4 font-semibold">${st.name}</td><td class="p-4 text-center">
-                        <button class="bg-indigo-50 text-indigo-700 px-3 py-1 rounded-lg text-xs" onclick="alert('نتائج ${st.name}')">نتائج</button>
-                        <button class="bg-rose-50 text-rose-700 px-3 py-1 rounded-lg text-xs" onclick="deleteItem('students', '${docSnap.id}'); setTimeout(loadStudentsList, 500);">حذف</button>
+                        <button class="bg-rose-50 text-rose-700 px-3 py-1 rounded-lg text-xs" onclick="deleteItem('students', '${docSnap.id}')">حذف</button>
                     </td></tr>`;
                 });
             } catch (e) { tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-center text-rose-500">حدث خطأ.</td></tr>'; }
         }
 
-        window.handleTxtUpload = async function(e) { /* تم إبقاء نفس الدالة تعمل بكفاءة عالية */ }
+        window.handleTxtUpload = async function(e) {
+            const file = e.target.files[0];
+            const level = document.getElementById('student-level-select').value;
+            const className = document.getElementById('student-class-input').value.trim();
+            if (!className) return alert("اكتب القسم أولاً!");
 
-        // تهيئة الصفحة
+            const reader = new FileReader();
+            reader.onload = async function(ev) {
+                const lines = ev.target.result.split('\n');
+                let count = 0;
+                for(let line of lines) {
+                    const match = line.trim().match(/^([^\s,]+)[\s,]+(.+)$/);
+                    if (match) {
+                        try { await addDoc(collection(db, "students"), { level, className, code: match[1].trim(), name: match[2].trim() }); count++; } catch(e){}
+                    }
+                }
+                e.target.value = '';
+                window.loadStudentsList();
+                alert(`تم رفع ${count} تلميذ بنجاح!`);
+            };
+            reader.readAsText(file);
+        }
+
+        // ================== التقارير والنتائج ==================
+        window.loadClassReport = async function() {
+            const level = document.getElementById('report-level').value;
+            const className = document.getElementById('report-class').value.trim();
+            if(!className) return alert("المرجو إدخال القسم");
+            const tbody = document.getElementById('reports-table-body');
+            tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center font-bold text-indigo-600">جاري جلب تقرير القسم... ⏳</td></tr>';
+            
+            try {
+                // جلب تلاميذ القسم
+                const qStudents = query(collection(db, "students"), where("level", "==", level), where("className", "==", className));
+                const snapStudents = await getDocs(qStudents);
+                if(snapStudents.empty) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-slate-500">لا يوجد تلاميذ في هذا القسم.</td></tr>';
+                    return;
+                }
+                
+                let html = '';
+                // جلب نتائج كل تلميذ
+                for (let docSnap of snapStudents.docs) {
+                    const st = docSnap.data();
+                    const qRes = query(collection(db, "results"), where("code", "==", st.code));
+                    const snapRes = await getDocs(qRes);
+                    
+                    if(snapRes.empty) {
+                        html += `<tr><td class="p-4 font-mono font-bold">${st.code}</td><td class="p-4 font-bold">${st.name}</td><td class="p-4 text-slate-400" colspan="3">لم ينجز أي اختبار بعد</td></tr>`;
+                    } else {
+                        snapRes.forEach(rDoc => {
+                            const res = rDoc.data();
+                            html += `<tr class="hover:bg-slate-50">
+                                <td class="p-4 font-mono font-bold">${st.code}</td>
+                                <td class="p-4 font-bold">${st.name}</td>
+                                <td class="p-4 text-indigo-700">${res.quizTitle}</td>
+                                <td class="p-4 font-bold text-emerald-600">${res.score} / ${res.total}</td>
+                                <td class="p-4 text-slate-500 text-xs">${res.date.split('T')[0]}</td>
+                            </tr>`;
+                        });
+                    }
+                }
+                tbody.innerHTML = html;
+            } catch(e) {
+                tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-rose-500">حدث خطأ في جلب التقرير.</td></tr>';
+            }
+        }
+
+        window.loadStudentReport = async function() {
+            const code = document.getElementById('report-student-code').value.trim();
+            if(!code) return alert("المرجو إدخال المعرف الشخصي");
+            const tbody = document.getElementById('reports-table-body');
+            tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center font-bold text-emerald-600">جاري جلب تقرير التلميذ... ⏳</td></tr>';
+            
+            try {
+                // جلب اسم التلميذ
+                const qStudent = query(collection(db, "students"), where("code", "==", code));
+                const snapStudent = await getDocs(qStudent);
+                if(snapStudent.empty) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-slate-500">المعرف غير مسجل.</td></tr>';
+                    return;
+                }
+                const st = snapStudent.docs[0].data();
+
+                // جلب نتائج التلميذ
+                const qRes = query(collection(db, "results"), where("code", "==", code));
+                const snapRes = await getDocs(qRes);
+                
+                let html = '';
+                if(snapRes.empty) {
+                    html = `<tr><td class="p-4 font-mono font-bold">${st.code}</td><td class="p-4 font-bold">${st.name}</td><td class="p-4 text-slate-400" colspan="3">لم ينجز أي اختبار بعد</td></tr>`;
+                } else {
+                    snapRes.forEach(rDoc => {
+                        const res = rDoc.data();
+                        html += `<tr class="hover:bg-emerald-50">
+                            <td class="p-4 font-mono font-bold">${st.code}</td>
+                            <td class="p-4 font-bold">${st.name}</td>
+                            <td class="p-4 text-indigo-700">${res.quizTitle}</td>
+                            <td class="p-4 font-bold text-emerald-600">${res.score} / ${res.total}</td>
+                            <td class="p-4 text-slate-500 text-xs">${res.date.split('T')[0]}</td>
+                        </tr>`;
+                    });
+                }
+                tbody.innerHTML = html;
+            } catch(e) {
+                tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-rose-500">حدث خطأ في جلب التقرير.</td></tr>';
+            }
+        }
+
+        // تشغيل دوال الجلب عند تحميل الصفحة
         document.addEventListener('DOMContentLoaded', () => { 
             loadAllArchives(); 
         });
