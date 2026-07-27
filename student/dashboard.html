@@ -6,7 +6,11 @@
     <title>فضاء التلميذ | منصة اللغة العربية</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <style> body { font-family: 'Cairo', sans-serif; } </style>
+    <style> 
+        body { font-family: 'Cairo', sans-serif; } 
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-800">
 
@@ -16,17 +20,14 @@
             <div class="text-center space-y-2">
                 <div class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-2">🎓</div>
                 <h2 class="text-xl font-bold text-slate-800">تسجيل الدخول للمنصة</h2>
-                <p class="text-sm text-slate-500">أدخل المعرف الشخصي الخاص بك للوصول إلى دروسك والتكليفات</p>
+                <p class="text-sm text-slate-500">أدخل المعرف الشخصي الخاص بك</p>
             </div>
             
             <div class="space-y-4 pt-2">
                 <input type="text" id="student-code-input" placeholder="مثال: G141078429" class="w-full p-4 border border-slate-200 rounded-xl text-center font-mono font-bold text-lg outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50 focus:bg-white transition-all">
                 <p id="login-error" class="text-sm text-rose-600 text-center font-bold hidden bg-rose-50 py-2 rounded-lg">المعرف الشخصي غير مسجل في هذا المستوى!</p>
-                <p id="login-loading" class="text-sm text-indigo-600 text-center font-bold hidden">جاري التحقق من السحابة... ⏳</p>
-                
-                <button id="login-btn" class="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-md transition-all">تأكيد الدخول</button>
+                <button id="login-btn" onclick="loginStudent()" class="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-md transition-all">تأكيد الدخول</button>
             </div>
-            
             <div class="text-center pt-2">
                 <a href="../index.html" class="text-xs text-slate-400 hover:text-slate-600 underline">العودة لاختيار مستوى آخر</a>
             </div>
@@ -40,80 +41,121 @@
             <a href="../index.html" class="bg-emerald-800 hover:bg-emerald-900 px-4 py-2 rounded-xl text-xs font-bold shadow-inner transition-all">خروج 🏠</a>
         </header>
 
-        <main class="max-w-4xl mx-auto my-8 p-4 space-y-6">
-            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-emerald-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h2 class="text-xl md:text-2xl font-bold text-emerald-800" id="welcome-msg">مرحباً بالتلميذ(ة): ...</h2>
-                    <p class="text-sm text-slate-500 mt-2">تمنياتنا لك بالتوفيق والنجاح في مسارك الدراسي.</p>
-                </div>
-                <a href="quizzes.html" class="w-full md:w-auto text-center px-6 py-3 bg-emerald-600 text-white text-sm font-bold rounded-xl hover:bg-emerald-700 shadow-md transition-all">اجتياز الاختبارات 📝</a>
-            </div>
+        <main class="max-w-5xl mx-auto my-8 p-4 space-y-8">
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center space-y-2">
-                    <div class="text-3xl mb-2">📚</div>
-                    <h3 class="font-bold text-slate-800">المكتبة الرقمية</h3>
-                    <p class="text-xs text-slate-500">تصفح الدروس والملخصات المرفوعة</p>
-                </div>
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center space-y-2">
-                    <div class="text-3xl mb-2">📌</div>
-                    <h3 class="font-bold text-slate-800">الواجبات والتكليفات</h3>
-                    <p class="text-xs text-slate-500">إنجاز الفروض المنزلية وتسليمها</p>
-                </div>
+            <!-- الترحيب الممركز -->
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-emerald-100 text-center fade-in">
+                <div class="w-20 h-20 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center text-4xl mx-auto mb-4 border-4 border-white shadow-md">✨</div>
+                <h2 class="text-2xl md:text-3xl font-extrabold text-emerald-800 mb-2" id="welcome-msg">مرحباً بك: (الاسم الكامل)</h2>
+                <p class="text-base md:text-lg text-slate-600 font-bold">أتمنى لك التوفيق والنجاح في مسارك الدراسي.</p>
             </div>
+
+            <!-- أزرار التبويبات -->
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+                <button onclick="switchStudentTab('library-sec', this)" class="std-tab-btn active-tab bg-emerald-600 text-white p-3 rounded-xl font-bold text-sm shadow-md transition-all">📚 المكتبة الرقمية</button>
+                <button onclick="switchStudentTab('assignments-sec', this)" class="std-tab-btn bg-white text-slate-600 border border-slate-200 p-3 rounded-xl font-bold text-sm hover:bg-slate-50 transition-all">📌 الواجبات والتكليفات</button>
+                <button onclick="switchStudentTab('announcements-sec', this)" class="std-tab-btn bg-white text-slate-600 border border-slate-200 p-3 rounded-xl font-bold text-sm hover:bg-slate-50 transition-all">📢 الإخبارات</button>
+                <button onclick="switchStudentTab('quizzes-sec', this)" class="std-tab-btn bg-white text-slate-600 border border-slate-200 p-3 rounded-xl font-bold text-sm hover:bg-slate-50 transition-all">📝 الاختبارات الرقمية</button>
+                <button onclick="switchStudentTab('results-sec', this)" class="std-tab-btn bg-white text-slate-600 border border-slate-200 p-3 rounded-xl font-bold text-sm hover:bg-slate-50 transition-all">🎯 نتائجي</button>
+            </div>
+
+            <!-- 1. المكتبة الرقمية -->
+            <section id="library-sec" class="std-sec fade-in bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <h3 class="text-lg font-bold text-emerald-900 border-b pb-3 mb-4">المكتبة الرقمية (دروس مستواك الدراسي)</h3>
+                <p class="text-sm text-slate-500">جاري جلب الدروس المخصصة لمستواك...</p>
+                <!-- ستظهر الدروس هنا تلقائياً -->
+            </section>
+
+            <!-- 2. الواجبات والتكليفات -->
+            <section id="assignments-sec" class="std-sec hidden fade-in bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <h3 class="text-lg font-bold text-emerald-900 border-b pb-3 mb-4">الواجبات والتكليفات المطلوبة</h3>
+                <div class="space-y-4">
+                    <!-- نموذج لعرض تكليف للتلميذ -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-slate-800">تطبيق في الدرس اللغوي</h4>
+                            <span class="text-xs font-bold bg-indigo-100 text-indigo-700 px-2 py-1 rounded">الدرس اللغوي</span>
+                        </div>
+                        <p class="text-sm text-slate-600 mb-3">طريقة الإنجاز المطلوبة: <strong class="text-emerald-700">الإجابة في دفتر الإعداد القبلي</strong></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. الإخبارات -->
+            <section id="announcements-sec" class="std-sec hidden fade-in bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <h3 class="text-lg font-bold text-emerald-900 border-b pb-3 mb-4">الإخبارات والإعلانات</h3>
+                <p class="text-sm text-slate-500">لا توجد إعلانات جديدة حالياً.</p>
+            </section>
+
+            <!-- 4. الاختبارات الرقمية -->
+            <section id="quizzes-sec" class="std-sec hidden fade-in bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <h3 class="text-lg font-bold text-emerald-900 border-b pb-3 mb-4">الاختبارات الرقمية المتاحة</h3>
+                
+                <!-- نموذج اختبار يتضمن التحقق من الموعد -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <h4 class="font-bold text-slate-800 mb-2">تقويم تشخيصي</h4>
+                    <p class="text-xs text-rose-600 font-bold mb-3">آخر أجل: 2026-08-01 12:00</p>
+                    <button onclick="checkQuizDeadline('2026-08-01T12:00:00')" class="px-5 py-2 bg-emerald-600 text-white text-sm font-bold rounded-lg shadow-md hover:bg-emerald-700">بدء الاختبار</button>
+                </div>
+            </section>
+
+            <!-- 5. نتائجي -->
+            <section id="results-sec" class="std-sec hidden fade-in bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <h3 class="text-lg font-bold text-emerald-900 border-b pb-3 mb-4">تجميع النقط (نتائجي التراكمية)</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl text-center">
+                        <span class="block text-xs font-bold text-slate-500 mb-1">المعدل العام</span>
+                        <span class="text-2xl font-black text-emerald-700">-- / 20</span>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-right text-sm border border-slate-200 rounded-xl">
+                        <thead class="bg-slate-50 text-slate-600 border-b">
+                            <tr><th class="p-3 font-bold">النشاط</th><th class="p-3 font-bold">التاريخ</th><th class="p-3 font-bold">النقطة</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="3" class="p-4 text-center text-slate-400">سيتم عرض نتائجك هنا فور تصحيحها.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
         </main>
     </div>
 
-    <!-- سكربت التحقق من الدخول عبر السحابة (Firebase) -->
-    <script type="module">
-        import { db, collection, getDocs, query, where } from '../assets/js/firebase-config.js';
-
-        async function loginStudent() {
+    <script>
+        function loginStudent() {
+            // محاكاة الدخول المؤقتة لتجربة التصميم
             const codeInput = document.getElementById('student-code-input').value.trim();
-            const urlParams = new URLSearchParams(window.location.search);
-            const level = urlParams.get('level') || 'common-sci';
-
-            if(!codeInput) {
-                alert("المرجو إدخال المعرف الشخصي أولاً.");
-                return;
-            }
-
-            // إظهار رسالة التحميل وإخفاء رسالة الخطأ
-            document.getElementById('login-error').classList.add('hidden');
-            document.getElementById('login-loading').classList.remove('hidden');
-            document.getElementById('login-btn').disabled = true;
-
-            try {
-                // البحث في السحابة عن التلميذ في المستوى المحدد بغض النظر عن القسم
-                const q = query(collection(db, "students"), where("level", "==", level), where("code", "==", codeInput));
-                const querySnapshot = await getDocs(q);
-
-                if (!querySnapshot.empty) {
-                    // تم العثور على التلميذ بنجاح
-                    const student = querySnapshot.docs[0].data();
-                    
-                    document.getElementById('login-modal').classList.add('hidden');
-                    document.getElementById('main-student-content').classList.remove('hidden');
-                    document.getElementById('welcome-msg').innerText = `مرحباً بك: ${student.name}`;
-                } else {
-                    // لم يتم العثور عليه
-                    document.getElementById('login-error').classList.remove('hidden');
-                }
-            } catch (error) {
-                console.error("Database Error:", error);
-                alert("حدث خطأ في الاتصال بقاعدة البيانات. تأكد من توفر الإنترنت.");
-            } finally {
-                // إعادة ضبط الأزرار
-                document.getElementById('login-loading').classList.add('hidden');
-                document.getElementById('login-btn').disabled = false;
-            }
+            if(!codeInput) return alert("المرجو إدخال المعرف الشخصي.");
+            
+            document.getElementById('login-modal').classList.add('hidden');
+            document.getElementById('main-student-content').classList.remove('hidden');
+            // سيتم استبدال "التلميذ" بالاسم الحقيقي من فايربيس
+            document.getElementById('welcome-msg').innerText = `مرحباً بك: (اسم التلميذ سيجلب من السحابة)`;
         }
 
-        // ربط دالة الدخول بالزر وزر Enter
-        document.getElementById('login-btn').addEventListener('click', loginStudent);
-        document.getElementById('student-code-input').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') loginStudent();
-        });
+        function switchStudentTab(secId, btnElement) {
+            document.querySelectorAll('.std-sec').forEach(el => el.classList.add('hidden'));
+            document.getElementById(secId).classList.remove('hidden');
+
+            document.querySelectorAll('.std-tab-btn').forEach(btn => {
+                btn.className = "std-tab-btn bg-white text-slate-600 border border-slate-200 p-3 rounded-xl font-bold text-sm hover:bg-slate-50 transition-all";
+            });
+            btnElement.className = "std-tab-btn active-tab bg-emerald-600 text-white p-3 rounded-xl font-bold text-sm shadow-md transition-all";
+        }
+
+        // دالة التحقق من موعد الاختبار
+        function checkQuizDeadline(deadlineStr) {
+            const now = new Date();
+            const deadline = new Date(deadlineStr);
+            if (now > deadline) {
+                alert("أنتم خارج موعد الاختبار؛ لذلك تم إغلاقه.");
+            } else {
+                alert("جاري فتح الاختبار...");
+                // التوجيه لصفحة الاختبار
+            }
+        }
     </script>
 </body>
 </html>
