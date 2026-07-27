@@ -1,21 +1,21 @@
 {
-  "name": "دفتر الأستاذ الرقمي",
-  "short_name": "دفتر الأستاذ",
+  "name": "منصة اللغة العربية | الأستاذ عبد المجيد",
+  "short_name": "لغتي العربية",
+  "description": "منصة تعليمية تفاعلية لمتابعة الدروس وإنجاز التكليفات في مادة اللغة العربية.",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#f4f7f6",
-  "theme_color": "#2c3e50",
-  "orientation": "portrait-primary",
+  "background_color": "#f8fafc",
+  "theme_color": "#059669",
   "icons": [
     {
-      "src": "icon-192.png",
-      "type": "image/png",
-      "sizes": "192x192"
+      "src": "assets/images/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
     },
     {
-      "src": "icon-512.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "src": "assets/images/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ]
 }

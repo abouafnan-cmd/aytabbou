@@ -8,57 +8,111 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style> body { font-family: 'Cairo', sans-serif; } </style>
 </head>
-<body class="bg-gray-50 min-h-screen text-gray-800">
+<body class="bg-slate-50 min-h-screen text-slate-800">
 
-    <!-- Auth Box (if not logged in) -->
-    <div id="login-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-        <div class="bg-white max-w-md w-full p-6 rounded-2xl shadow-xl space-y-4">
-            <h2 class="text-lg font-bold text-center text-gray-800">تسجيل الدخول للمنصة</h2>
-            <p class="text-xs text-gray-500 text-center">أدخل المعرف الشخصي الخاص بك للوصول إلى دروسك والتكليفات</p>
-            <input type="text" id="student-code-input" placeholder="أدخل المعرف الشخصي (مثال: K130092)" class="w-full p-3 border rounded-xl text-center font-mono outline-none focus:ring-2 focus:ring-emerald-500">
-            <p id="login-error" class="text-xs text-red-600 text-center font-bold hidden">المعرف الشخصي غير موجود في لائحة هذا المستوى!</p>
-            <button onclick="loginStudent()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-md">تأكيد الدخول</button>
+    <!-- نافذة تسجيل الدخول -->
+    <div id="login-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div class="bg-white max-w-md w-full p-8 rounded-2xl shadow-xl space-y-5 border border-slate-100">
+            <div class="text-center space-y-2">
+                <div class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-2">🎓</div>
+                <h2 class="text-xl font-bold text-slate-800">تسجيل الدخول للمنصة</h2>
+                <p class="text-sm text-slate-500">أدخل المعرف الشخصي الخاص بك للوصول إلى دروسك والتكليفات</p>
+            </div>
+            
+            <div class="space-y-4 pt-2">
+                <input type="text" id="student-code-input" placeholder="مثال: G141078429" class="w-full p-4 border border-slate-200 rounded-xl text-center font-mono font-bold text-lg outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50 focus:bg-white transition-all">
+                <p id="login-error" class="text-sm text-rose-600 text-center font-bold hidden bg-rose-50 py-2 rounded-lg">المعرف الشخصي غير موجود في هذا المستوى!</p>
+                <button onclick="loginStudent()" class="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-md transition-all">تأكيد الدخول</button>
+            </div>
+            
+            <div class="text-center pt-2">
+                <a href="../index.html" class="text-xs text-slate-400 hover:text-slate-600 underline">العودة لاختيار مستوى آخر</a>
+            </div>
         </div>
     </div>
 
-    <!-- Main Content (Shown after login) -->
+    <!-- المحتوى الفعلي لفضاء التلميذ -->
     <div id="main-student-content" class="hidden">
-        <header class="bg-emerald-600 text-white shadow-md py-4 px-6 flex justify-between items-center">
+        <header class="bg-emerald-600 text-white shadow-lg py-4 px-6 flex justify-between items-center sticky top-0 z-40">
             <h1 class="text-lg font-bold">منصة اللغة العربية | فضاء التلميذ</h1>
-            <a href="../index.html" class="bg-emerald-700 hover:bg-emerald-800 px-3 py-1.5 rounded-lg text-xs font-bold">تغيير المستوى 🏠</a>
+            <a href="../index.html" class="bg-emerald-800 hover:bg-emerald-900 px-4 py-2 rounded-xl text-xs font-bold shadow-inner transition-all">تغيير المستوى 🏠</a>
         </header>
 
         <main class="max-w-4xl mx-auto my-8 p-4 space-y-6">
-            <!-- Welcome Header -->
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100 flex justify-between items-center">
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-emerald-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h2 class="text-xl font-bold text-emerald-800" id="welcome-msg">مرحباً بالتلميذ(ة): ...</h2>
-                    <p class="text-xs text-gray-500 mt-1">تمنياتنا لك بالتوفيق والنجاح في مسارك الدراسي.</p>
+                    <h2 class="text-xl md:text-2xl font-bold text-emerald-800" id="welcome-msg">مرحباً بالتلميذ(ة): ...</h2>
+                    <p class="text-sm text-slate-500 mt-2">تمنياتنا لك بالتوفيق والنجاح في مسارك الدراسي.</p>
                 </div>
-                <span class="text-3xl">🎓</span>
+                <a href="quizzes.html" class="w-full md:w-auto text-center px-6 py-3 bg-emerald-600 text-white text-sm font-bold rounded-xl hover:bg-emerald-700 shadow-md transition-all">اجتياز الاختبارات 📝</a>
+            </div>
+            
+            <!-- مساحة للإعلانات أو الدروس مستقبلاً -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center space-y-2">
+                    <div class="text-3xl mb-2">📚</div>
+                    <h3 class="font-bold text-slate-800">المكتبة الرقمية</h3>
+                    <p class="text-xs text-slate-500">تصفح الدروس والملخصات المرفوعة</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center space-y-2">
+                    <div class="text-3xl mb-2">📌</div>
+                    <h3 class="font-bold text-slate-800">الواجبات والتكليفات</h3>
+                    <p class="text-xs text-slate-500">إنجاز الفروض المنزلية وتسليمها</p>
+                </div>
             </div>
         </main>
     </div>
 
     <script>
         function loginStudent() {
-            const code = document.getElementById('student-code-input').value.trim();
+            const codeInput = document.getElementById('student-code-input').value.trim();
             const urlParams = new URLSearchParams(window.location.search);
             const level = urlParams.get('level') || 'common-sci';
 
-            const allStudents = JSON.parse(localStorage.getItem('edu_students') || '{}');
-            const levelStudents = allStudents[level] || [];
+            if(!codeInput) {
+                alert("المرجو إدخال المعرف الشخصي أولاً.");
+                return;
+            }
 
-            const foundStudent = levelStudents.find(s => s.code === code);
+            let foundStudent = null;
 
+            // البحث الشامل: المرور على جميع البيانات المخزنة للبحث عن أقسام هذا المستوى
+            const prefix = `students_${level}_`;
+            
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                
+                // إذا كان المفتاح يبدأ باسم المستوى المطلوب (يتجاهل القسم ويبحث في الجميع)
+                if (key.startsWith(prefix)) {
+                    const classStudents = JSON.parse(localStorage.getItem(key) || '[]');
+                    
+                    // البحث عن المعرف داخل هذا القسم
+                    const student = classStudents.find(s => s.code === codeInput);
+                    if (student) {
+                        foundStudent = student;
+                        break; // إيقاف البحث بمجرد العثور عليه
+                    }
+                }
+            }
+
+            // النتيجة
             if (foundStudent) {
                 document.getElementById('login-modal').classList.add('hidden');
                 document.getElementById('main-student-content').classList.remove('hidden');
-                document.getElementById('welcome-msg').innerText = `مرحباً بالتلميذ(ة): ${foundStudent.name}`;
+                document.getElementById('welcome-msg').innerText = `مرحباً بك: ${foundStudent.name}`;
+                document.getElementById('login-error').classList.add('hidden');
             } else {
+                // إظهار رسالة الخطأ
                 document.getElementById('login-error').classList.remove('hidden');
             }
         }
+
+        // دعم الضغط على زر "Entrée" لتسجيل الدخول
+        document.getElementById('student-code-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                loginStudent();
+            }
+        });
     </script>
 </body>
 </html>
