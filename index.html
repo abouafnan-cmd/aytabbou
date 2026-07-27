@@ -5,85 +5,90 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>منصة اللغة العربية | الأستاذ عبد المجيد أيت عبو</title>
     
-    <!-- إعدادات تطبيق الهاتف (PWA) -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#059669">
-    <link rel="apple-touch-icon" href="assets/images/icon-192.png">
-
-    <!-- روابط التصميم والخطوط -->
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <style> body { font-family: 'Cairo', sans-serif; } </style>
+    <!-- إعدادات الوضع الليلي والخطوط -->
+    <script>
+        tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { cairo: ['Cairo', 'sans-serif'], amiri: ['Amiri', 'serif'] } } } }
+        // تشغيل الوضع الليلي تلقائياً إذا كان محفوظاً
+        if(localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Cairo', sans-serif; }
+        .font-art { font-family: 'Amiri', serif; }
+        /* زخرفة إسلامية خفيفة للخلفية */
+        .bg-pattern { background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2310b981' fill-opacity='0.05' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E"); }
+        .dark .bg-pattern { background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E"); }
+    </style>
 </head>
-<body class="bg-slate-50 min-h-screen flex items-center justify-center p-4">
+<body class="bg-slate-50 dark:bg-slate-900 bg-pattern min-h-screen flex items-center justify-center p-4 transition-colors duration-300">
 
-    <div class="max-w-xl w-full bg-white rounded-2xl shadow-md border border-slate-100 p-6 md:p-8 space-y-6">
+    <!-- زر تبديل الوضع الليلي -->
+    <button onclick="toggleTheme()" class="absolute top-4 left-4 p-3 bg-white dark:bg-slate-800 text-slate-800 dark:text-yellow-400 rounded-full shadow-md hover:scale-110 transition-transform">
+        <svg id="theme-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+    </button>
+
+    <div class="max-w-xl w-full bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 p-6 md:p-8 space-y-6 transition-colors duration-300">
         
-        <!-- الترويسة -->
         <div class="text-center space-y-3">
-            <div class="w-16 h-16 bg-emerald-600 text-white font-extrabold rounded-2xl flex items-center justify-center text-2xl mx-auto shadow-lg shadow-emerald-100">
+            <div class="w-16 h-16 bg-emerald-600 text-white font-art font-extrabold rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg shadow-emerald-200 dark:shadow-none transition-transform hover:scale-105 cursor-default">
                 ض
             </div>
-            <h1 class="text-xl md:text-2xl font-bold text-slate-800 leading-snug">
+            <h1 class="text-2xl md:text-3xl font-art font-bold text-slate-800 dark:text-white leading-snug">
                 مرحباً بك في منصة "اللغة العربية" <br>
-                <span class="text-emerald-700">للأستاذ عبد المجيد أيت عبو</span>
+                <span class="text-emerald-600 dark:text-emerald-400">للدكتور عبد المجيد أيت عبو</span>
             </h1>
-            <p class="text-xs md:text-sm text-slate-500 font-semibold">اختر المستوى الذي تدرس فيه للوصول إلى الدروس والتكليفات:</p>
+            <p class="text-xs md:text-sm text-slate-500 dark:text-slate-400 font-semibold">اختر مستواك الدراسي للوصول إلى الدروس والتكليفات:</p>
         </div>
 
-        <!-- لائحة المستويات -->
         <div class="space-y-2.5">
-            <a href="student/dashboard.html?level=common-sci" class="flex items-center justify-between p-3.5 rounded-xl border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/50 transition-all group">
-                <span class="font-bold text-slate-700 group-hover:text-emerald-800 text-sm">📌 جذع مشترك علوم</span>
-                <span class="text-xs text-slate-400 group-hover:text-emerald-600">دخول ←</span>
+            <a href="student/dashboard.html?level=common-sci" class="flex items-center justify-between p-3.5 rounded-xl border border-slate-200 dark:border-slate-600 hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-slate-700 dark:text-slate-200 transition-all group">
+                <span class="font-bold text-sm">📌 جذع مشترك علوم</span>
             </a>
-
-            <a href="student/dashboard.html?level=common-lit" class="flex items-center justify-between p-3.5 rounded-xl border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/50 transition-all group">
-                <span class="font-bold text-slate-700 group-hover:text-emerald-800 text-sm">📌 جذع مشترك آداب</span>
-                <span class="text-xs text-slate-400 group-hover:text-emerald-600">دخول ←</span>
+            <a href="student/dashboard.html?level=common-lit" class="flex items-center justify-between p-3.5 rounded-xl border border-slate-200 dark:border-slate-600 hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-slate-700 dark:text-slate-200 transition-all group">
+                <span class="font-bold text-sm">📌 جذع مشترك آداب</span>
             </a>
-
-            <a href="student/dashboard.html?level=1bac-sci" class="flex items-center justify-between p-3.5 rounded-xl border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/50 transition-all group">
-                <span class="font-bold text-slate-700 group-hover:text-emerald-800 text-sm">📌 الأولى باكلوريا علوم</span>
-                <span class="text-xs text-slate-400 group-hover:text-emerald-600">دخول ←</span>
+            <a href="student/dashboard.html?level=1bac-sci" class="flex items-center justify-between p-3.5 rounded-xl border border-slate-200 dark:border-slate-600 hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-slate-700 dark:text-slate-200 transition-all group">
+                <span class="font-bold text-sm">📌 الأولى باكلوريا علوم</span>
             </a>
-
-            <a href="student/dashboard.html?level=1bac-lit" class="flex items-center justify-between p-3.5 rounded-xl border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/50 transition-all group">
-                <span class="font-bold text-slate-700 group-hover:text-emerald-800 text-sm">📌 الأولى باكلوريا آداب</span>
-                <span class="text-xs text-slate-400 group-hover:text-emerald-600">دخول ←</span>
+            <a href="student/dashboard.html?level=1bac-lit" class="flex items-center justify-between p-3.5 rounded-xl border border-slate-200 dark:border-slate-600 hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-slate-700 dark:text-slate-200 transition-all group">
+                <span class="font-bold text-sm">📌 الأولى باكلوريا آداب</span>
             </a>
-
-            <a href="student/dashboard.html?level=2bac-sci" class="flex items-center justify-between p-3.5 rounded-xl border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/50 transition-all group">
-                <span class="font-bold text-slate-700 group-hover:text-emerald-800 text-sm">📌 الثانية باكلوريا علوم</span>
-                <span class="text-xs text-slate-400 group-hover:text-emerald-600">دخول ←</span>
+            <a href="student/dashboard.html?level=2bac-sci" class="flex items-center justify-between p-3.5 rounded-xl border border-slate-200 dark:border-slate-600 hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-slate-700 dark:text-slate-200 transition-all group">
+                <span class="font-bold text-sm">📌 الثانية باكلوريا علوم</span>
             </a>
-
-            <a href="student/dashboard.html?level=2bac-lit" class="flex items-center justify-between p-3.5 rounded-xl border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/50 transition-all group">
-                <span class="font-bold text-slate-700 group-hover:text-emerald-800 text-sm">📌 الثانية باكلوريا آداب</span>
-                <span class="text-xs text-slate-400 group-hover:text-emerald-600">دخول ←</span>
+            <a href="student/dashboard.html?level=2bac-lit" class="flex items-center justify-between p-3.5 rounded-xl border border-slate-200 dark:border-slate-600 hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-slate-700 dark:text-slate-200 transition-all group">
+                <span class="font-bold text-sm">📌 الثانية باكلوريا آداب</span>
             </a>
         </div>
 
-        <!-- رابط دخول الإدارة -->
         <div class="text-center pt-2">
-            <a href="admin.html" class="text-xs text-slate-400 hover:text-slate-600 underline">دخول الإدارة (خاص بالأستاذ)</a>
+            <a href="admin.html" class="text-xs text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 underline">دخول الإدارة (خاص بالأستاذ)</a>
         </div>
-
     </div>
 
-    <!-- سكربت تشغيل عامل الخدمة (لتثبيت التطبيق) -->
     <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('sw.js')
-            .then(registration => {
-              console.log('تم تشغيل التطبيق بنجاح!', registration.scope);
-            })
-            .catch(error => {
-              console.log('فشل تشغيل التطبيق:', error);
-            });
-        });
-      }
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+            updateIcon();
+        }
+        function updateIcon() {
+            const icon = document.getElementById('theme-icon');
+            if(document.documentElement.classList.contains('dark')) {
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+            } else {
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>';
+            }
+        }
+        updateIcon();
+        
+        // PWA Script
+        if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js'); }); }
     </script>
 </body>
 </html>
