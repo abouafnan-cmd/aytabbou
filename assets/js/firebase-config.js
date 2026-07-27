@@ -1,8 +1,9 @@
 // استدعاء مكتبات Firebase عبر الروابط المباشرة للمتصفح
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, query, where, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
 
-// إعدادات مشروعك الخاص (تم إدراج بياناتك)
+// إعدادات مشروعك الخاص
 const firebaseConfig = {
   apiKey: "AIzaSyA0vuu9Wi3ubo-jHsJXXxTdjyVqIyNyF_Q",
   authDomain: "arabic-edu-platform.firebaseapp.com",
@@ -13,9 +14,9 @@ const firebaseConfig = {
   measurementId: "G-FTF8GK4B3G"
 };
 
-// تهيئة الاتصال
+// تهيئة الاتصال بالسحابة والتخزين
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
-// تصدير الأدوات لاستخدامها في واجهات المنصة
-export { db, collection, addDoc, getDocs, query, where, deleteDoc, doc };
+export { db, storage, ref, uploadBytes, getDownloadURL, collection, addDoc, getDocs, query, where, deleteDoc, doc };

@@ -21,21 +21,27 @@
                 <h2 class="text-xl font-bold text-slate-800">تسجيل الدخول للمنصة</h2>
                 <p class="text-sm text-slate-500">أدخل المعرف الشخصي الخاص بك</p>
             </div>
-            
             <div class="space-y-4 pt-2">
                 <input type="text" id="student-code-input" placeholder="مثال: G141078429" class="w-full p-4 border border-slate-200 rounded-xl text-center font-mono font-bold text-lg outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50">
                 <p id="login-error" class="text-sm text-rose-600 text-center font-bold hidden bg-rose-50 py-2 rounded-lg">المعرف غير مسجل!</p>
-                <button id="login-btn" class="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-md">تأكيد الدخول</button>
+                <button id="login-btn" class="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-md transition-all">تأكيد الدخول</button>
             </div>
-            <div class="text-center pt-2">
-                <a href="../index.html" class="text-xs text-slate-400 hover:text-slate-600 underline">العودة لاختيار مستوى آخر</a>
-            </div>
+        </div>
+    </div>
+
+    <!-- نافذة اجتياز الاختبار (مخفية) -->
+    <div id="quiz-taking-modal" class="hidden fixed inset-0 bg-slate-900/90 z-50 overflow-y-auto p-4">
+        <div class="max-w-3xl mx-auto bg-white rounded-2xl p-6 mt-10 space-y-6">
+            <h2 id="qt-title" class="text-2xl font-bold text-emerald-800 border-b pb-3">عنوان الاختبار</h2>
+            <div id="qt-questions" class="space-y-6"></div>
+            <button onclick="submitQuiz()" class="px-8 py-3 bg-emerald-600 text-white font-bold rounded-xl shadow-md w-full">إنهاء الاختبار وإرسال الأجوبة</button>
+            <button onclick="document.getElementById('quiz-taking-modal').classList.add('hidden')" class="px-8 py-3 bg-slate-200 text-slate-700 font-bold rounded-xl w-full mt-2">إغلاق وتراجع</button>
         </div>
     </div>
 
     <div id="main-student-content" class="hidden">
         <header class="bg-emerald-600 text-white shadow-lg py-4 px-6 flex justify-between items-center sticky top-0 z-40">
-            <h1 class="text-lg font-bold">منصة اللغة العربية | فضاء التلميذ</h1>
+            <h1 class="text-lg font-bold">فضاء التلميذ</h1>
             <a href="../index.html" class="bg-emerald-800 hover:bg-emerald-900 px-4 py-2 rounded-xl text-xs font-bold shadow-inner">خروج 🏠</a>
         </header>
 
@@ -48,166 +54,182 @@
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
-                <button onclick="switchStudentTab('library-sec', this)" class="std-tab-btn active-tab bg-emerald-600 text-white p-3 rounded-xl font-bold text-sm shadow-md transition-all">📚 المكتبة الرقمية</button>
-                <button onclick="switchStudentTab('assignments-sec', this)" class="std-tab-btn bg-white text-slate-600 border border-slate-200 p-3 rounded-xl font-bold text-sm hover:bg-slate-50 transition-all">📌 التكليفات</button>
-                <button onclick="switchStudentTab('announcements-sec', this)" class="std-tab-btn bg-white text-slate-600 border border-slate-200 p-3 rounded-xl font-bold text-sm hover:bg-slate-50 transition-all">📢 الإخبارات</button>
-                <button onclick="switchStudentTab('quizzes-sec', this)" class="std-tab-btn bg-white text-slate-600 border border-slate-200 p-3 rounded-xl font-bold text-sm hover:bg-slate-50 transition-all">📝 الاختبارات</button>
-                <button onclick="switchStudentTab('results-sec', this)" class="std-tab-btn bg-white text-slate-600 border border-slate-200 p-3 rounded-xl font-bold text-sm hover:bg-slate-50 transition-all">🎯 نتائجي</button>
+                <button onclick="switchStudentTab('library-sec', this)" class="std-tab-btn active-tab bg-emerald-600 text-white p-3 rounded-xl font-bold text-sm shadow-md">📚 المكتبة الرقمية</button>
+                <button onclick="switchStudentTab('assignments-sec', this)" class="std-tab-btn bg-white text-slate-600 border border-slate-200 p-3 rounded-xl font-bold text-sm">📌 التكليفات</button>
+                <button onclick="switchStudentTab('announcements-sec', this)" class="std-tab-btn bg-white text-slate-600 border border-slate-200 p-3 rounded-xl font-bold text-sm">📢 الإخبارات</button>
+                <button onclick="switchStudentTab('quizzes-sec', this)" class="std-tab-btn bg-white text-slate-600 border border-slate-200 p-3 rounded-xl font-bold text-sm">📝 الاختبارات</button>
+                <button onclick="switchStudentTab('results-sec', this)" class="std-tab-btn bg-white text-slate-600 border border-slate-200 p-3 rounded-xl font-bold text-sm">🎯 نتائجي</button>
             </div>
 
-            <!-- 1. المكتبة الرقمية -->
             <section id="library-sec" class="std-sec fade-in bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <h3 class="text-lg font-bold text-emerald-900 border-b pb-3 mb-4">المكتبة الرقمية (دروس مستواك الدراسي)</h3>
-                <div id="lessons-list" class="space-y-4">جاري جلب الدروس من السحابة...</div>
+                <h3 class="text-lg font-bold text-emerald-900 border-b pb-3 mb-4">المكتبة الرقمية</h3>
+                <div id="lessons-list" class="space-y-4">جاري الجلب...</div>
             </section>
 
-            <!-- 2. الواجبات -->
             <section id="assignments-sec" class="std-sec hidden fade-in bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                 <h3 class="text-lg font-bold text-emerald-900 border-b pb-3 mb-4">الواجبات والتكليفات المطلوبة</h3>
-                <div id="assignments-list" class="space-y-4">جاري جلب الواجبات...</div>
+                <div id="assignments-list" class="space-y-4">جاري الجلب...</div>
             </section>
 
-            <!-- 3. الإخبارات -->
             <section id="announcements-sec" class="std-sec hidden fade-in bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                 <h3 class="text-lg font-bold text-emerald-900 border-b pb-3 mb-4">الإخبارات والإعلانات</h3>
-                <div id="announcements-list" class="space-y-4">جاري جلب الإعلانات...</div>
+                <div id="announcements-list" class="space-y-4">جاري الجلب...</div>
             </section>
 
-            <!-- 4. الاختبارات -->
             <section id="quizzes-sec" class="std-sec hidden fade-in bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                 <h3 class="text-lg font-bold text-emerald-900 border-b pb-3 mb-4">الاختبارات الرقمية المتاحة</h3>
-                <div id="quizzes-list" class="space-y-4">جاري جلب الاختبارات...</div>
+                <div id="quizzes-list" class="space-y-4">جاري الجلب...</div>
             </section>
 
-            <!-- 5. نتائجي -->
             <section id="results-sec" class="std-sec hidden fade-in bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <h3 class="text-lg font-bold text-emerald-900 border-b pb-3 mb-4">تجميع النقط (نتائجي التراكمية)</h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl text-center">
-                        <span class="block text-xs font-bold text-slate-500 mb-1">المعدل العام</span>
-                        <span class="text-2xl font-black text-emerald-700">-- / 20</span>
-                    </div>
-                </div>
+                <h3 class="text-lg font-bold text-emerald-900 border-b pb-3 mb-4">تجميع النقط (النتائج التراكمية)</h3>
+                <table class="w-full text-right text-sm border border-slate-200 rounded-xl overflow-hidden">
+                    <thead class="bg-slate-50 border-b"><tr><th class="p-3">النشاط</th><th class="p-3">النقطة</th></tr></thead>
+                    <tbody id="results-table-body"><tr><td colspan="2" class="p-4 text-center">لا توجد نتائج بعد.</td></tr></tbody>
+                </table>
             </section>
-
         </main>
     </div>
 
-    <!-- دوال التبويبات والمواعيد -->
     <script>
         function switchStudentTab(secId, btnElement) {
             document.querySelectorAll('.std-sec').forEach(el => el.classList.add('hidden'));
             document.getElementById(secId).classList.remove('hidden');
             document.querySelectorAll('.std-tab-btn').forEach(btn => {
-                btn.className = "std-tab-btn bg-white text-slate-600 border border-slate-200 p-3 rounded-xl font-bold text-sm hover:bg-slate-50 transition-all";
+                btn.className = "std-tab-btn bg-white text-slate-600 border border-slate-200 p-3 rounded-xl font-bold text-sm";
             });
-            btnElement.className = "std-tab-btn active-tab bg-emerald-600 text-white p-3 rounded-xl font-bold text-sm shadow-md transition-all";
-        }
-
-        window.checkQuizDeadline = function(deadlineStr) {
-            const now = new Date();
-            const deadline = new Date(deadlineStr);
-            if (now > deadline) {
-                alert("أنتم خارج موعد الاختبار؛ لذلك تم إغلاقه.");
-            } else {
-                alert("جاري فتح الاختبار...");
-            }
+            btnElement.className = "std-tab-btn active-tab bg-emerald-600 text-white p-3 rounded-xl font-bold text-sm shadow-md";
         }
     </script>
 
-    <!-- سكربت فايربيس (جلب بيانات التلميذ) -->
+    <!-- سكربت فايربيس -->
     <script type="module">
-        import { db, collection, getDocs, query, where } from '../assets/js/firebase-config.js';
+        import { db, collection, getDocs, query, where, addDoc } from '../assets/js/firebase-config.js';
+
+        let currentUser = null;
+        let activeQuiz = null;
 
         async function loginStudent() {
             const codeInput = document.getElementById('student-code-input').value.trim();
             const urlParams = new URLSearchParams(window.location.search);
             const level = urlParams.get('level') || 'common-sci';
 
-            if(!codeInput) return alert("المرجو إدخال المعرف.");
+            if(!codeInput) return alert("أدخل المعرف.");
             document.getElementById('login-btn').innerText = "جاري التحقق...";
 
             try {
-                // التأكد من تسجيل التلميذ
                 const q = query(collection(db, "students"), where("level", "==", level), where("code", "==", codeInput));
                 const snap = await getDocs(q);
-
                 if (!snap.empty) {
-                    const student = snap.docs[0].data();
+                    currentUser = snap.docs[0].data();
                     document.getElementById('login-modal').classList.add('hidden');
                     document.getElementById('main-student-content').classList.remove('hidden');
-                    document.getElementById('welcome-msg').innerText = `مرحباً بك: ${student.name}`;
-                    
-                    // جلب البيانات السحابية فور الدخول
-                    fetchStudentData(level);
+                    document.getElementById('welcome-msg').innerText = `مرحباً بك: ${currentUser.name}`;
+                    fetchData(level);
                 } else {
                     document.getElementById('login-error').classList.remove('hidden');
                 }
-            } catch (e) { alert("خطأ في الاتصال بقاعدة البيانات."); }
+            } catch (e) { alert("خطأ."); }
             document.getElementById('login-btn').innerText = "تأكيد الدخول";
         }
 
-        async function fetchStudentData(level) {
-            // 1. جلب الدروس
-            const lessonsQ = query(collection(db, "lessons"), where("level", "==", level));
-            const lessonsSnap = await getDocs(lessonsQ);
-            let lessonsHTML = '';
-            lessonsSnap.forEach(doc => {
-                const data = doc.data();
-                lessonsHTML += `<div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                    <h4 class="font-bold text-emerald-800">${data.title}</h4>
-                    <span class="text-xs font-bold text-slate-500 mt-1 block">المكون: ${data.component}</span>
-                    <a href="${data.link}" target="_blank" class="text-xs text-indigo-600 font-bold mt-2 inline-block hover:underline">عرض محتوى الدرس →</a>
-                </div>`;
-            });
-            document.getElementById('lessons-list').innerHTML = lessonsHTML || '<p class="text-sm text-slate-400">لا توجد دروس حالياً.</p>';
+        async function fetchData(level) {
+            // جلب الإعلانات
+            try {
+                const annSnap = await getDocs(collection(db, "announcements"));
+                let h = '';
+                annSnap.forEach(d => { 
+                    const v = d.data(); 
+                    if(v.level === level || v.level === 'all') h += `<div class="bg-indigo-50 p-4 rounded-xl border-r-4 border-r-indigo-500"><h4 class="font-bold text-indigo-900">${v.title}</h4><p class="text-sm mt-2">${v.content}</p></div>`; 
+                });
+                document.getElementById('announcements-list').innerHTML = h || '<p>لا توجد إعلانات.</p>';
+            } catch(e){}
 
-            // 2. جلب الإعلانات
-            const annQ = query(collection(db, "announcements"));
-            const annSnap = await getDocs(annQ);
-            let annHTML = '';
-            annSnap.forEach(doc => {
-                const data = doc.data();
-                if(data.level === level || data.level === 'all') {
-                    annHTML += `<div class="bg-indigo-50 p-4 rounded-xl border border-indigo-100 border-r-4 border-r-indigo-500">
-                        <h4 class="font-bold text-indigo-900">${data.title}</h4>
-                        <p class="text-sm text-slate-700 mt-2">${data.content}</p>
-                        <span class="text-xs text-slate-500 mt-2 block">تاريخ الإعلان: ${data.date}</span>
-                    </div>`;
-                }
-            });
-            document.getElementById('announcements-list').innerHTML = annHTML || '<p class="text-sm text-slate-400">لا توجد إعلانات.</p>';
+            // جلب الدروس
+            try {
+                const lessSnap = await getDocs(query(collection(db, "lessons"), where("level", "==", level)));
+                let h = '';
+                lessSnap.forEach(d => { 
+                    const v = d.data(); 
+                    h += `<div class="bg-slate-50 p-4 rounded-xl border"><h4 class="font-bold text-emerald-800">${v.title}</h4><span class="text-xs bg-emerald-100 text-emerald-800 px-2 py-1 rounded inline-block mt-2">${v.component}</span><br><a href="${v.link}" target="_blank" class="text-sm text-indigo-600 font-bold mt-2 inline-block">الاطلاع على الدرس →</a></div>`; 
+                });
+                document.getElementById('lessons-list').innerHTML = h || '<p>لا توجد دروس.</p>';
+            } catch(e){}
 
-            // 3. جلب التكليفات
-            const assQ = query(collection(db, "assignments"), where("level", "==", level));
-            const assSnap = await getDocs(assQ);
-            let assHTML = '';
-            assSnap.forEach(doc => {
-                const data = doc.data();
-                assHTML += `<div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                    <div class="flex justify-between items-start">
-                        <h4 class="font-bold text-slate-800">${data.title}</h4>
-                        <span class="text-xs font-bold bg-indigo-100 text-indigo-700 px-2 py-1 rounded">${data.component}</span>
-                    </div>
-                    <p class="text-sm text-slate-600 mt-2 bg-white p-3 rounded border">${data.questions}</p>
-                    <p class="text-sm text-slate-600 mt-3">نمط الإجابة المطلوب: <strong class="text-emerald-700">${data.mode}</strong></p>
-                </div>`;
-            });
-            document.getElementById('assignments-list').innerHTML = assHTML || '<p class="text-sm text-slate-400">لا توجد تكليفات.</p>';
+            // جلب التكليفات
+            try {
+                const assSnap = await getDocs(query(collection(db, "assignments"), where("level", "==", level)));
+                let h = '';
+                assSnap.forEach(d => { 
+                    const v = d.data(); 
+                    h += `<div class="bg-slate-50 p-4 rounded-xl border"><h4 class="font-bold">${v.title} (${v.component})</h4><p class="mt-2 text-sm bg-white p-3 border rounded">${v.questions}</p><p class="text-sm text-emerald-700 font-bold mt-2">المطلوب: ${v.mode}</p></div>`; 
+                });
+                document.getElementById('assignments-list').innerHTML = h || '<p>لا توجد تكليفات.</p>';
+            } catch(e){}
 
-            // 4. جلب الاختبارات
-            const quizQ = query(collection(db, "quizzes"), where("level", "==", level));
-            const quizSnap = await getDocs(quizQ);
-            let quizHTML = '';
-            quizSnap.forEach(doc => {
-                const data = doc.data();
-                quizHTML += `<div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                    <h4 class="font-bold text-slate-800">${data.title}</h4>
-                    <p class="text-xs text-rose-600 font-bold mt-2 mb-3">آخر أجل: ${data.deadline.replace('T', ' ')}</p>
-                    <button onclick="checkQuizDeadline('${data.deadline}')" class="px-5 py-2 bg-emerald-600 text-white text-sm font-bold rounded-lg hover:bg-emerald-700">بدء الاختبار</button>
-                </div>`;
+            // جلب الاختبارات ونتائج التلميذ
+            try {
+                // جلب النتائج السابقة
+                const resSnap = await getDocs(query(collection(db, "results"), where("code", "==", currentUser.code)));
+                let completedQuizzes = [];
+                let resHTML = '';
+                resSnap.forEach(d => {
+                    const r = d.data();
+                    completedQuizzes.push(r.quizId);
+                    resHTML += `<tr><td class="p-3 font-semibold">${r.quizTitle}</td><td class="p-3 font-bold text-emerald-600">${r.score} / ${r.total}</td></tr>`;
+                });
+                if(resHTML) document.getElementById('results-table-body').innerHTML = resHTML;
+
+                // جلب الاختبارات
+                const qzSnap = await getDocs(query(collection(db, "quizzes"), where("level", "==", level)));
+                let h = '';
+                window.availableQuizzes = {};
+                qzSnap.forEach(d => { 
+                    const v = d.data(); 
+                    window.availableQuizzes[d.id] = v;
+                    if(!completedQuizzes.includes(d.id)) {
+                        h += `<div class="bg-slate-50 p-4 rounded-xl border"><h4 class="font-bold">${v.title}</h4><p class="text-xs text-rose-600 font-bold mt-1 mb-3">آخر أجل: ${v.deadline}</p><button onclick="startQuiz('${d.id}')" class="px-5 py-2 bg-emerald-600 text-white rounded-lg text-sm font-bold">بدء الاختبار</button></div>`; 
+                    } else {
+                        h += `<div class="bg-emerald-50 p-4 rounded-xl border"><h4 class="font-bold">${v.title}</h4><p class="text-sm text-emerald-700 font-bold">✓ تم الإنجاز</p></div>`;
+                    }
+                });
+                document.getElementById('quizzes-list').innerHTML = h || '<p>لا توجد اختبارات.</p>';
+            } catch(e){}
+        }
+
+        window.startQuiz = function(quizId) {
+            const quiz = window.availableQuizzes[quizId];
+            const now = new Date();
+            if(now > new Date(quiz.deadline)) return alert("أنتم خارج موعد الاختبار؛ لذلك تم إغلاقه.");
+            
+            activeQuiz = { id: quizId, data: quiz };
+            document.getElementById('qt-title').innerText = quiz.title;
+            let qHTML = '';
+            quiz.questions.forEach((q, i) => {
+                let opts = '';
+                q.options.forEach((opt, j) => {
+                    opts += `<label class="flex items-center gap-3 p-3 border rounded-xl hover:bg-slate-50 cursor-pointer"><input type="radio" name="q${i}" value="${j}" class="w-4 h-4 accent-emerald-600"> ${opt}</label>`;
+                });
+                qHTML += `<div class="p-4 bg-slate-50 rounded-xl border"><h4 class="font-bold mb-3">${i+1}. ${q.q}</h4><div class="grid grid-cols-1 md:grid-cols-2 gap-3">${opts}</div></div>`;
             });
-            document.getElementById('quizzes-list').innerHTML = quizHTML || '<p class="text-sm text-slate-400">لا توجد اختبارات.</p>';
+            document.getElementById('qt-questions').innerHTML = qHTML;
+            document.getElementById('quiz-taking-modal').classList.remove('hidden');
+        }
+
+        window.submitQuiz = async function() {
+            let score = 0;
+            const total = activeQuiz.data.questions.length;
+            for(let i=0; i<total; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                if(selected && parseInt(selected.value) === activeQuiz.data.questions[i].answerIndex) score++;
+            }
+            
+            try {
+                await addDoc(collection(db, "results"), { code: currentUser.code, quizId: activeQuiz.id, quizTitle: activeQuiz.data.title, score, total, date: new Date().toISOString() });
+                alert(`أحسنت! نتيجتك هي: ${score} من ${total}`);
+                document.getElementById('quiz-taking-modal').classList.add('hidden');
+                fetchData(currentUser.level); // تحديث الواجهة
+            } catch(e) { alert("خطأ في الإرسال."); }
         }
 
         document.getElementById('login-btn').addEventListener('click', loginStudent);
