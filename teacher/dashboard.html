@@ -193,7 +193,10 @@
                 await addDoc(collection(db, "announcements"), { content: text, publishDate: date, timestamp: new Date() });
                 alert('تم النشر بنجاح!');
                 document.getElementById('announcement-text').value = '';
-            } catch (error) { alert('خطأ في الاتصال بالسحابة.'); }
+            } catch (error) { 
+                console.error("Firebase Error:", error);
+                alert('خطأ في الاتصال بالسحابة. تأكد من قواعد أمان Firestore.'); 
+            }
         }
 
         // 2. جلب لائحة التلاميذ من السحابة
@@ -228,7 +231,8 @@
                     `;
                 });
             } catch (e) {
-                tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-center text-rose-500">حدث خطأ في الاتصال بقاعدة البيانات.</td></tr>';
+                console.error("Firebase Error:", e);
+                tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-center text-rose-500">حدث خطأ في الاتصال بقاعدة البيانات. (راجع قواعد الأمان Rules)</td></tr>';
             }
         }
 
@@ -257,7 +261,10 @@
                 document.getElementById('single-student-code').value = '';
                 window.loadStudentsList();
                 alert('تمت الإضافة للسحابة بنجاح!');
-            } catch (e) { alert("خطأ في الحفظ."); }
+            } catch (e) { 
+                console.error("Firebase Error:", e);
+                alert("خطأ في الحفظ. (راجع قواعد الأمان Rules)"); 
+            }
         }
 
         // 4. رفع اللائحة للسحابة (ملف TXT)
@@ -276,7 +283,6 @@
                 
                 document.getElementById('upload-status').classList.remove('hidden');
 
-                // رفع التلاميذ واحد تلو الآخر للسحابة
                 for(let line of lines) {
                     const trimmed = line.trim();
                     const match = trimmed.match(/^([^\s,]+)[\s,]+(.+)$/);
@@ -289,7 +295,9 @@
                                 name: match[2].trim()
                             });
                             addedCount++;
-                        } catch(err) { console.error("فشل في حفظ التلميذ", err); }
+                        } catch(err) { 
+                            console.error("Firebase Error on upload:", err); 
+                        }
                     }
                 }
 
@@ -307,9 +315,10 @@
                 try {
                     await deleteDoc(doc(db, "students", docId));
                     window.loadStudentsList();
-                } catch(e) { alert("تعذر الحذف."); }
+                } catch(e) { 
+                    console.error("Firebase Error:", e);
+                    alert("تعذر الحذف."); 
+                }
             }
         }
     </script>
-</body>
-</html>
