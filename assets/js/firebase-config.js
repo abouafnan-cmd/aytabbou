@@ -1,8 +1,8 @@
 // استدعاء مكتبات Firebase الأساسية
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, query, where, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-// إعدادات مشروعك الخاص (قم بنسخها من حسابك في Firebase)
+// إعدادات مشروعك الخاص (ضع بياناتك هنا)
 const firebaseConfig = {
     apiKey: "// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -36,5 +36,5 @@ const analytics = getAnalytics(app);",
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// تصدير الأدوات لاستخدامها في باقي الملفات
-export { db, collection, addDoc, getDocs, query, where };
+// تصدير الأدوات
+export { db, collection, addDoc, getDocs, query, where, deleteDoc, doc };
