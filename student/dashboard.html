@@ -22,7 +22,6 @@
 </head>
 <body class="bg-slate-50 dark:bg-slate-900 bg-pattern min-h-screen text-slate-800 dark:text-slate-200 transition-colors duration-300">
 
-    <!-- حاوية الإشعارات الاحترافية (Toasts) -->
     <div id="toast-container" class="fixed top-5 left-1/2 transform -translate-x-1/2 z-[100] flex flex-col gap-2 pointer-events-none w-full max-w-sm px-4"></div>
 
     <div id="login-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
@@ -38,7 +37,6 @@
         </div>
     </div>
 
-    <!-- نافذة الاختبار -->
     <div id="quiz-taking-modal" class="hidden fixed inset-0 bg-slate-900/90 z-50 overflow-y-auto p-4">
         <div class="max-w-3xl mx-auto bg-white dark:bg-slate-800 rounded-2xl p-6 mt-10 space-y-6">
             <h2 id="qt-title" class="text-2xl font-art font-bold text-emerald-800 dark:text-emerald-400 border-b dark:border-slate-600 pb-3">عنوان الاختبار</h2>
@@ -77,10 +75,9 @@
             </div>
 
             <section id="library-sec" class="std-sec fade-in bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700"><h3 class="text-xl font-art font-bold text-emerald-900 dark:text-emerald-400 border-b dark:border-slate-600 pb-3 mb-4">المكتبة الرقمية</h3><div id="lessons-list" class="space-y-4"></div></section>
-            <section id="assignments-sec" class="std-sec hidden fade-in bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700"><h3 class="text-xl font-art font-bold text-emerald-900 dark:text-emerald-400 border-b dark:border-slate-600 pb-3 mb-4">الواجبات والتكليفات</h3><div id="assignments-list" class="space-y-4"></div></section>
+            <section id="assignments-sec" class="std-sec hidden fade-in bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700"><h3 class="text-xl font-art font-bold text-emerald-900 dark:text-emerald-400 border-b dark:border-slate-600 pb-3 mb-4">الواجبات والتكليفات المطلوبة</h3><div id="assignments-list" class="space-y-4"></div></section>
             <section id="announcements-sec" class="std-sec hidden fade-in bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700"><h3 class="text-xl font-art font-bold text-emerald-900 dark:text-emerald-400 border-b dark:border-slate-600 pb-3 mb-4">الإخبارات والإعلانات</h3><div id="announcements-list" class="space-y-4"></div></section>
-            <section id="quizzes-sec" class="std-sec hidden fade-in bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700"><h3 class="text-xl font-art font-bold text-emerald-900 dark:text-emerald-400 border-b dark:border-slate-600 pb-3 mb-4">الاختبارات الرقمية</h3><div id="quizzes-list" class="space-y-4"></div></section>
-            
+            <section id="quizzes-sec" class="std-sec hidden fade-in bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700"><h3 class="text-xl font-art font-bold text-emerald-900 dark:text-emerald-400 border-b dark:border-slate-600 pb-3 mb-4">الاختبارات الرقمية المتاحة</h3><div id="quizzes-list" class="space-y-4"></div></section>
             <section id="results-sec" class="std-sec hidden fade-in bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
                 <h3 class="text-xl font-art font-bold text-emerald-900 dark:text-emerald-400 border-b dark:border-slate-600 pb-3 mb-4">نتائجي التراكمية</h3>
                 <table class="w-full text-right text-sm border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden">
@@ -92,29 +89,23 @@
     </div>
 
     <script>
-        // نظام الإشعارات المنبثقة (Toast)
         window.showToast = function(msg, type = 'success') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             const color = type === 'error' ? 'bg-rose-600' : 'bg-emerald-600';
-            toast.className = `${color} text-white px-5 py-3 rounded-xl shadow-lg font-bold text-sm mb-2 transition-all duration-300 opacity-0 transform -translate-y-5 flex items-center justify-between`;
-            toast.innerHTML = `<span>${msg}</span>`;
-            container.appendChild(toast);
+            toast.className = `${color} text-white px-5 py-3 rounded-xl shadow-lg font-bold text-sm mb-2 transition-all duration-300 opacity-0 transform -translate-y-5`;
+            toast.innerHTML = msg; container.appendChild(toast);
             setTimeout(() => { toast.classList.remove('opacity-0', '-translate-y-5'); }, 10);
             setTimeout(() => { toast.classList.add('opacity-0'); setTimeout(() => toast.remove(), 300); }, 4000);
         }
 
         function toggleTheme() { document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light'); }
         function switchStudentTab(secId, btnElement) { document.querySelectorAll('.std-sec').forEach(el => el.classList.add('hidden')); document.getElementById(secId).classList.remove('hidden'); document.querySelectorAll('.std-tab-btn').forEach(btn => { btn.className = "std-tab-btn bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-200 border border-slate-200 dark:border-slate-700 p-3 rounded-xl font-bold text-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-all"; }); btnElement.className = "std-tab-btn active-tab bg-emerald-600 text-white p-3 rounded-xl font-bold text-sm shadow-md transition-all"; }
-        
-        function toggleAnswerBox(id) {
-            const box = document.getElementById(`ans_box_${id}`);
-            box.classList.toggle('hidden');
-        }
+        function toggleAnswerBox(id) { document.getElementById(`ans_box_${id}`).classList.toggle('hidden'); }
     </script>
 
     <script type="module">
-        import { db, storage, ref, uploadBytes, getDownloadURL, collection, getDocs, query, where, addDoc } from '../assets/js/firebase-config.js';
+        import { db, collection, getDocs, query, where, addDoc } from '../assets/js/firebase-config.js';
 
         let currentUser = null; let activeQuiz = null;
 
@@ -136,9 +127,7 @@
                     document.getElementById('welcome-msg').innerText = `مرحباً بك: ${currentUser.name}`;
                     fetchData(level);
                     showToast(`أهلاً بك ${currentUser.name} في منصتك! 🌟`);
-                } else {
-                    showToast("المعرف غير مسجل في هذا المستوى!", "error");
-                }
+                } else { showToast("المعرف غير مسجل في هذا المستوى!", "error"); }
             } catch (e) { showToast("خطأ في الاتصال بالسحابة", "error"); }
             document.getElementById('login-btn').innerText = "تأكيد الدخول";
         }
@@ -152,11 +141,10 @@
 
             try {
                 const lessSnap = await getDocs(query(collection(db, "lessons"), where("level", "==", level))); let h = '';
-                lessSnap.forEach(d => { const v = d.data(); h += `<div class="bg-slate-50 dark:bg-slate-700 p-4 rounded-xl border dark:border-slate-600"><h4 class="font-bold text-emerald-800 dark:text-emerald-300">${v.title}</h4><span class="text-xs bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200 px-2 py-1 rounded inline-block mt-2">${v.component}</span><br><a href="${v.link}" target="_blank" class="text-sm text-indigo-600 dark:text-indigo-400 font-bold mt-2 inline-block">الاطلاع على الدرس →</a></div>`; });
+                lessSnap.forEach(d => { const v = d.data(); h += `<div class="bg-slate-50 dark:bg-slate-700 p-4 rounded-xl border dark:border-slate-600"><h4 class="font-bold text-emerald-800 dark:text-emerald-300">${v.title}</h4><span class="text-xs bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200 px-2 py-1 rounded inline-block mt-2">${v.component}</span><br><a href="${v.link}" target="_blank" class="text-sm text-indigo-600 dark:text-indigo-400 font-bold mt-2 inline-block hover:underline">الاطلاع على الدرس →</a></div>`; });
                 document.getElementById('lessons-list').innerHTML = h || '<p>لا توجد دروس.</p>';
             } catch(e){}
 
-            // جلب نتائج التلميذ والواجبات المنجزة
             let completedQuizzes = []; let resHTML = ''; let mySubmissions = {};
             try {
                 const resSnap = await getDocs(query(collection(db, "results"), where("code", "==", currentUser.code)));
@@ -167,17 +155,14 @@
                     const s = d.data(); mySubmissions[s.assignmentId] = s; 
                     if(s.status === 'graded') { resHTML += `<tr><td class="p-3 font-semibold">واجب: ${s.assignmentTitle}</td><td class="p-3 font-bold text-emerald-600 dark:text-emerald-400">${s.score} / 20</td></tr>`; }
                 });
-                
                 if(resHTML) document.getElementById('results-table-body').innerHTML = resHTML;
             } catch(e){}
 
-            // جلب التكليفات مع تمييز المنجز منها
+            // التكليفات (بدون تخزين فايربيس)
             try {
                 const assSnap = await getDocs(query(collection(db, "assignments"), where("level", "==", level))); let h = '';
                 assSnap.forEach(d => { 
-                    const v = d.data(); const assId = d.id;
-                    const sub = mySubmissions[assId];
-
+                    const v = d.data(); const assId = d.id; const sub = mySubmissions[assId];
                     h += `<div class="bg-slate-50 dark:bg-slate-700 p-4 rounded-xl border dark:border-slate-600"><h4 class="font-bold">${v.title} (${v.component})</h4><p class="mt-2 text-sm bg-white dark:bg-slate-800 p-3 border dark:border-slate-600 rounded">${v.questions}</p>`;
                     
                     if (sub) {
@@ -191,19 +176,19 @@
                             <textarea id="text_val_${assId}" rows="3" placeholder="اكتب إجابتك هنا..." class="w-full p-2 border rounded-lg text-sm bg-white dark:bg-slate-800 dark:text-white dark:border-slate-500"></textarea>
                             <button onclick="submitAssText('${assId}', '${v.title}')" class="w-full px-4 py-2 bg-indigo-600 text-white text-xs font-bold rounded-lg">إرسال الواجب 🚀</button>
                         </div></div>`;
-                    } else if (v.mode === 'رفع ملف (صورة أو PDF)') {
-                        h += `<button onclick="toggleAnswerBox('${assId}')" class="mt-3 px-4 py-2 bg-emerald-600 text-white text-xs font-bold rounded-lg hover:bg-emerald-700">إرفاق الإجابة 📎</button>
+                    } else if (v.mode === 'إرفاق رابط الإجابة (درايف وغيرها)') {
+                        h += `<button onclick="toggleAnswerBox('${assId}')" class="mt-3 px-4 py-2 bg-emerald-600 text-white text-xs font-bold rounded-lg hover:bg-emerald-700">إرفاق رابط الإجابة 🔗</button>
                         <div id="ans_box_${assId}" class="hidden mt-3 p-3 bg-slate-200 dark:bg-slate-600 rounded-lg space-y-2">
-                            <p class="text-xs text-rose-600 font-bold">تنبيه: حجم الملف يجب ألا يتجاوز 2 ميغابايت.</p>
-                            <input type="file" id="file_val_${assId}" accept="image/*,.pdf" class="w-full p-2 border rounded-lg text-sm bg-white dark:bg-slate-800 dark:text-white dark:border-slate-500 cursor-pointer">
-                            <button onclick="submitAssFile('${assId}', '${v.title}')" class="w-full px-4 py-2 bg-indigo-600 text-white text-xs font-bold rounded-lg">رفع وإرسال الواجب 🚀</button>
+                            <p class="text-xs font-bold text-indigo-700 dark:text-indigo-300">قم برفع صورتك أو ملفك على (Google Drive) أو أي موقع رفع، والصق الرابط هنا:</p>
+                            <input type="url" id="link_val_${assId}" placeholder="https://..." class="w-full p-2 border rounded-lg text-sm bg-white dark:bg-slate-800 dark:text-white dark:border-slate-500 text-left" dir="ltr">
+                            <button onclick="submitAssLink('${assId}', '${v.title}')" class="w-full px-4 py-2 bg-indigo-600 text-white text-xs font-bold rounded-lg">إرسال الرابط 🚀</button>
                         </div></div>`;
                     }
                 });
                 document.getElementById('assignments-list').innerHTML = h || '<p>لا توجد تكليفات.</p>';
             } catch(e){}
 
-            // جلب الاختبارات
+            // الاختبارات
             try {
                 const qzSnap = await getDocs(query(collection(db, "quizzes"), where("level", "==", level))); let h = ''; window.availableQuizzes = {};
                 qzSnap.forEach(d => { 
@@ -218,37 +203,30 @@
             } catch(e){}
         }
 
-        // إرسال النص
         window.submitAssText = async function(assId, title) {
             const content = document.getElementById(`text_val_${assId}`).value.trim();
-            if(!content) return showToast("المرجو كتابة الإجابة أولاً", "error");
-            showToast("جاري إرسال الواجب... ⏳");
+            if(!content) return showToast("اكتب الإجابة أولاً", "error");
+            showToast("جاري الإرسال... ⏳");
             try {
                 await addDoc(collection(db, "submissions"), { studentCode: currentUser.code, studentName: currentUser.name, level: currentUser.level, assignmentId: assId, assignmentTitle: title, type: 'text', content: content, status: 'pending', score: 0, timestamp: new Date().toISOString() });
-                showToast("تم إرسال الواجب بنجاح! سيطلع عليه الأستاذ قريباً 🎉"); fetchData(currentUser.level);
+                showToast("تم الإرسال بنجاح! سيطلع عليه الأستاذ قريباً 🎉"); fetchData(currentUser.level);
             } catch(e) { showToast("حدث خطأ", "error"); }
         }
 
-        // إرسال الملف (مع التحقق من الحجم <= 2MB)
-        window.submitAssFile = async function(assId, title) {
-            const file = document.getElementById(`file_val_${assId}`).files[0];
-            if(!file) return showToast("المرجو اختيار الملف أولاً", "error");
-            if(file.size > 2 * 1024 * 1024) return showToast("حجم الملف كبير جداً! الحد الأقصى هو 2 ميغابايت", "error");
+        window.submitAssLink = async function(assId, title) {
+            const url = document.getElementById(`link_val_${assId}`).value.trim();
+            if(!url || !url.startsWith('http')) return showToast("المرجو إدخال رابط صحيح يبدأ بـ http", "error");
             
-            showToast("جاري رفع الملف وإرسال الواجب... ⏳");
+            showToast("جاري إرسال الرابط... ⏳");
             try {
-                const fileRef = ref(storage, 'submissions/' + currentUser.code + '_' + Date.now() + '_' + file.name);
-                await uploadBytes(fileRef, file);
-                const url = await getDownloadURL(fileRef);
-                await addDoc(collection(db, "submissions"), { studentCode: currentUser.code, studentName: currentUser.name, level: currentUser.level, assignmentId: assId, assignmentTitle: title, type: 'file', content: url, status: 'pending', score: 0, timestamp: new Date().toISOString() });
+                await addDoc(collection(db, "submissions"), { studentCode: currentUser.code, studentName: currentUser.name, level: currentUser.level, assignmentId: assId, assignmentTitle: title, type: 'link', content: url, status: 'pending', score: 0, timestamp: new Date().toISOString() });
                 showToast("تم إرسال الواجب بنجاح! 🎉"); fetchData(currentUser.level);
-            } catch(e) { showToast("حدث خطأ في الرفع", "error"); }
+            } catch(e) { showToast("حدث خطأ في الإرسال", "error"); }
         }
 
         window.startQuiz = function(quizId) {
             const quiz = window.availableQuizzes[quizId];
             if(new Date() > new Date(quiz.deadline)) return showToast("انتهى موعد الاختبار، تم إغلاقه.", "error");
-            
             activeQuiz = { id: quizId, data: quiz };
             document.getElementById('qt-title').innerText = quiz.title;
             let qHTML = '';
@@ -267,13 +245,11 @@
                 const selected = document.querySelector(`input[name="q${i}"]:checked`);
                 if(selected && parseInt(selected.value) === activeQuiz.data.questions[i].answerIndex) score++;
             }
-            showToast("جاري إرسال الإجابات... ⏳");
+            showToast("جاري الإرسال... ⏳");
             try {
                 await addDoc(collection(db, "results"), { code: currentUser.code, quizId: activeQuiz.id, quizTitle: activeQuiz.data.title, score, total, date: new Date().toISOString() });
                 document.getElementById('quiz-taking-modal').classList.add('hidden');
-                
                 if (score / total >= 0.5) confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#10b981', '#fbbf24', '#ffffff'] });
-                
                 showToast(`أحسنت! نتيجتك هي: ${score} من ${total}`);
                 fetchData(currentUser.level); 
             } catch(e) { showToast("حدث خطأ", "error"); }
