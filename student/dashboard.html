@@ -127,7 +127,7 @@
 
         window.loginStudent = async function() {
             const rawCodeInput = document.getElementById('student-code-input').value.trim();
-            const codeInputUpper = rawCodeInput.toUpperCase(); // جعل الحروف كبيرة تلقائياً لتفادي الخطأ
+            const codeInputUpper = rawCodeInput.toUpperCase();
             const urlParams = new URLSearchParams(window.location.search);
             const level = urlParams.get('level') || 'common-sci';
 
@@ -137,11 +137,9 @@
             btn.innerText = "جاري التحقق...";
 
             try {
-                // البحث بالمعرف بالحروف الكبيرة أولاً
                 let q = query(collection(db, "students"), where("level", "==", level), where("code", "==", codeInputUpper));
                 let snap = await getDocs(q);
                 
-                // إن لم يجده، يبحث بالمعرف كما أدخله التلميذ تماماً
                 if (snap.empty) {
                     q = query(collection(db, "students"), where("level", "==", level), where("code", "==", rawCodeInput));
                     snap = await getDocs(q);
@@ -164,7 +162,6 @@
             btn.innerText = "تأكيد الدخول";
         }
 
-        // تفعيل زر Entrée لتسجيل الدخول
         document.getElementById('student-code-input').addEventListener('keypress', e => { 
             if (e.key === 'Enter') window.loginStudent(); 
         });
@@ -195,7 +192,7 @@
                 if(resHTML) document.getElementById('results-table-body').innerHTML = resHTML;
             } catch(e){}
 
-            // جلب التكليفات 
+            // التكليفات مع الخوارزمية الجديدة
             try {
                 const assSnap = await getDocs(query(collection(db, "assignments"), where("level", "==", level))); 
                 let h = '';
@@ -228,31 +225,33 @@
                             </div>`;
                         }
                     } else {
-                        if (v.mode === 'الإجابة في دفتر الإعداد القبلي') {
+                        // خوارزمية ذكية لاكتشاف نوع التكليف سواء كان قديماً أو جديداً في السحابة
+                        if (v.mode.includes('الدفتر') || v.mode.includes('الإعداد القبلي')) {
                             h += `<div class="flex items-center justify-center gap-2 text-amber-700 dark:text-amber-400 font-bold bg-amber-50 dark:bg-amber-900/20 p-3.5 rounded-xl border border-amber-200 dark:border-amber-800/50">
                                 <span>📌 المطلوب: إنجاز هذا التكليف في دفتر الإعداد القبلي</span>
                             </div>`;
                         } 
-                        else if (v.mode === 'الإجابة المباشرة في مربع نص') {
+                        else if (v.mode.includes('مربع نص') || v.mode.includes('المباشرة')) {
                             h += `<button onclick="toggleAnswerBox('${assId}')" class="flex items-center justify-center gap-2 w-full md:w-fit px-6 py-2.5 bg-emerald-600 text-white text-sm font-bold rounded-xl hover:bg-emerald-700 transition-all shadow-sm">
                                 <span>✍️ الإجابة عن الواجب</span>
                             </button>
                             <div id="ans_box_${assId}" class="hidden mt-4 p-4 bg-slate-100 dark:bg-slate-700 rounded-xl space-y-3 border border-slate-200 dark:border-slate-600">
                                 <label class="block text-sm font-bold text-slate-700 dark:text-slate-300">اكتب إجابتك هنا:</label>
                                 <textarea id="text_val_${assId}" rows="4" class="w-full p-3 border rounded-xl text-sm bg-white dark:bg-slate-800 dark:text-white dark:border-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none resize-none"></textarea>
-                                <button onclick="submitAssText('${assId}')" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 transition-all shadow-md">
+                                <button onclick="submitAssText('${assId}', '${v.title}')" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 transition-all shadow-md">
                                     <span>🚀 الإرسال إلى الأستاذ</span>
                                 </button>
                             </div>`;
                         } 
-                        else if (v.mode === 'إرفاق رابط الإجابة (درايف وغيرها)') {
+                        else { 
+                            // يشمل (إرفاق رابط) و (رفع ملف)
                             h += `<button onclick="toggleAnswerBox('${assId}')" class="flex items-center justify-center gap-2 w-full md:w-fit px-6 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 transition-all shadow-sm">
                                 <span>🔗 إرفاق رابط الواجب</span>
                             </button>
                             <div id="ans_box_${assId}" class="hidden mt-4 p-4 bg-indigo-50 dark:bg-slate-700 rounded-xl space-y-3 border border-indigo-100 dark:border-slate-600">
                                 <p class="text-xs font-bold text-indigo-800 dark:text-indigo-300 bg-white dark:bg-slate-800 p-2.5 rounded-lg border dark:border-slate-600 leading-relaxed">💡 قم بتصوير إنجازك أو تحويله لـ PDF ورفعه على مساحتك في (Google Drive) أو أي موقع رفع، ثم انسخ الرابط والصقه هنا:</p>
                                 <input type="url" id="link_val_${assId}" placeholder="الصق الرابط هنا (https://...)" class="w-full p-3 border rounded-xl text-sm bg-white dark:bg-slate-800 dark:text-white dark:border-slate-500 text-left focus:ring-2 focus:ring-indigo-500 outline-none" dir="ltr">
-                                <button onclick="submitAssLink('${assId}')" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-emerald-600 text-white text-sm font-bold rounded-xl hover:bg-emerald-700 transition-all shadow-md">
+                                <button onclick="submitAssLink('${assId}', '${v.title}')" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-emerald-600 text-white text-sm font-bold rounded-xl hover:bg-emerald-700 transition-all shadow-md">
                                     <span>🚀 الإرسال إلى الأستاذ</span>
                                 </button>
                             </div>`;
