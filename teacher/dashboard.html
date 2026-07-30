@@ -32,7 +32,7 @@
                 <div class="w-10 h-10 bg-white/20 font-art rounded-xl flex items-center justify-center text-2xl backdrop-blur-sm">ض</div>
                 <div>
                     <h1 class="text-lg md:text-2xl font-art font-bold leading-tight">الدكتور عبد المجيد أيت عبو</h1>
-                    <p class="text-xs text-indigo-200 font-bold">لوحة الإدارة (متصل بالسحابة ☁️)</p>
+                    <p class="text-xs text-indigo-200 font-bold">لوحة الإدارة (إعداد وتحضير المحتوى ☁️)</p>
                 </div>
             </div>
             <div class="flex items-center gap-3">
@@ -66,16 +66,16 @@
                     </div>
                     <textarea id="announcement-text" placeholder="نص الإعلان" rows="3" class="w-full p-4 border border-slate-200 dark:border-slate-600 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white text-sm"></textarea>
                     <input type="date" id="announcement-date" class="w-full md:w-1/2 p-3.5 border border-slate-200 dark:border-slate-600 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white text-sm">
-                    <button id="btn-pub-ann" class="px-8 py-3.5 bg-indigo-600 text-white font-bold rounded-xl shadow-md transition-all">نشر الإعلان</button>
+                    <button id="btn-pub-ann" class="px-8 py-3.5 bg-indigo-600 text-white font-bold rounded-xl shadow-md transition-all">حفظ (تحضير مسبق) 💾</button>
                 </div>
             </div>
             <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
-                <h3 class="font-bold border-b dark:border-slate-700 pb-3 mb-4">أرشيف الإعلانات</h3>
+                <h3 class="font-bold border-b dark:border-slate-700 pb-3 mb-4">أرشيف الإعلانات (المسودات تظهر بلون باهت)</h3>
                 <div class="overflow-x-auto"><table class="w-full text-right text-sm"><tbody id="archive-ann" class="divide-y dark:divide-slate-700"><tr><td class="py-4 text-center">جاري الجلب...</td></tr></tbody></table></div>
             </div>
         </section>
 
-        <!-- 2: الدروس (تحديث: رابط فقط) -->
+        <!-- 2: الدروس -->
         <section id="lessons-tab" class="tab-content hidden fade-in space-y-6">
             <div class="bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
                 <h2 class="text-xl font-art font-bold text-indigo-900 dark:text-indigo-400 border-b dark:border-slate-700 pb-4 mb-5">إضافة درس جديد</h2>
@@ -85,15 +85,15 @@
                     <select id="lesson-component" class="w-full p-3.5 border border-slate-200 dark:border-slate-600 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white text-sm"><option value="النصوص">النصوص</option><option value="الدرس اللغوي">الدرس اللغوي</option><option value="التعبير والإنشاء">التعبير والإنشاء</option><option value="المؤلفات">المؤلفات</option><option value="أنشطة داعمة">أنشطة داعمة</option></select>
                     <input type="url" id="lesson-link" placeholder="رابط الدرس (درايف، يوتيوب...)" class="w-full p-3.5 border border-slate-200 dark:border-slate-600 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white text-sm text-left" dir="ltr">
                 </div>
-                <button id="btn-pub-lesson" class="px-8 py-3.5 bg-indigo-600 text-white font-bold rounded-xl shadow-md transition-all">حفظ ونشر الدرس</button>
+                <button id="btn-pub-lesson" class="px-8 py-3.5 bg-indigo-600 text-white font-bold rounded-xl shadow-md transition-all">حفظ (تحضير مسبق) 💾</button>
             </div>
             <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
-                <h3 class="font-bold border-b dark:border-slate-700 pb-3 mb-4">أرشيف الدروس</h3>
+                <h3 class="font-bold border-b dark:border-slate-700 pb-3 mb-4">أرشيف الدروس (المسودات تظهر بلون باهت)</h3>
                 <div class="overflow-x-auto"><table class="w-full text-right text-sm"><tbody id="archive-less" class="divide-y dark:divide-slate-700"><tr><td class="py-4 text-center">جاري الجلب...</td></tr></tbody></table></div>
             </div>
         </section>
 
-        <!-- 3: التكليفات (تحديث: خيار الرابط) -->
+        <!-- 3: التكليفات -->
         <section id="assignments-tab" class="tab-content hidden fade-in space-y-6">
             <div class="bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
                 <h2 class="text-xl font-art font-bold text-indigo-900 dark:text-indigo-400 border-b dark:border-slate-700 pb-4 mb-5">إضافة تكليف جديد</h2>
@@ -108,10 +108,10 @@
                         <option value="إرفاق رابط الإجابة (درايف وغيرها)">إرفاق رابط الإجابة (درايف وغيرها)</option>
                     </select>
                 </div>
-                <button id="btn-pub-ass" class="px-8 py-3.5 bg-indigo-600 text-white font-bold rounded-xl shadow-md transition-all">نشر التكليف</button>
+                <button id="btn-pub-ass" class="px-8 py-3.5 bg-indigo-600 text-white font-bold rounded-xl shadow-md transition-all">حفظ (تحضير مسبق) 💾</button>
             </div>
             <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
-                <h3 class="font-bold border-b dark:border-slate-700 pb-3 mb-4">أرشيف التكليفات</h3>
+                <h3 class="font-bold border-b dark:border-slate-700 pb-3 mb-4">أرشيف التكليفات (المسودات تظهر بلون باهت)</h3>
                 <div class="overflow-x-auto"><table class="w-full text-right text-sm"><tbody id="archive-ass" class="divide-y dark:divide-slate-700"><tr><td class="py-4 text-center">جاري الجلب...</td></tr></tbody></table></div>
             </div>
         </section>
@@ -126,10 +126,10 @@
                     <div><label class="block text-sm mb-2 text-slate-500">موعد الإغلاق</label><input type="datetime-local" id="quiz-deadline" class="w-full p-3.5 border border-slate-200 dark:border-slate-600 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white text-sm"></div>
                     <div id="quiz-file-container"><label class="block text-sm mb-2 text-slate-500">ملف الأسئلة (txt)</label><input type="file" id="quiz-file" accept=".txt" class="w-full p-2.5 border border-slate-200 dark:border-slate-600 rounded-xl bg-slate-50 dark:bg-slate-700 text-sm cursor-pointer"></div>
                 </div>
-                <button id="btn-pub-quiz" class="px-8 py-3.5 bg-indigo-600 text-white font-bold rounded-xl shadow-md transition-all">نشر الاختبار</button>
+                <button id="btn-pub-quiz" class="px-8 py-3.5 bg-indigo-600 text-white font-bold rounded-xl shadow-md transition-all">حفظ (تحضير مسبق) 💾</button>
             </div>
             <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
-                <h3 class="font-bold border-b dark:border-slate-700 pb-3 mb-4">أرشيف الاختبارات</h3>
+                <h3 class="font-bold border-b dark:border-slate-700 pb-3 mb-4">أرشيف الاختبارات (المسودات تظهر بلون باهت)</h3>
                 <div class="overflow-x-auto"><table class="w-full text-right text-sm"><tbody id="archive-quiz" class="divide-y dark:divide-slate-700"><tr><td class="py-4 text-center">جاري الجلب...</td></tr></tbody></table></div>
             </div>
         </section>
@@ -158,22 +158,17 @@
             </div>
         </section>
 
-        <!-- 6: تصحيح الواجبات (تحديث: دعم روابط درايف) -->
+        <!-- 6: تصحيح الواجبات -->
         <section id="grading-tab" class="tab-content hidden fade-in space-y-6">
             <div class="bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
                 <h2 class="text-xl font-art font-bold text-indigo-900 dark:text-indigo-400 border-b dark:border-slate-700 pb-4 mb-5 flex justify-between items-center">
-                    <span>✔️ تصحيح الواجبات والتكليفات المنجزة</span>
+                    <span>✔️ تصحيح الواجبات المنجزة</span>
                     <button onclick="loadSubmissionsToGrade()" class="px-4 py-2 bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-300 text-xs font-bold rounded-xl shadow-sm hover:bg-indigo-200 transition-all">تحديث اللائحة 🔄</button>
                 </h2>
-                
                 <div class="overflow-x-auto bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl shadow-sm">
                     <table class="w-full text-right text-sm">
-                        <thead class="bg-white dark:bg-slate-800 border-b dark:border-slate-600">
-                            <tr><th class="p-4 w-1/4">التلميذ (المستوى)</th><th class="p-4 w-1/4">الواجب</th><th class="p-4 w-1/3">الإجابة المنجزة</th><th class="p-4 text-center">النقطة (/20)</th></tr>
-                        </thead>
-                        <tbody id="grading-table-body" class="divide-y dark:divide-slate-700">
-                            <tr><td colspan="4" class="p-4 text-center">اضغط تحديث اللائحة لجلب إجابات التلاميذ.</td></tr>
-                        </tbody>
+                        <thead class="bg-white dark:bg-slate-800 border-b dark:border-slate-600"><tr><th class="p-4 w-1/4">التلميذ</th><th class="p-4 w-1/4">الواجب</th><th class="p-4 w-1/3">الإجابة المنجزة</th><th class="p-4 text-center">النقطة (/20)</th></tr></thead>
+                        <tbody id="grading-table-body" class="divide-y dark:divide-slate-700"><tr><td colspan="4" class="p-4 text-center">اضغط تحديث اللائحة.</td></tr></tbody>
                     </table>
                 </div>
             </div>
@@ -187,24 +182,10 @@
                     <button onclick="exportToExcel('reports-table', 'تقرير_النتائج')" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-bold rounded-xl shadow-md transition-all">تصدير لـ Excel ⬇️</button>
                 </h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
-                    <div class="p-5 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl border border-indigo-100 dark:border-indigo-800 space-y-4">
-                        <h3 class="font-bold text-indigo-900 dark:text-indigo-300">تقرير قسم كامل</h3>
-                        <select id="report-level" class="w-full p-3 border border-slate-200 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-700 dark:text-white"><option value="common-sci">جذع مشترك علوم</option><option value="common-lit">جذع مشترك آداب</option><option value="1bac-sci">الأولى باكلوريا علوم</option><option value="1bac-lit">الأولى باكلوريا آداب</option><option value="2bac-sci">الثانية باكلوريا علوم</option><option value="2bac-lit">الثانية باكلوريا آداب</option></select>
-                        <input type="text" id="report-class" placeholder="القسم" class="w-full p-3 border border-slate-200 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-700 dark:text-white">
-                        <button onclick="loadClassReport()" class="w-full px-4 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-md hover:bg-indigo-700 transition-all">استعراض القسم</button>
-                    </div>
-                    <div class="p-5 bg-emerald-50 dark:bg-emerald-900/20 rounded-2xl border border-emerald-100 dark:border-emerald-800 space-y-4">
-                        <h3 class="font-bold text-emerald-900 dark:text-emerald-300">تقرير تلميذ فردي</h3>
-                        <input type="text" id="report-student-code" placeholder="المعرف (مثال: G141078429)" class="w-full p-3 border border-slate-200 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-700 dark:text-white">
-                        <button onclick="loadStudentReport()" class="w-full px-4 py-3 bg-emerald-600 text-white font-bold rounded-xl shadow-md hover:bg-emerald-700 mt-[3.8rem] transition-all">استعراض التلميذ</button>
-                    </div>
+                    <div class="p-5 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl border border-indigo-100 dark:border-indigo-800 space-y-4"><h3 class="font-bold text-indigo-900 dark:text-indigo-300">تقرير قسم كامل</h3><select id="report-level" class="w-full p-3 border border-slate-200 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-700 dark:text-white"><option value="common-sci">جذع مشترك علوم</option><option value="common-lit">جذع مشترك آداب</option><option value="1bac-sci">الأولى باكلوريا علوم</option><option value="1bac-lit">الأولى باكلوريا آداب</option><option value="2bac-sci">الثانية باكلوريا علوم</option><option value="2bac-lit">الثانية باكلوريا آداب</option></select><input type="text" id="report-class" placeholder="القسم" class="w-full p-3 border border-slate-200 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-700 dark:text-white"><button onclick="loadClassReport()" class="w-full px-4 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-md hover:bg-indigo-700 transition-all">استعراض القسم</button></div>
+                    <div class="p-5 bg-emerald-50 dark:bg-emerald-900/20 rounded-2xl border border-emerald-100 dark:border-emerald-800 space-y-4"><h3 class="font-bold text-emerald-900 dark:text-emerald-300">تقرير تلميذ فردي</h3><input type="text" id="report-student-code" placeholder="المعرف (مثال: G141078429)" class="w-full p-3 border border-slate-200 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-700 dark:text-white"><button onclick="loadStudentReport()" class="w-full px-4 py-3 bg-emerald-600 text-white font-bold rounded-xl shadow-md hover:bg-emerald-700 mt-[3.8rem] transition-all">استعراض التلميذ</button></div>
                 </div>
-                <div class="overflow-x-auto bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-sm">
-                    <table id="reports-table" class="w-full text-right text-sm">
-                        <thead class="bg-slate-50 dark:bg-slate-700 border-b dark:border-slate-600"><tr><th class="p-4">المعرف</th><th class="p-4">الاسم الكامل</th><th class="p-4">النشاط (اختبار/واجب)</th><th class="p-4">النقطة</th><th class="p-4">التاريخ</th></tr></thead>
-                        <tbody id="reports-table-body" class="divide-y dark:divide-slate-700"><tr><td colspan="5" class="p-4 text-center">حدد قسم أو تلميذ.</td></tr></tbody>
-                    </table>
-                </div>
+                <div class="overflow-x-auto bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-sm"><table id="reports-table" class="w-full text-right text-sm"><thead class="bg-slate-50 dark:bg-slate-700 border-b dark:border-slate-600"><tr><th class="p-4">المعرف</th><th class="p-4">الاسم الكامل</th><th class="p-4">النشاط (اختبار/واجب)</th><th class="p-4">النقطة</th><th class="p-4">التاريخ</th></tr></thead><tbody id="reports-table-body" class="divide-y dark:divide-slate-700"><tr><td colspan="5" class="p-4 text-center">حدد قسم أو تلميذ.</td></tr></tbody></table></div>
             </div>
         </section>
     </main>
@@ -213,7 +194,7 @@
         window.showToast = function(msg, type = 'success') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
-            const color = type === 'error' ? 'bg-rose-600 dark:bg-rose-700' : 'bg-emerald-600 dark:bg-emerald-700';
+            const color = type === 'error' ? 'bg-rose-600' : 'bg-emerald-600';
             toast.className = `${color} text-white px-5 py-3 rounded-xl shadow-lg font-bold text-sm mb-2 transition-all duration-300 opacity-0 transform -translate-y-5`;
             toast.innerHTML = msg; container.appendChild(toast);
             setTimeout(() => { toast.classList.remove('opacity-0', '-translate-y-5'); }, 10);
@@ -225,71 +206,124 @@
         function exportToExcel(tableId, filename = '') { let table = document.getElementById(tableId); if(table.rows.length <= 1) return showToast("الجدول فارغ!", "error"); let wb = XLSX.utils.table_to_book(table, {sheet:"النتائج"}); XLSX.writeFile(wb, filename ? `${filename}_${new Date().toISOString().split('T')[0]}.xlsx` : `تقرير.xlsx`); }
     </script>
 
+    <!-- سكربت فايربيس المحدث بدعم (المسودة والنشر) -->
     <script type="module">
-        // تم إزالة مكتبات Firebase Storage لعدم الحاجة إليها
         import { db, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, where } from '../assets/js/firebase-config.js';
         let editIds = { ann: null, less: null, ass: null, quiz: null };
 
+        // دالة مساعدة لإنشاء صفوف الأرشيف بناء على حالة النشر (draft vs published)
+        function createArchiveRow(type, item) {
+            const isDraft = (item.status === 'draft');
+            const rowClass = isDraft ? "opacity-60 bg-slate-100 dark:bg-slate-700/50 grayscale-[20%]" : "bg-white dark:bg-slate-800";
+            const publishBtn = isDraft 
+                ? `<button onclick="publishToStudents('${type}', '${item.id}')" class="px-3 py-1 bg-amber-100 text-amber-700 rounded-lg text-xs font-bold hover:bg-amber-200 shadow-sm border border-amber-200">إرسال للتلاميذ 🚀</button>`
+                : `<span class="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-xs font-bold border border-emerald-100">تم الإرسال ✓</span>`;
+            
+            return `<tr class="${rowClass}">
+                <td class="py-4 pr-4 font-bold ${isDraft ? 'text-slate-500' : ''}">${item.title}</td>
+                <td class="py-4 pl-4 flex gap-2 justify-end items-center">
+                    ${publishBtn}
+                    <button onclick="editItem('${type}', '${item.id}')" class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-lg text-xs font-bold">تعديل</button>
+                    <button onclick="deleteItem('${type === 'ann' ? 'announcements' : type === 'less' ? 'lessons' : type === 'ass' ? 'assignments' : 'quizzes'}', '${item.id}')" class="px-3 py-1 bg-rose-100 text-rose-700 rounded-lg text-xs font-bold">حذف</button>
+                </td>
+            </tr>`;
+        }
+
         window.loadAllArchives = async function() {
             try {
-                const annSnap = await getDocs(collection(db, "announcements")); let anns = []; annSnap.forEach(d => anns.push({id: d.id, ...d.data()})); anns.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)); let annHTML = ''; anns.forEach(a => { annHTML += `<tr><td class="py-3 pr-4 font-bold">${a.title}</td><td class="py-3 pl-4 flex gap-2 justify-end"><button onclick="editItem('ann', '${a.id}')" class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-lg text-xs font-bold">تعديل</button><button onclick="deleteItem('announcements', '${a.id}')" class="px-3 py-1 bg-rose-100 text-rose-700 rounded-lg text-xs font-bold">حذف</button></td></tr>`; }); document.getElementById('archive-ann').innerHTML = annHTML || '<tr><td colspan="2" class="text-center py-4">لا يوجد.</td></tr>';
-                const lessSnap = await getDocs(collection(db, "lessons")); let less = []; lessSnap.forEach(d => less.push({id: d.id, ...d.data()})); less.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)); let lessHTML = ''; less.forEach(l => { lessHTML += `<tr><td class="py-3 pr-4 font-bold">${l.title}</td><td class="py-3 pl-4 flex gap-2 justify-end"><button onclick="editItem('less', '${l.id}')" class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-lg text-xs font-bold">تعديل</button><button onclick="deleteItem('lessons', '${l.id}')" class="px-3 py-1 bg-rose-100 text-rose-700 rounded-lg text-xs font-bold">حذف</button></td></tr>`; }); document.getElementById('archive-less').innerHTML = lessHTML || '<tr><td colspan="2" class="text-center py-4">لا يوجد.</td></tr>';
-                const assSnap = await getDocs(collection(db, "assignments")); let asg = []; assSnap.forEach(d => asg.push({id: d.id, ...d.data()})); asg.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)); let assHTML = ''; asg.forEach(a => { assHTML += `<tr><td class="py-3 pr-4 font-bold">${a.title}</td><td class="py-3 pl-4 flex gap-2 justify-end"><button onclick="editItem('ass', '${a.id}')" class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-lg text-xs font-bold">تعديل</button><button onclick="deleteItem('assignments', '${a.id}')" class="px-3 py-1 bg-rose-100 text-rose-700 rounded-lg text-xs font-bold">حذف</button></td></tr>`; }); document.getElementById('archive-ass').innerHTML = assHTML || '<tr><td colspan="2" class="text-center py-4">لا يوجد.</td></tr>';
-                const quizSnap = await getDocs(collection(db, "quizzes")); let qzs = []; quizSnap.forEach(d => qzs.push({id: d.id, ...d.data()})); qzs.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)); let quizHTML = ''; qzs.forEach(q => { quizHTML += `<tr><td class="py-3 pr-4 font-bold">${q.title}</td><td class="py-3 pl-4 flex gap-2 justify-end"><button onclick="editItem('quiz', '${q.id}')" class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-lg text-xs font-bold">تعديل</button><button onclick="deleteItem('quizzes', '${q.id}')" class="px-3 py-1 bg-rose-100 text-rose-700 rounded-lg text-xs font-bold">حذف</button></td></tr>`; }); document.getElementById('archive-quiz').innerHTML = quizHTML || '<tr><td colspan="2" class="text-center py-4">لا يوجد.</td></tr>';
-            } catch(e) {}
+                // إعلانات
+                const annSnap = await getDocs(collection(db, "announcements")); let anns = []; annSnap.forEach(d => anns.push({id: d.id, ...d.data()})); 
+                anns.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)); 
+                let annHTML = ''; anns.forEach(a => { annHTML += createArchiveRow('ann', a); }); 
+                document.getElementById('archive-ann').innerHTML = annHTML || '<tr><td colspan="2" class="text-center py-4">لا يوجد بيانات.</td></tr>';
+
+                // دروس
+                const lessSnap = await getDocs(collection(db, "lessons")); let less = []; lessSnap.forEach(d => less.push({id: d.id, ...d.data()})); 
+                less.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)); 
+                let lessHTML = ''; less.forEach(l => { lessHTML += createArchiveRow('less', l); }); 
+                document.getElementById('archive-less').innerHTML = lessHTML || '<tr><td colspan="2" class="text-center py-4">لا يوجد بيانات.</td></tr>';
+
+                // تكليفات
+                const assSnap = await getDocs(collection(db, "assignments")); let asg = []; assSnap.forEach(d => asg.push({id: d.id, ...d.data()})); 
+                asg.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)); 
+                let assHTML = ''; asg.forEach(a => { assHTML += createArchiveRow('ass', a); }); 
+                document.getElementById('archive-ass').innerHTML = assHTML || '<tr><td colspan="2" class="text-center py-4">لا يوجد بيانات.</td></tr>';
+
+                // اختبارات
+                const quizSnap = await getDocs(collection(db, "quizzes")); let qzs = []; quizSnap.forEach(d => qzs.push({id: d.id, ...d.data()})); 
+                qzs.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)); 
+                let quizHTML = ''; qzs.forEach(q => { quizHTML += createArchiveRow('quiz', q); }); 
+                document.getElementById('archive-quiz').innerHTML = quizHTML || '<tr><td colspan="2" class="text-center py-4">لا يوجد بيانات.</td></tr>';
+            } catch(e) { console.error(e); }
+        }
+
+        // دالة نشر المسودة للطلاب
+        window.publishToStudents = async function(typeCode, docId) {
+            const colName = typeCode === 'ann' ? 'announcements' : typeCode === 'less' ? 'lessons' : typeCode === 'ass' ? 'assignments' : 'quizzes';
+            if(confirm('هل أنت متأكد من إرسال هذا المحتوى للتلاميذ الآن؟')) {
+                showToast("جاري الإرسال... ⏳");
+                try {
+                    await updateDoc(doc(db, colName, docId), { status: 'published', publishDate: new Date().toISOString() });
+                    showToast("تم إرسال المحتوى للتلاميذ بنجاح! 🚀");
+                    loadAllArchives();
+                } catch(e) { showToast("حدث خطأ أثناء الإرسال", "error"); }
+            }
         }
 
         window.deleteItem = async function(col, docId) { if(confirm('متأكد من الحذف؟')) { await deleteDoc(doc(db, col, docId)); showToast('تم الحذف'); loadAllArchives(); } }
+        
         window.editItem = async function(type, id) { 
             window.scrollTo({ top: 0, behavior: 'smooth' }); 
             const snap = await getDocs(collection(db, type === 'ann' ? 'announcements' : type === 'less' ? 'lessons' : type === 'ass' ? 'assignments' : 'quizzes')); 
             let data = null; snap.forEach(d => { if(d.id === id) data = d.data(); }); 
-            if(type === 'ann') { document.getElementById('announcement-title').value = data.title; document.getElementById('announcement-text').value = data.content; editIds.ann = id; document.getElementById('btn-pub-ann').innerText = "تحديث"; } 
-            else if(type === 'less') { document.getElementById('lesson-title').value = data.title; editIds.less = id; document.getElementById('btn-pub-lesson').innerText = "تحديث"; } 
-            else if(type === 'ass') { document.getElementById('assignment-title').value = data.title; editIds.ass = id; document.getElementById('btn-pub-ass').innerText = "تحديث"; } 
-            else if(type === 'quiz') { document.getElementById('quiz-title').value = data.title; document.getElementById('quiz-file-container').classList.add('hidden'); editIds.quiz = id; document.getElementById('btn-pub-quiz').innerText = "تحديث"; } 
+            
+            if(type === 'ann') { document.getElementById('announcement-title').value = data.title; document.getElementById('announcement-text').value = data.content; editIds.ann = id; document.getElementById('btn-pub-ann').innerText = "تحديث التعديلات"; } 
+            else if(type === 'less') { document.getElementById('lesson-title').value = data.title; editIds.less = id; document.getElementById('btn-pub-lesson').innerText = "تحديث التعديلات"; } 
+            else if(type === 'ass') { document.getElementById('assignment-title').value = data.title; editIds.ass = id; document.getElementById('btn-pub-ass').innerText = "تحديث التعديلات"; } 
+            else if(type === 'quiz') { document.getElementById('quiz-title').value = data.title; document.getElementById('quiz-file-container').classList.add('hidden'); editIds.quiz = id; document.getElementById('btn-pub-quiz').innerText = "تحديث التعديلات"; } 
         }
 
-        document.getElementById('btn-pub-ann').onclick = async () => { const title = document.getElementById('announcement-title').value; const text = document.getElementById('announcement-text').value; if(!title) return; const payload = { title, content: text, date: document.getElementById('announcement-date').value, level: document.getElementById('announcement-level').value, timestamp: new Date().toISOString() }; if(editIds.ann) await updateDoc(doc(db, "announcements", editIds.ann), payload); else await addDoc(collection(db, "announcements"), payload); showToast('تم الحفظ!'); editIds.ann = null; document.getElementById('btn-pub-ann').innerText = "نشر الإعلان"; document.getElementById('announcement-title').value = ''; document.getElementById('announcement-text').value = ''; loadAllArchives(); };
-        document.getElementById('btn-pub-lesson').onclick = async () => { const title = document.getElementById('lesson-title').value; if(!title) return; const payload = { title, level: document.getElementById('lesson-level').value, component: document.getElementById('lesson-component').value, timestamp: new Date().toISOString() }; if(!editIds.less){ payload.link = document.getElementById('lesson-link').value; if(!payload.link) return showToast("أدخل الرابط!", "error"); } if(editIds.less) await updateDoc(doc(db, "lessons", editIds.less), {title: payload.title, level: payload.level, component: payload.component}); else await addDoc(collection(db, "lessons"), payload); showToast('تم الحفظ!'); editIds.less = null; document.getElementById('btn-pub-lesson').innerText = "حفظ ونشر الدرس"; document.getElementById('lesson-title').value = ''; document.getElementById('lesson-link').value = ''; loadAllArchives(); };
-        document.getElementById('btn-pub-ass').onclick = async () => { const title = document.getElementById('assignment-title').value; if(!title) return; const payload = { level: document.getElementById('assignment-level').value, title, questions: document.getElementById('assignment-questions').value, mode: document.getElementById('assignment-mode').value, component: document.getElementById('assignment-component').value, timestamp: new Date().toISOString() }; if(editIds.ass) await updateDoc(doc(db, "assignments", editIds.ass), payload); else await addDoc(collection(db, "assignments"), payload); showToast('تم الحفظ!'); editIds.ass = null; document.getElementById('btn-pub-ass').innerText = "نشر التكليف"; document.getElementById('assignment-title').value = ''; document.getElementById('assignment-questions').value = ''; loadAllArchives(); };
+        // دوال الحفظ (تضيف status: 'draft' للمحتوى الجديد)
+        document.getElementById('btn-pub-ann').onclick = async () => { const title = document.getElementById('announcement-title').value; const text = document.getElementById('announcement-text').value; if(!title) return; const payload = { title, content: text, date: document.getElementById('announcement-date').value, level: document.getElementById('announcement-level').value, timestamp: new Date().toISOString(), status: 'draft' }; if(editIds.ann) { delete payload.status; await updateDoc(doc(db, "announcements", editIds.ann), payload); } else { await addDoc(collection(db, "announcements"), payload); } showToast('تم حفظ المسودة!'); editIds.ann = null; document.getElementById('btn-pub-ann').innerText = "حفظ (تحضير مسبق) 💾"; document.getElementById('announcement-title').value = ''; document.getElementById('announcement-text').value = ''; loadAllArchives(); };
         
+        document.getElementById('btn-pub-lesson').onclick = async () => { const title = document.getElementById('lesson-title').value; if(!title) return; const payload = { title, level: document.getElementById('lesson-level').value, component: document.getElementById('lesson-component').value, link: document.getElementById('lesson-link').value, timestamp: new Date().toISOString(), status: 'draft' }; if(editIds.less) { delete payload.status; await updateDoc(doc(db, "lessons", editIds.less), payload); } else { await addDoc(collection(db, "lessons"), payload); } showToast('تم حفظ المسودة!'); editIds.less = null; document.getElementById('btn-pub-lesson').innerText = "حفظ (تحضير مسبق) 💾"; document.getElementById('lesson-title').value = ''; document.getElementById('lesson-link').value = ''; loadAllArchives(); };
+        
+        document.getElementById('btn-pub-ass').onclick = async () => { const title = document.getElementById('assignment-title').value; if(!title) return; const payload = { level: document.getElementById('assignment-level').value, title, questions: document.getElementById('assignment-questions').value, mode: document.getElementById('assignment-mode').value, component: document.getElementById('assignment-component').value, timestamp: new Date().toISOString(), status: 'draft' }; if(editIds.ass) { delete payload.status; await updateDoc(doc(db, "assignments", editIds.ass), payload); } else { await addDoc(collection(db, "assignments"), payload); } showToast('تم حفظ المسودة!'); editIds.ass = null; document.getElementById('btn-pub-ass').innerText = "حفظ (تحضير مسبق) 💾"; document.getElementById('assignment-title').value = ''; document.getElementById('assignment-questions').value = ''; loadAllArchives(); };
+
+        document.getElementById('btn-pub-quiz').onclick = async () => { 
+            const title = document.getElementById('quiz-title').value; 
+            const deadline = document.getElementById('quiz-deadline').value;
+            const level = document.getElementById('quiz-level').value;
+            if(!title || !deadline) return showToast("أكمل البيانات", "error");
+
+            if(editIds.quiz) {
+                await updateDoc(doc(db, "quizzes", editIds.quiz), { title, level, deadline });
+                showToast('تم التحديث!'); editIds.quiz = null; document.getElementById('btn-pub-quiz').innerText = "حفظ (تحضير مسبق) 💾"; document.getElementById('quiz-file-container').classList.remove('hidden'); document.getElementById('quiz-title').value = ''; loadAllArchives(); return;
+            }
+
+            const file = document.getElementById('quiz-file').files[0];
+            if(!file) return showToast("ارفع ملف الأسئلة", "error");
+
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                const text = e.target.result; const lines = text.split('\n'); let parsedQuestions = []; let currentQ = null;
+                for(let line of lines) { line = line.trim(); if(!line) continue; if(line.match(/^\d+\./)) { if(currentQ) parsedQuestions.push(currentQ); currentQ = { q: line.replace(/^\d+\.\s*/, ''), options: [], answerIndex: -1 }; } else if (line.startsWith('-')) { let opt = line.substring(1).trim(); let isCorrect = false; if(opt.endsWith('*')) { isCorrect = true; opt = opt.slice(0, -1).trim(); } if(currentQ) { currentQ.options.push(opt); if(isCorrect) currentQ.answerIndex = currentQ.options.length - 1; } } }
+                if(currentQ) parsedQuestions.push(currentQ);
+                if(parsedQuestions.length === 0) return showToast('الملف فارغ أو صيغته خاطئة', "error");
+
+                try {
+                    await addDoc(collection(db, "quizzes"), { title, level, deadline, questions: parsedQuestions, timestamp: new Date().toISOString(), status: 'draft' });
+                    showToast(`تم حفظ المسودة بنجاح!`); document.getElementById('quiz-title').value = ''; document.getElementById('quiz-file').value = ''; loadAllArchives();
+                } catch(err) { showToast("خطأ", "error"); }
+            };
+            reader.readAsText(file);
+        };
+
+        // بقية الدوال (إدارة التلاميذ، التصحيح، التقارير) تعمل بكفاءة تامة...
         window.loadStudentsList = async function() { const level = document.getElementById('student-level-select').value; const className = document.getElementById('student-class-input').value.trim(); if(!className) return showToast("أدخل القسم", "error"); const tbody = document.getElementById('students-table-body'); tbody.innerHTML = '<tr><td colspan="3" class="text-center">جاري الجلب...</td></tr>'; const q = query(collection(db, "students"), where("level", "==", level), where("className", "==", className)); const snap = await getDocs(q); tbody.innerHTML = ''; snap.forEach(docSnap => { const st = docSnap.data(); tbody.innerHTML += `<tr class="hover:bg-slate-50 dark:hover:bg-slate-700"><td class="p-4 font-mono">${st.code}</td><td class="p-4 font-bold">${st.name}</td><td class="p-4"><button onclick="deleteItem('students', '${docSnap.id}'); setTimeout(loadStudentsList, 500);" class="text-rose-500 font-bold">حذف</button></td></tr>`; }); if(snap.empty) tbody.innerHTML = '<tr><td colspan="3" class="text-center">لا يوجد.</td></tr>'; }
         window.handleTxtUpload = async function(e) { const file = e.target.files[0]; const level = document.getElementById('student-level-select').value; const className = document.getElementById('student-class-input').value.trim(); if (!className) return showToast("اكتب القسم!", "error"); const reader = new FileReader(); reader.onload = async function(ev) { const lines = ev.target.result.split('\n'); let count = 0; for(let line of lines) { const match = line.trim().match(/^([^\s,]+)[\s,]+(.+)$/); if (match) { try { await addDoc(collection(db, "students"), { level, className, code: match[1].trim(), name: match[2].trim() }); count++; } catch(e){} } } e.target.value = ''; window.loadStudentsList(); showToast(`تم رفع ${count} تلميذ!`); }; reader.readAsText(file); }
-
-        // ==================== ميزة تصحيح الواجبات (تحديث: دعم روابط درايف) ====================
-        window.loadSubmissionsToGrade = async function() {
-            const tbody = document.getElementById('grading-table-body');
-            tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center">جاري الجلب... ⏳</td></tr>';
-            try {
-                const subSnap = await getDocs(query(collection(db, "submissions"), where("status", "==", "pending")));
-                let html = '';
-                subSnap.forEach(d => {
-                    const s = d.data();
-                    let contentHtml = s.type === 'text' 
-                        ? `<div class="bg-white dark:bg-slate-800 p-3 rounded-lg text-xs border dark:border-slate-600 whitespace-pre-wrap">${s.content}</div>`
-                        : `<a href="${s.content}" target="_blank" class="inline-flex items-center gap-2 bg-indigo-50 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 px-4 py-2 rounded-lg font-bold text-xs hover:bg-indigo-100 transition-all border border-indigo-100 dark:border-indigo-800" dir="ltr">🔗 فتح الرابط المرفق</a>`;
-                    
-                    html += `<tr class="hover:bg-slate-100 dark:hover:bg-slate-800">
-                        <td class="p-4"><span class="font-bold block">${s.studentName}</span><span class="text-xs text-slate-500">${s.studentCode} (${s.level})</span></td>
-                        <td class="p-4 font-bold text-indigo-700 dark:text-indigo-400">${s.assignmentTitle}</td>
-                        <td class="p-4">${contentHtml}</td>
-                        <td class="p-4 text-center"><div class="flex items-center justify-center gap-2"><input type="number" id="score_${d.id}" min="0" max="20" placeholder="/20" class="w-16 p-2 border rounded text-center text-sm font-bold bg-white dark:bg-slate-700"><button onclick="saveGrade('${d.id}')" class="px-3 py-2 bg-emerald-600 text-white rounded font-bold text-xs">حفظ</button></div></td>
-                    </tr>`;
-                });
-                tbody.innerHTML = html || '<tr><td colspan="4" class="p-4 text-center font-bold text-emerald-600">رائع! جميع الواجبات مصححة. 🎉</td></tr>';
-            } catch(e) { showToast("حدث خطأ", "error"); }
-        }
-
-        window.saveGrade = async function(subId) {
-            const scoreInput = document.getElementById(`score_${subId}`).value;
-            if(scoreInput === '') return showToast("أدخل النقطة!", "error");
-            try {
-                await updateDoc(doc(db, "submissions", subId), { status: 'graded', score: parseFloat(scoreInput) });
-                showToast("تم الحفظ!"); loadSubmissionsToGrade();
-            } catch(e) { showToast("خطأ", "error"); }
-        }
-
+        window.loadSubmissionsToGrade = async function() { const tbody = document.getElementById('grading-table-body'); tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center">جاري الجلب... ⏳</td></tr>'; try { const subSnap = await getDocs(query(collection(db, "submissions"), where("status", "==", "pending"))); let html = ''; subSnap.forEach(d => { const s = d.data(); let contentHtml = s.type === 'text' ? `<div class="bg-white dark:bg-slate-800 p-3 rounded-lg text-xs border dark:border-slate-600 whitespace-pre-wrap">${s.content}</div>` : `<a href="${s.content}" target="_blank" class="inline-flex items-center gap-2 bg-indigo-50 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 px-4 py-2 rounded-lg font-bold text-xs hover:bg-indigo-100 transition-all border border-indigo-100 dark:border-indigo-800" dir="ltr">🔗 فتح الرابط المرفق</a>`; html += `<tr class="hover:bg-slate-100 dark:hover:bg-slate-800"><td class="p-4"><span class="font-bold block">${s.studentName}</span><span class="text-xs text-slate-500">${s.studentCode} (${s.level})</span></td><td class="p-4 font-bold text-indigo-700 dark:text-indigo-400">${s.assignmentTitle}</td><td class="p-4">${contentHtml}</td><td class="p-4 text-center"><div class="flex items-center justify-center gap-2"><input type="number" id="score_${d.id}" min="0" max="20" placeholder="/20" class="w-16 p-2 border rounded text-center text-sm font-bold bg-white dark:bg-slate-700"><button onclick="saveGrade('${d.id}')" class="px-3 py-2 bg-emerald-600 text-white rounded font-bold text-xs">حفظ</button></div></td></tr>`; }); tbody.innerHTML = html || '<tr><td colspan="4" class="p-4 text-center font-bold text-emerald-600">رائع! جميع الواجبات مصححة. 🎉</td></tr>'; } catch(e) { showToast("حدث خطأ", "error"); } }
+        window.saveGrade = async function(subId) { const scoreInput = document.getElementById(`score_${subId}`).value; if(scoreInput === '') return showToast("أدخل النقطة!", "error"); try { await updateDoc(doc(db, "submissions", subId), { status: 'graded', score: parseFloat(scoreInput) }); showToast("تم الحفظ!"); loadSubmissionsToGrade(); } catch(e) { showToast("خطأ", "error"); } }
         window.loadClassReport = async function() { const level = document.getElementById('report-level').value; const className = document.getElementById('report-class').value.trim(); if(!className) return showToast("أدخل القسم", "error"); const tbody = document.getElementById('reports-table-body'); tbody.innerHTML = '<tr><td colspan="5" class="text-center">جاري الجلب...</td></tr>'; const snapStudents = await getDocs(query(collection(db, "students"), where("level", "==", level), where("className", "==", className))); let html = ''; for (let docSnap of snapStudents.docs) { const st = docSnap.data(); const snapRes = await getDocs(query(collection(db, "results"), where("code", "==", st.code))); const snapSub = await getDocs(query(collection(db, "submissions"), where("studentCode", "==", st.code), where("status", "==", "graded"))); if(snapRes.empty && snapSub.empty) { html += `<tr><td>${st.code}</td><td>${st.name}</td><td colspan="3">لم ينجز أي نشاط</td></tr>`; } else { snapRes.forEach(rDoc => { const res = rDoc.data(); html += `<tr><td>${st.code}</td><td>${st.name}</td><td>اختبار: ${res.quizTitle}</td><td class="font-bold text-emerald-600">${res.score}/${res.total}</td><td>${res.date.split('T')[0]}</td></tr>`; }); snapSub.forEach(sDoc => { const sub = sDoc.data(); html += `<tr><td>${st.code}</td><td>${st.name}</td><td>واجب: ${sub.assignmentTitle}</td><td class="font-bold text-emerald-600">${sub.score}/20</td><td>${sub.timestamp.split('T')[0]}</td></tr>`; }); } } tbody.innerHTML = html || '<tr><td colspan="5" class="text-center">لا توجد بيانات.</td></tr>'; }
         window.loadStudentReport = async function() { const code = document.getElementById('report-student-code').value.trim(); if(!code) return showToast("أدخل المعرف", "error"); const tbody = document.getElementById('reports-table-body'); tbody.innerHTML = '<tr><td colspan="5" class="text-center">جاري الجلب...</td></tr>'; const snapStudent = await getDocs(query(collection(db, "students"), where("code", "==", code))); if(snapStudent.empty) { tbody.innerHTML = '<tr><td colspan="5" class="text-center">المعرف غير مسجل.</td></tr>'; return; } const st = snapStudent.docs[0].data(); const snapRes = await getDocs(query(collection(db, "results"), where("code", "==", code))); const snapSub = await getDocs(query(collection(db, "submissions"), where("studentCode", "==", code), where("status", "==", "graded"))); let html = ''; if(snapRes.empty && snapSub.empty) { html = `<tr><td>${st.code}</td><td>${st.name}</td><td colspan="3">لم ينجز أي نشاط</td></tr>`; } else { snapRes.forEach(rDoc => { const res = rDoc.data(); html += `<tr><td>${st.code}</td><td>${st.name}</td><td>اختبار: ${res.quizTitle}</td><td class="font-bold text-emerald-600">${res.score}/${res.total}</td><td>${res.date.split('T')[0]}</td></tr>`; }); snapSub.forEach(sDoc => { const sub = sDoc.data(); html += `<tr><td>${st.code}</td><td>${st.name}</td><td>واجب: ${sub.assignmentTitle}</td><td class="font-bold text-emerald-600">${sub.score}/20</td><td>${sub.timestamp.split('T')[0]}</td></tr>`; }); } tbody.innerHTML = html; }
         
