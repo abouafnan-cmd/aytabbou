@@ -132,19 +132,15 @@
             const level = urlParams.get('level') || 'common-sci';
 
             if(!rawCodeInput) return showToast("أدخل المعرف الشخصي أولاً", "error");
-            
-            const btn = document.getElementById('login-btn');
-            btn.innerText = "جاري التحقق...";
+            const btn = document.getElementById('login-btn'); btn.innerText = "جاري التحقق...";
 
             try {
                 let q = query(collection(db, "students"), where("level", "==", level), where("code", "==", codeInputUpper));
                 let snap = await getDocs(q);
-                
                 if (snap.empty) {
                     q = query(collection(db, "students"), where("level", "==", level), where("code", "==", rawCodeInput));
                     snap = await getDocs(q);
                 }
-
                 if (!snap.empty) {
                     window.currentUser = snap.docs[0].data();
                     document.getElementById('login-modal').classList.add('hidden');
@@ -152,109 +148,72 @@
                     document.getElementById('welcome-msg').innerText = `مرحباً بك: ${window.currentUser.name}`;
                     window.fetchData(level);
                     showToast(`أهلاً بك ${window.currentUser.name} في منصتك! 🌟`);
-                } else { 
-                    showToast("المعرف غير مسجل في هذا المستوى!", "error"); 
-                }
-            } catch (e) { 
-                console.error(e);
-                showToast("خطأ في الاتصال بالسحابة", "error"); 
-            }
+                } else { showToast("المعرف غير مسجل في هذا المستوى!", "error"); }
+            } catch (e) { showToast("خطأ في الاتصال بالسحابة", "error"); }
             btn.innerText = "تأكيد الدخول";
         }
 
-        document.getElementById('student-code-input').addEventListener('keypress', e => { 
-            if (e.key === 'Enter') window.loginStudent(); 
-        });
+        document.getElementById('student-code-input').addEventListener('keypress', e => { if (e.key === 'Enter') window.loginStudent(); });
 
         window.fetchData = async function(level) {
+            // جلب الإعلانات (فقط المنشورة)
             try {
                 const annSnap = await getDocs(collection(db, "announcements")); let h = '';
-                annSnap.forEach(d => { const v = d.data(); if(v.level === level || v.level === 'all') h += `<div class="bg-indigo-50 dark:bg-indigo-900/30 p-4 rounded-xl border-r-4 border-r-indigo-500"><h4 class="font-bold text-indigo-900 dark:text-indigo-300">${v.title}</h4><p class="text-sm mt-2">${v.content}</p></div>`; });
-                document.getElementById('announcements-list').innerHTML = h || '<p>لا توجد إعلانات.</p>';
+                annSnap.forEach(d => { 
+                    const v = d.data(); 
+                    if(v.status === 'draft') return; // منع ظهور المسودات
+                    if(v.level === level || v.level === 'all') h += `<div class="bg-indigo-50 dark:bg-indigo-900/30 p-4 rounded-xl border-r-4 border-r-indigo-500"><h4 class="font-bold text-indigo-900 dark:text-indigo-300">${v.title}</h4><p class="text-sm mt-2">${v.content}</p></div>`; 
+                });
+                document.getElementById('announcements-list').innerHTML = h || '<p class="text-slate-500 text-center py-4 font-bold">لا توجد إعلانات.</p>';
             } catch(e){}
 
+            // جلب الدروس (فقط المنشورة)
             try {
                 const lessSnap = await getDocs(query(collection(db, "lessons"), where("level", "==", level))); let h = '';
-                lessSnap.forEach(d => { const v = d.data(); h += `<div class="bg-slate-50 dark:bg-slate-700 p-4 rounded-xl border dark:border-slate-600"><h4 class="font-bold text-emerald-800 dark:text-emerald-300">${v.title}</h4><span class="text-xs bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200 px-2 py-1 rounded inline-block mt-2">${v.component}</span><br><a href="${v.link}" target="_blank" class="text-sm text-indigo-600 dark:text-indigo-400 font-bold mt-2 inline-block hover:underline">الاطلاع على الدرس →</a></div>`; });
-                document.getElementById('lessons-list').innerHTML = h || '<p>لا توجد دروس.</p>';
+                lessSnap.forEach(d => { 
+                    const v = d.data(); 
+                    if(v.status === 'draft') return; // منع ظهور المسودات
+                    h += `<div class="bg-slate-50 dark:bg-slate-700 p-4 rounded-xl border dark:border-slate-600"><h4 class="font-bold text-emerald-800 dark:text-emerald-300">${v.title}</h4><span class="text-xs bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200 px-2 py-1 rounded inline-block mt-2">${v.component}</span><br><a href="${v.link}" target="_blank" class="text-sm text-indigo-600 dark:text-indigo-400 font-bold mt-2 inline-block hover:underline">الاطلاع على الدرس →</a></div>`; 
+                });
+                document.getElementById('lessons-list').innerHTML = h || '<p class="text-slate-500 text-center py-4 font-bold">لا توجد دروس حالياً.</p>';
             } catch(e){}
 
             let completedQuizzes = []; let resHTML = ''; let mySubmissions = {};
             try {
                 const resSnap = await getDocs(query(collection(db, "results"), where("code", "==", window.currentUser.code)));
                 resSnap.forEach(d => { const r = d.data(); completedQuizzes.push(r.quizId); resHTML += `<tr><td class="p-3 font-semibold">${r.quizTitle}</td><td class="p-3 font-bold text-emerald-600 dark:text-emerald-400 text-center">${r.score} / ${r.total}</td></tr>`; });
-                
                 const subSnap = await getDocs(query(collection(db, "submissions"), where("studentCode", "==", window.currentUser.code)));
-                subSnap.forEach(d => { 
-                    const s = d.data(); mySubmissions[s.assignmentId] = s; 
-                    if(s.status === 'graded') { resHTML += `<tr><td class="p-3 font-semibold">واجب: ${s.assignmentTitle}</td><td class="p-3 font-bold text-emerald-600 dark:text-emerald-400 text-center">${s.score} / 20</td></tr>`; }
-                });
+                subSnap.forEach(d => { const s = d.data(); mySubmissions[s.assignmentId] = s; if(s.status === 'graded') { resHTML += `<tr><td class="p-3 font-semibold">واجب: ${s.assignmentTitle}</td><td class="p-3 font-bold text-emerald-600 dark:text-emerald-400 text-center">${s.score} / 20</td></tr>`; } });
                 if(resHTML) document.getElementById('results-table-body').innerHTML = resHTML;
             } catch(e){}
 
-            // التكليفات مع الخوارزمية الجديدة
+            // جلب التكليفات (فقط المنشورة)
             try {
                 const assSnap = await getDocs(query(collection(db, "assignments"), where("level", "==", level))); 
-                let h = '';
-                window.availableAssignments = {};
-                
+                let h = ''; window.availableAssignments = {};
                 assSnap.forEach(d => { 
-                    const v = d.data(); const assId = d.id; const sub = mySubmissions[assId];
-                    window.availableAssignments[assId] = v;
+                    const v = d.data(); 
+                    if(v.status === 'draft') return; // منع ظهور المسودات
                     
+                    const assId = d.id; const sub = mySubmissions[assId];
+                    window.availableAssignments[assId] = v;
                     const dateObj = v.timestamp ? new Date(v.timestamp) : new Date();
                     const dateStr = dateObj.toLocaleDateString('ar-MA', { year: 'numeric', month: 'long', day: 'numeric' });
 
-                    h += `<div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
-                        <div class="absolute top-0 right-0 bg-indigo-50 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 text-xs px-4 py-2 rounded-bl-2xl font-bold flex items-center gap-1 border-b border-l border-indigo-100 dark:border-indigo-800">
-                            <span>📅 تاريخ التكليف: ${dateStr}</span>
-                        </div>
-                        <h4 class="text-xl font-bold text-indigo-900 dark:text-indigo-400 mt-6">${v.title}</h4>
-                        <span class="inline-block bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300 text-xs px-3 py-1 rounded-lg mt-2 font-bold">${v.component}</span>
-                        <div class="mt-4 p-4 bg-slate-50 dark:bg-slate-700/50 border border-slate-100 dark:border-slate-600 rounded-xl text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap leading-relaxed">${v.questions}</div>
-                        <div class="mt-5 pt-4 border-t border-slate-100 dark:border-slate-700">`;
+                    h += `<div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden"><div class="absolute top-0 right-0 bg-indigo-50 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 text-xs px-4 py-2 rounded-bl-2xl font-bold flex items-center gap-1 border-b border-l border-indigo-100 dark:border-indigo-800"><span>📅 تاريخ التكليف: ${dateStr}</span></div><h4 class="text-xl font-bold text-indigo-900 dark:text-indigo-400 mt-6">${v.title}</h4><span class="inline-block bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300 text-xs px-3 py-1 rounded-lg mt-2 font-bold">${v.component}</span><div class="mt-4 p-4 bg-slate-50 dark:bg-slate-700/50 border border-slate-100 dark:border-slate-600 rounded-xl text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap leading-relaxed">${v.questions}</div><div class="mt-5 pt-4 border-t border-slate-100 dark:border-slate-700">`;
                     
                     if (sub) {
-                        if (sub.status === 'graded') {
-                            h += `<div class="flex items-center gap-2 text-emerald-700 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-900/20 p-3.5 rounded-xl border border-emerald-100 dark:border-emerald-800/50">
-                                <span>✔️ تم التصحيح، نتيجتك هي: ${sub.score} / 20</span>
-                            </div>`;
-                        } else {
-                            h += `<div class="flex items-center gap-2 text-indigo-700 dark:text-indigo-400 font-bold bg-indigo-50 dark:bg-indigo-900/20 p-3.5 rounded-xl border border-indigo-100 dark:border-indigo-800/50">
-                                <span>⏳ تم الإرسال بنجاح.. الإجابة في انتظار تصحيح الأستاذ</span>
-                            </div>`;
-                        }
+                        if (sub.status === 'graded') h += `<div class="flex items-center gap-2 text-emerald-700 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-900/20 p-3.5 rounded-xl border border-emerald-100 dark:border-emerald-800/50"><span>✔️ تم التصحيح، نتيجتك هي: ${sub.score} / 20</span></div>`;
+                        else h += `<div class="flex items-center gap-2 text-indigo-700 dark:text-indigo-400 font-bold bg-indigo-50 dark:bg-indigo-900/20 p-3.5 rounded-xl border border-indigo-100 dark:border-indigo-800/50"><span>⏳ تم الإرسال بنجاح.. الإجابة في انتظار تصحيح الأستاذ</span></div>`;
                     } else {
-                        // خوارزمية ذكية لاكتشاف نوع التكليف سواء كان قديماً أو جديداً في السحابة
                         if (v.mode.includes('الدفتر') || v.mode.includes('الإعداد القبلي')) {
-                            h += `<div class="flex items-center justify-center gap-2 text-amber-700 dark:text-amber-400 font-bold bg-amber-50 dark:bg-amber-900/20 p-3.5 rounded-xl border border-amber-200 dark:border-amber-800/50">
-                                <span>📌 المطلوب: إنجاز هذا التكليف في دفتر الإعداد القبلي</span>
-                            </div>`;
+                            h += `<div class="flex items-center justify-center gap-2 text-amber-700 dark:text-amber-400 font-bold bg-amber-50 dark:bg-amber-900/20 p-3.5 rounded-xl border border-amber-200 dark:border-amber-800/50"><span>📌 المطلوب: إنجاز هذا التكليف في دفتر الإعداد القبلي</span></div>`;
                         } 
                         else if (v.mode.includes('مربع نص') || v.mode.includes('المباشرة')) {
-                            h += `<button onclick="toggleAnswerBox('${assId}')" class="flex items-center justify-center gap-2 w-full md:w-fit px-6 py-2.5 bg-emerald-600 text-white text-sm font-bold rounded-xl hover:bg-emerald-700 transition-all shadow-sm">
-                                <span>✍️ الإجابة عن الواجب</span>
-                            </button>
-                            <div id="ans_box_${assId}" class="hidden mt-4 p-4 bg-slate-100 dark:bg-slate-700 rounded-xl space-y-3 border border-slate-200 dark:border-slate-600">
-                                <label class="block text-sm font-bold text-slate-700 dark:text-slate-300">اكتب إجابتك هنا:</label>
-                                <textarea id="text_val_${assId}" rows="4" class="w-full p-3 border rounded-xl text-sm bg-white dark:bg-slate-800 dark:text-white dark:border-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none resize-none"></textarea>
-                                <button onclick="submitAssText('${assId}', '${v.title}')" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 transition-all shadow-md">
-                                    <span>🚀 الإرسال إلى الأستاذ</span>
-                                </button>
-                            </div>`;
+                            h += `<button onclick="toggleAnswerBox('${assId}')" class="flex items-center justify-center gap-2 w-full md:w-fit px-6 py-2.5 bg-emerald-600 text-white text-sm font-bold rounded-xl hover:bg-emerald-700 transition-all shadow-sm"><span>✍️ الإجابة عن الواجب</span></button><div id="ans_box_${assId}" class="hidden mt-4 p-4 bg-slate-100 dark:bg-slate-700 rounded-xl space-y-3 border border-slate-200 dark:border-slate-600"><label class="block text-sm font-bold text-slate-700 dark:text-slate-300">اكتب إجابتك هنا:</label><textarea id="text_val_${assId}" rows="4" class="w-full p-3 border rounded-xl text-sm bg-white dark:bg-slate-800 dark:text-white dark:border-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none resize-none"></textarea><button onclick="submitAssText('${assId}')" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 transition-all shadow-md"><span>🚀 الإرسال إلى الأستاذ</span></button></div>`;
                         } 
                         else { 
-                            // يشمل (إرفاق رابط) و (رفع ملف)
-                            h += `<button onclick="toggleAnswerBox('${assId}')" class="flex items-center justify-center gap-2 w-full md:w-fit px-6 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 transition-all shadow-sm">
-                                <span>🔗 إرفاق رابط الواجب</span>
-                            </button>
-                            <div id="ans_box_${assId}" class="hidden mt-4 p-4 bg-indigo-50 dark:bg-slate-700 rounded-xl space-y-3 border border-indigo-100 dark:border-slate-600">
-                                <p class="text-xs font-bold text-indigo-800 dark:text-indigo-300 bg-white dark:bg-slate-800 p-2.5 rounded-lg border dark:border-slate-600 leading-relaxed">💡 قم بتصوير إنجازك أو تحويله لـ PDF ورفعه على مساحتك في (Google Drive) أو أي موقع رفع، ثم انسخ الرابط والصقه هنا:</p>
-                                <input type="url" id="link_val_${assId}" placeholder="الصق الرابط هنا (https://...)" class="w-full p-3 border rounded-xl text-sm bg-white dark:bg-slate-800 dark:text-white dark:border-slate-500 text-left focus:ring-2 focus:ring-indigo-500 outline-none" dir="ltr">
-                                <button onclick="submitAssLink('${assId}', '${v.title}')" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-emerald-600 text-white text-sm font-bold rounded-xl hover:bg-emerald-700 transition-all shadow-md">
-                                    <span>🚀 الإرسال إلى الأستاذ</span>
-                                </button>
-                            </div>`;
+                            h += `<button onclick="toggleAnswerBox('${assId}')" class="flex items-center justify-center gap-2 w-full md:w-fit px-6 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 transition-all shadow-sm"><span>🔗 إرفاق رابط الواجب</span></button><div id="ans_box_${assId}" class="hidden mt-4 p-4 bg-indigo-50 dark:bg-slate-700 rounded-xl space-y-3 border border-indigo-100 dark:border-slate-600"><p class="text-xs font-bold text-indigo-800 dark:text-indigo-300 bg-white dark:bg-slate-800 p-2.5 rounded-lg border dark:border-slate-600 leading-relaxed">💡 قم بتصوير إنجازك أو تحويله لـ PDF ورفعه على مساحتك في (Google Drive) أو أي موقع رفع، ثم انسخ الرابط والصقه هنا:</p><input type="url" id="link_val_${assId}" placeholder="الصق الرابط هنا (https://...)" class="w-full p-3 border rounded-xl text-sm bg-white dark:bg-slate-800 dark:text-white dark:border-slate-500 text-left focus:ring-2 focus:ring-indigo-500 outline-none" dir="ltr"><button onclick="submitAssLink('${assId}')" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-emerald-600 text-white text-sm font-bold rounded-xl hover:bg-emerald-700 transition-all shadow-md"><span>🚀 الإرسال إلى الأستاذ</span></button></div>`;
                         }
                     }
                     h += `</div></div>`;
@@ -262,11 +221,14 @@
                 document.getElementById('assignments-list').innerHTML = h || '<p class="text-slate-500 text-center py-4 font-bold">لا توجد تكليفات مطلوبة حالياً.</p>';
             } catch(e){}
 
-            // الاختبارات
+            // الاختبارات (فقط المنشورة)
             try {
                 const qzSnap = await getDocs(query(collection(db, "quizzes"), where("level", "==", level))); let h = ''; window.availableQuizzes = {};
                 qzSnap.forEach(d => { 
-                    const v = d.data(); window.availableQuizzes[d.id] = v;
+                    const v = d.data(); 
+                    if(v.status === 'draft') return; // منع ظهور المسودات
+                    
+                    window.availableQuizzes[d.id] = v;
                     if(!completedQuizzes.includes(d.id)) {
                         h += `<div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm"><h4 class="font-bold text-lg mb-1">${v.title}</h4><p class="text-xs text-rose-600 dark:text-rose-400 font-bold mb-4">آخر أجل: ${v.deadline.replace('T',' ')}</p><button onclick="startQuiz('${d.id}')" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-bold shadow-sm">بدء الاختبار 📝</button></div>`; 
                     } else {
@@ -277,59 +239,10 @@
             } catch(e){}
         }
 
-        window.submitAssText = async function(assId) {
-            const content = document.getElementById(`text_val_${assId}`).value.trim();
-            const title = window.availableAssignments[assId].title;
-            if(!content) return showToast("اكتب الإجابة أولاً", "error");
-            showToast("جاري الإرسال... ⏳");
-            try {
-                await addDoc(collection(db, "submissions"), { studentCode: window.currentUser.code, studentName: window.currentUser.name, level: window.currentUser.level, assignmentId: assId, assignmentTitle: title, type: 'text', content: content, status: 'pending', score: 0, timestamp: new Date().toISOString() });
-                showToast("تم الإرسال بنجاح! سيطلع عليه الأستاذ قريباً 🎉"); window.fetchData(window.currentUser.level);
-            } catch(e) { showToast("حدث خطأ", "error"); }
-        }
-
-        window.submitAssLink = async function(assId) {
-            const url = document.getElementById(`link_val_${assId}`).value.trim();
-            const title = window.availableAssignments[assId].title;
-            if(!url || !url.startsWith('http')) return showToast("المرجو إدخال رابط صحيح يبدأ بـ http", "error");
-            
-            showToast("جاري إرسال الرابط... ⏳");
-            try {
-                await addDoc(collection(db, "submissions"), { studentCode: window.currentUser.code, studentName: window.currentUser.name, level: window.currentUser.level, assignmentId: assId, assignmentTitle: title, type: 'link', content: url, status: 'pending', score: 0, timestamp: new Date().toISOString() });
-                showToast("تم إرسال الواجب بنجاح! 🎉"); window.fetchData(window.currentUser.level);
-            } catch(e) { showToast("حدث خطأ في الإرسال", "error"); }
-        }
-
-        window.startQuiz = function(quizId) {
-            const quiz = window.availableQuizzes[quizId];
-            if(new Date() > new Date(quiz.deadline)) return showToast("انتهى موعد الاختبار، تم إغلاقه.", "error");
-            window.activeQuiz = { id: quizId, data: quiz };
-            document.getElementById('qt-title').innerText = quiz.title;
-            let qHTML = '';
-            quiz.questions.forEach((q, i) => {
-                let opts = '';
-                q.options.forEach((opt, j) => { opts += `<label class="flex items-center gap-3 p-4 border dark:border-slate-600 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer transition-colors"><input type="radio" name="q${i}" value="${j}" class="w-4 h-4 accent-emerald-600"> <span class="font-semibold">${opt}</span></label>`; });
-                qHTML += `<div class="p-5 bg-slate-50 dark:bg-slate-700/50 rounded-xl border dark:border-slate-600"><h4 class="font-bold mb-4 text-lg">${i+1}. ${q.q}</h4><div class="grid grid-cols-1 md:grid-cols-2 gap-3">${opts}</div></div>`;
-            });
-            document.getElementById('qt-questions').innerHTML = qHTML;
-            document.getElementById('quiz-taking-modal').classList.remove('hidden');
-        }
-
-        window.submitQuiz = async function() {
-            let score = 0; const total = window.activeQuiz.data.questions.length;
-            for(let i=0; i<total; i++) {
-                const selected = document.querySelector(`input[name="q${i}"]:checked`);
-                if(selected && parseInt(selected.value) === window.activeQuiz.data.questions[i].answerIndex) score++;
-            }
-            showToast("جاري الإرسال... ⏳");
-            try {
-                await addDoc(collection(db, "results"), { code: window.currentUser.code, quizId: window.activeQuiz.id, quizTitle: window.activeQuiz.data.title, score, total, date: new Date().toISOString() });
-                document.getElementById('quiz-taking-modal').classList.add('hidden');
-                if (score / total >= 0.5) confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#10b981', '#fbbf24', '#ffffff'] });
-                showToast(`أحسنت! نتيجتك هي: ${score} من ${total}`);
-                window.fetchData(window.currentUser.level); 
-            } catch(e) { showToast("حدث خطأ", "error"); }
-        }
+        window.submitAssText = async function(assId) { /*... دالة الإرسال ...*/ const content = document.getElementById(`text_val_${assId}`).value.trim(); const title = window.availableAssignments[assId].title; if(!content) return showToast("اكتب الإجابة أولاً", "error"); showToast("جاري الإرسال... ⏳"); try { await addDoc(collection(db, "submissions"), { studentCode: window.currentUser.code, studentName: window.currentUser.name, level: window.currentUser.level, assignmentId: assId, assignmentTitle: title, type: 'text', content: content, status: 'pending', score: 0, timestamp: new Date().toISOString() }); showToast("تم الإرسال بنجاح! 🎉"); window.fetchData(window.currentUser.level); } catch(e) { showToast("حدث خطأ", "error"); } }
+        window.submitAssLink = async function(assId) { /*... دالة إرسال الرابط ...*/ const url = document.getElementById(`link_val_${assId}`).value.trim(); const title = window.availableAssignments[assId].title; if(!url || !url.startsWith('http')) return showToast("أدخل رابط صحيح", "error"); showToast("جاري إرسال الرابط... ⏳"); try { await addDoc(collection(db, "submissions"), { studentCode: window.currentUser.code, studentName: window.currentUser.name, level: window.currentUser.level, assignmentId: assId, assignmentTitle: title, type: 'link', content: url, status: 'pending', score: 0, timestamp: new Date().toISOString() }); showToast("تم الإرسال بنجاح! 🎉"); window.fetchData(window.currentUser.level); } catch(e) { showToast("حدث خطأ", "error"); } }
+        window.startQuiz = function(quizId) { /*... دالة الاختبار ...*/ const quiz = window.availableQuizzes[quizId]; if(new Date() > new Date(quiz.deadline)) return showToast("انتهى الموعد.", "error"); window.activeQuiz = { id: quizId, data: quiz }; document.getElementById('qt-title').innerText = quiz.title; let qHTML = ''; quiz.questions.forEach((q, i) => { let opts = ''; q.options.forEach((opt, j) => { opts += `<label class="flex items-center gap-3 p-4 border dark:border-slate-600 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer"><input type="radio" name="q${i}" value="${j}" class="w-4 h-4 accent-emerald-600"> <span class="font-semibold">${opt}</span></label>`; }); qHTML += `<div class="p-5 bg-slate-50 dark:bg-slate-700/50 rounded-xl border dark:border-slate-600"><h4 class="font-bold mb-4 text-lg">${i+1}. ${q.q}</h4><div class="grid grid-cols-1 md:grid-cols-2 gap-3">${opts}</div></div>`; }); document.getElementById('qt-questions').innerHTML = qHTML; document.getElementById('quiz-taking-modal').classList.remove('hidden'); }
+        window.submitQuiz = async function() { /*... دالة الإرسال للاختبار ...*/ let score = 0; const total = window.activeQuiz.data.questions.length; for(let i=0; i<total; i++) { const selected = document.querySelector(`input[name="q${i}"]:checked`); if(selected && parseInt(selected.value) === window.activeQuiz.data.questions[i].answerIndex) score++; } showToast("جاري الإرسال... ⏳"); try { await addDoc(collection(db, "results"), { code: window.currentUser.code, quizId: window.activeQuiz.id, quizTitle: window.activeQuiz.data.title, score, total, date: new Date().toISOString() }); document.getElementById('quiz-taking-modal').classList.add('hidden'); if (score / total >= 0.5) confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#10b981', '#fbbf24', '#ffffff'] }); showToast(`أحسنت! نتيجتك هي: ${score} من ${total}`); window.fetchData(window.currentUser.level); } catch(e) { showToast("حدث خطأ", "error"); } }
     </script>
 </body>
 </html>
