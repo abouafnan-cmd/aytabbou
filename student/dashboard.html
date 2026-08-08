@@ -24,16 +24,32 @@
 
     <div id="toast-container" class="fixed top-5 left-1/2 transform -translate-x-1/2 z-[100] flex flex-col gap-2 pointer-events-none w-full max-w-sm px-4"></div>
 
-    <div id="login-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+    <!-- نافذة تسجيل الدخول -->
+    <div id="login-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-40">
         <div class="bg-white dark:bg-slate-800 max-w-md w-full p-8 rounded-2xl shadow-2xl border border-slate-100 dark:border-slate-700 space-y-5">
             <div class="text-center space-y-2">
                 <div class="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 font-art rounded-2xl flex items-center justify-center text-4xl mx-auto mb-2">ض</div>
                 <h2 class="text-xl font-bold dark:text-white">تسجيل الدخول للمنصة</h2>
             </div>
             <div class="space-y-4 pt-2">
-                <input type="text" id="student-code-input" placeholder="المعرف الشخصي (مثال: G141078429)" class="w-full p-4 border border-slate-200 dark:border-slate-600 rounded-xl text-center font-mono font-bold text-lg outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50 dark:bg-slate-700 dark:text-white uppercase">
+                <input type="text" id="student-code-input" placeholder="المعرف الشخصي (مثال: G141078429)" class="w-full p-4 border border-slate-200 dark:border-slate-600 rounded-xl text-center font-mono font-bold outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50 dark:bg-slate-700 dark:text-white uppercase">
+                <input type="password" id="student-password-input" placeholder="كلمة المرور (الافتراضية: 0000)" class="w-full p-4 border border-slate-200 dark:border-slate-600 rounded-xl text-center font-mono font-bold outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50 dark:bg-slate-700 dark:text-white">
+                <div class="text-right">
+                    <button onclick="showToast('المرجو التواصل مع الأستاذ لاسترجاع كلمة المرور الخاصة بك.', 'error')" class="text-xs text-indigo-600 dark:text-indigo-400 font-bold hover:underline">نسيت كلمة المرور؟</button>
+                </div>
                 <button id="login-btn" onclick="loginStudent()" class="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-md transition-all">تأكيد الدخول</button>
             </div>
+        </div>
+    </div>
+
+    <!-- نافذة إجبارية لتغيير كلمة المرور الافتراضية -->
+    <div id="change-password-modal" class="hidden fixed inset-0 bg-slate-900/95 z-[60] flex items-center justify-center p-4 backdrop-blur-md">
+        <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl max-w-sm w-full space-y-5 text-center shadow-2xl border-t-4 border-t-emerald-500">
+            <div class="text-5xl mb-2">🔐</div>
+            <h3 class="font-bold text-xl text-slate-800 dark:text-white">تحديث كلمة المرور</h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400 font-semibold leading-relaxed">حفاظاً على خصوصيتك ومنعاً لدخول أي شخص آخر بحسابك، المرجو تغيير كلمة المرور الافتراضية (0000) إلى كلمة جديدة خاصة بك.</p>
+            <input type="password" id="new-password" placeholder="اكتب كلمة المرور الجديدة" class="w-full p-4 border border-slate-200 dark:border-slate-600 rounded-xl text-center font-mono font-bold bg-slate-50 dark:bg-slate-700 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500">
+            <button onclick="saveNewPassword()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl shadow-md transition-all">حفظ ومتابعة إلى المنصة</button>
         </div>
     </div>
 
@@ -47,6 +63,7 @@
         </div>
     </div>
 
+    <!-- المحتوى الرئيسي للمنصة -->
     <div id="main-student-content" class="hidden">
         <header class="bg-emerald-700 text-white shadow-lg py-4 px-4 md:px-8 flex justify-between items-center sticky top-0 z-40">
             <h1 class="text-xl font-art font-bold">فضاء التلميذ</h1>
@@ -119,7 +136,7 @@
 
     <!-- سكربت فايربيس -->
     <script type="module">
-        import { db, collection, getDocs, query, where, addDoc } from '../assets/js/firebase-config.js';
+        import { db, collection, getDocs, query, where, addDoc, updateDoc, doc } from '../assets/js/firebase-config.js';
 
         window.currentUser = null; 
         window.activeQuiz = null;
@@ -127,52 +144,103 @@
 
         window.loginStudent = async function() {
             const rawCodeInput = document.getElementById('student-code-input').value.trim();
+            const passwordInput = document.getElementById('student-password-input').value.trim();
             const codeInputUpper = rawCodeInput.toUpperCase();
             const urlParams = new URLSearchParams(window.location.search);
             const level = urlParams.get('level') || 'common-sci';
 
             if(!rawCodeInput) return showToast("أدخل المعرف الشخصي أولاً", "error");
-            const btn = document.getElementById('login-btn'); btn.innerText = "جاري التحقق...";
+            if(!passwordInput) return showToast("أدخل كلمة المرور أولاً", "error");
+            
+            const btn = document.getElementById('login-btn');
+            btn.innerText = "جاري التحقق...";
 
             try {
                 let q = query(collection(db, "students"), where("level", "==", level), where("code", "==", codeInputUpper));
                 let snap = await getDocs(q);
+                
                 if (snap.empty) {
                     q = query(collection(db, "students"), where("level", "==", level), where("code", "==", rawCodeInput));
                     snap = await getDocs(q);
                 }
+
                 if (!snap.empty) {
-                    window.currentUser = snap.docs[0].data();
+                    const docSnap = snap.docs[0];
+                    const stData = docSnap.data();
+                    const actualPassword = stData.password || '0000'; // إذا لم تكن موجودة فهي 0000
+
+                    if (passwordInput !== actualPassword) {
+                        btn.innerText = "تأكيد الدخول";
+                        return showToast("كلمة المرور غير صحيحة!", "error");
+                    }
+
+                    // المصادقة ناجحة
+                    window.currentUser = { id: docSnap.id, ...stData, password: actualPassword };
                     document.getElementById('login-modal').classList.add('hidden');
-                    document.getElementById('main-student-content').classList.remove('hidden');
-                    document.getElementById('welcome-msg').innerText = `مرحباً بك: ${window.currentUser.name}`;
-                    window.fetchData(level);
-                    showToast(`أهلاً بك ${window.currentUser.name} في منصتك! 🌟`);
-                } else { showToast("المعرف غير مسجل في هذا المستوى!", "error"); }
-            } catch (e) { showToast("خطأ في الاتصال بالسحابة", "error"); }
+                    
+                    // التحقق من كلمة المرور الافتراضية
+                    if (actualPassword === '0000') {
+                        document.getElementById('change-password-modal').classList.remove('hidden');
+                    } else {
+                        document.getElementById('main-student-content').classList.remove('hidden');
+                        document.getElementById('welcome-msg').innerText = `مرحباً بك: ${window.currentUser.name}`;
+                        window.fetchData(level);
+                        showToast(`أهلاً بك ${window.currentUser.name} في منصتك! 🌟`);
+                    }
+
+                } else { 
+                    showToast("المعرف غير مسجل في هذا المستوى!", "error"); 
+                }
+            } catch (e) { 
+                console.error(e);
+                showToast("خطأ في الاتصال بالسحابة", "error"); 
+            }
             btn.innerText = "تأكيد الدخول";
         }
 
+        // دالة حفظ كلمة المرور الجديدة
+        window.saveNewPassword = async function() {
+            const newPass = document.getElementById('new-password').value.trim();
+            if (newPass.length < 4) return showToast("كلمة المرور يجب أن تتكون من 4 رموز على الأقل", "error");
+            if (newPass === '0000') return showToast("المرجو اختيار كلمة مرور مختلفة عن الافتراضية!", "error");
+
+            showToast("جاري تحديث كلمة المرور... ⏳");
+            try {
+                await updateDoc(doc(db, "students", window.currentUser.id), { password: newPass });
+                window.currentUser.password = newPass;
+                document.getElementById('change-password-modal').classList.add('hidden');
+                
+                // الدخول للمنصة
+                document.getElementById('main-student-content').classList.remove('hidden');
+                document.getElementById('welcome-msg').innerText = `مرحباً بك: ${window.currentUser.name}`;
+                window.fetchData(window.currentUser.level);
+                showToast("تم تحديث كلمة المرور بنجاح! 🎉");
+            } catch(e) {
+                showToast("حدث خطأ أثناء التحديث", "error");
+            }
+        }
+
         document.getElementById('student-code-input').addEventListener('keypress', e => { if (e.key === 'Enter') window.loginStudent(); });
+        document.getElementById('student-password-input').addEventListener('keypress', e => { if (e.key === 'Enter') window.loginStudent(); });
 
         window.fetchData = async function(level) {
-            // جلب الإعلانات (فقط المنشورة)
+            // جلب الإعلانات
             try {
                 const annSnap = await getDocs(collection(db, "announcements")); let h = '';
                 annSnap.forEach(d => { 
                     const v = d.data(); 
-                    if(v.status === 'draft') return; // منع ظهور المسودات
+                    if(v.status === 'draft') return; 
                     if(v.level === level || v.level === 'all') h += `<div class="bg-indigo-50 dark:bg-indigo-900/30 p-4 rounded-xl border-r-4 border-r-indigo-500"><h4 class="font-bold text-indigo-900 dark:text-indigo-300">${v.title}</h4><p class="text-sm mt-2">${v.content}</p></div>`; 
                 });
                 document.getElementById('announcements-list').innerHTML = h || '<p class="text-slate-500 text-center py-4 font-bold">لا توجد إعلانات.</p>';
             } catch(e){}
 
-            // جلب الدروس (فقط المنشورة)
+            // جلب الدروس
             try {
                 const lessSnap = await getDocs(query(collection(db, "lessons"), where("level", "==", level))); let h = '';
                 lessSnap.forEach(d => { 
                     const v = d.data(); 
-                    if(v.status === 'draft') return; // منع ظهور المسودات
+                    if(v.status === 'draft') return; 
                     h += `<div class="bg-slate-50 dark:bg-slate-700 p-4 rounded-xl border dark:border-slate-600"><h4 class="font-bold text-emerald-800 dark:text-emerald-300">${v.title}</h4><span class="text-xs bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200 px-2 py-1 rounded inline-block mt-2">${v.component}</span><br><a href="${v.link}" target="_blank" class="text-sm text-indigo-600 dark:text-indigo-400 font-bold mt-2 inline-block hover:underline">الاطلاع على الدرس →</a></div>`; 
                 });
                 document.getElementById('lessons-list').innerHTML = h || '<p class="text-slate-500 text-center py-4 font-bold">لا توجد دروس حالياً.</p>';
@@ -182,18 +250,22 @@
             try {
                 const resSnap = await getDocs(query(collection(db, "results"), where("code", "==", window.currentUser.code)));
                 resSnap.forEach(d => { const r = d.data(); completedQuizzes.push(r.quizId); resHTML += `<tr><td class="p-3 font-semibold">${r.quizTitle}</td><td class="p-3 font-bold text-emerald-600 dark:text-emerald-400 text-center">${r.score} / ${r.total}</td></tr>`; });
+                
                 const subSnap = await getDocs(query(collection(db, "submissions"), where("studentCode", "==", window.currentUser.code)));
-                subSnap.forEach(d => { const s = d.data(); mySubmissions[s.assignmentId] = s; if(s.status === 'graded') { resHTML += `<tr><td class="p-3 font-semibold">واجب: ${s.assignmentTitle}</td><td class="p-3 font-bold text-emerald-600 dark:text-emerald-400 text-center">${s.score} / 20</td></tr>`; } });
+                subSnap.forEach(d => { 
+                    const s = d.data(); mySubmissions[s.assignmentId] = s; 
+                    if(s.status === 'graded') { resHTML += `<tr><td class="p-3 font-semibold">واجب: ${s.assignmentTitle}</td><td class="p-3 font-bold text-emerald-600 dark:text-emerald-400 text-center">${s.score} / 20</td></tr>`; }
+                });
                 if(resHTML) document.getElementById('results-table-body').innerHTML = resHTML;
             } catch(e){}
 
-            // جلب التكليفات (فقط المنشورة)
+            // جلب التكليفات 
             try {
                 const assSnap = await getDocs(query(collection(db, "assignments"), where("level", "==", level))); 
                 let h = ''; window.availableAssignments = {};
                 assSnap.forEach(d => { 
                     const v = d.data(); 
-                    if(v.status === 'draft') return; // منع ظهور المسودات
+                    if(v.status === 'draft') return; 
                     
                     const assId = d.id; const sub = mySubmissions[assId];
                     window.availableAssignments[assId] = v;
@@ -221,13 +293,12 @@
                 document.getElementById('assignments-list').innerHTML = h || '<p class="text-slate-500 text-center py-4 font-bold">لا توجد تكليفات مطلوبة حالياً.</p>';
             } catch(e){}
 
-            // الاختبارات (فقط المنشورة)
+            // الاختبارات
             try {
                 const qzSnap = await getDocs(query(collection(db, "quizzes"), where("level", "==", level))); let h = ''; window.availableQuizzes = {};
                 qzSnap.forEach(d => { 
                     const v = d.data(); 
-                    if(v.status === 'draft') return; // منع ظهور المسودات
-                    
+                    if(v.status === 'draft') return; 
                     window.availableQuizzes[d.id] = v;
                     if(!completedQuizzes.includes(d.id)) {
                         h += `<div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm"><h4 class="font-bold text-lg mb-1">${v.title}</h4><p class="text-xs text-rose-600 dark:text-rose-400 font-bold mb-4">آخر أجل: ${v.deadline.replace('T',' ')}</p><button onclick="startQuiz('${d.id}')" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-bold shadow-sm">بدء الاختبار 📝</button></div>`; 
@@ -239,10 +310,10 @@
             } catch(e){}
         }
 
-        window.submitAssText = async function(assId) { /*... دالة الإرسال ...*/ const content = document.getElementById(`text_val_${assId}`).value.trim(); const title = window.availableAssignments[assId].title; if(!content) return showToast("اكتب الإجابة أولاً", "error"); showToast("جاري الإرسال... ⏳"); try { await addDoc(collection(db, "submissions"), { studentCode: window.currentUser.code, studentName: window.currentUser.name, level: window.currentUser.level, assignmentId: assId, assignmentTitle: title, type: 'text', content: content, status: 'pending', score: 0, timestamp: new Date().toISOString() }); showToast("تم الإرسال بنجاح! 🎉"); window.fetchData(window.currentUser.level); } catch(e) { showToast("حدث خطأ", "error"); } }
-        window.submitAssLink = async function(assId) { /*... دالة إرسال الرابط ...*/ const url = document.getElementById(`link_val_${assId}`).value.trim(); const title = window.availableAssignments[assId].title; if(!url || !url.startsWith('http')) return showToast("أدخل رابط صحيح", "error"); showToast("جاري إرسال الرابط... ⏳"); try { await addDoc(collection(db, "submissions"), { studentCode: window.currentUser.code, studentName: window.currentUser.name, level: window.currentUser.level, assignmentId: assId, assignmentTitle: title, type: 'link', content: url, status: 'pending', score: 0, timestamp: new Date().toISOString() }); showToast("تم الإرسال بنجاح! 🎉"); window.fetchData(window.currentUser.level); } catch(e) { showToast("حدث خطأ", "error"); } }
-        window.startQuiz = function(quizId) { /*... دالة الاختبار ...*/ const quiz = window.availableQuizzes[quizId]; if(new Date() > new Date(quiz.deadline)) return showToast("انتهى الموعد.", "error"); window.activeQuiz = { id: quizId, data: quiz }; document.getElementById('qt-title').innerText = quiz.title; let qHTML = ''; quiz.questions.forEach((q, i) => { let opts = ''; q.options.forEach((opt, j) => { opts += `<label class="flex items-center gap-3 p-4 border dark:border-slate-600 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer"><input type="radio" name="q${i}" value="${j}" class="w-4 h-4 accent-emerald-600"> <span class="font-semibold">${opt}</span></label>`; }); qHTML += `<div class="p-5 bg-slate-50 dark:bg-slate-700/50 rounded-xl border dark:border-slate-600"><h4 class="font-bold mb-4 text-lg">${i+1}. ${q.q}</h4><div class="grid grid-cols-1 md:grid-cols-2 gap-3">${opts}</div></div>`; }); document.getElementById('qt-questions').innerHTML = qHTML; document.getElementById('quiz-taking-modal').classList.remove('hidden'); }
-        window.submitQuiz = async function() { /*... دالة الإرسال للاختبار ...*/ let score = 0; const total = window.activeQuiz.data.questions.length; for(let i=0; i<total; i++) { const selected = document.querySelector(`input[name="q${i}"]:checked`); if(selected && parseInt(selected.value) === window.activeQuiz.data.questions[i].answerIndex) score++; } showToast("جاري الإرسال... ⏳"); try { await addDoc(collection(db, "results"), { code: window.currentUser.code, quizId: window.activeQuiz.id, quizTitle: window.activeQuiz.data.title, score, total, date: new Date().toISOString() }); document.getElementById('quiz-taking-modal').classList.add('hidden'); if (score / total >= 0.5) confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#10b981', '#fbbf24', '#ffffff'] }); showToast(`أحسنت! نتيجتك هي: ${score} من ${total}`); window.fetchData(window.currentUser.level); } catch(e) { showToast("حدث خطأ", "error"); } }
+        window.submitAssText = async function(assId) { const content = document.getElementById(`text_val_${assId}`).value.trim(); const title = window.availableAssignments[assId].title; if(!content) return showToast("اكتب الإجابة أولاً", "error"); showToast("جاري الإرسال... ⏳"); try { await addDoc(collection(db, "submissions"), { studentCode: window.currentUser.code, studentName: window.currentUser.name, level: window.currentUser.level, assignmentId: assId, assignmentTitle: title, type: 'text', content: content, status: 'pending', score: 0, timestamp: new Date().toISOString() }); showToast("تم الإرسال بنجاح! 🎉"); window.fetchData(window.currentUser.level); } catch(e) { showToast("حدث خطأ", "error"); } }
+        window.submitAssLink = async function(assId) { const url = document.getElementById(`link_val_${assId}`).value.trim(); const title = window.availableAssignments[assId].title; if(!url || !url.startsWith('http')) return showToast("المرجو إدخال رابط صحيح يبدأ بـ http", "error"); showToast("جاري إرسال الرابط... ⏳"); try { await addDoc(collection(db, "submissions"), { studentCode: window.currentUser.code, studentName: window.currentUser.name, level: window.currentUser.level, assignmentId: assId, assignmentTitle: title, type: 'link', content: url, status: 'pending', score: 0, timestamp: new Date().toISOString() }); showToast("تم إرسال الواجب بنجاح! 🎉"); window.fetchData(window.currentUser.level); } catch(e) { showToast("حدث خطأ في الإرسال", "error"); } }
+        window.startQuiz = function(quizId) { const quiz = window.availableQuizzes[quizId]; if(new Date() > new Date(quiz.deadline)) return showToast("انتهى الموعد.", "error"); window.activeQuiz = { id: quizId, data: quiz }; document.getElementById('qt-title').innerText = quiz.title; let qHTML = ''; quiz.questions.forEach((q, i) => { let opts = ''; q.options.forEach((opt, j) => { opts += `<label class="flex items-center gap-3 p-4 border dark:border-slate-600 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer transition-colors"><input type="radio" name="q${i}" value="${j}" class="w-4 h-4 accent-emerald-600"> <span class="font-semibold">${opt}</span></label>`; }); qHTML += `<div class="p-5 bg-slate-50 dark:bg-slate-700/50 rounded-xl border dark:border-slate-600"><h4 class="font-bold mb-4 text-lg">${i+1}. ${q.q}</h4><div class="grid grid-cols-1 md:grid-cols-2 gap-3">${opts}</div></div>`; }); document.getElementById('qt-questions').innerHTML = qHTML; document.getElementById('quiz-taking-modal').classList.remove('hidden'); }
+        window.submitQuiz = async function() { let score = 0; const total = window.activeQuiz.data.questions.length; for(let i=0; i<total; i++) { const selected = document.querySelector(`input[name="q${i}"]:checked`); if(selected && parseInt(selected.value) === window.activeQuiz.data.questions[i].answerIndex) score++; } showToast("جاري الإرسال... ⏳"); try { await addDoc(collection(db, "results"), { code: window.currentUser.code, quizId: window.activeQuiz.id, quizTitle: window.activeQuiz.data.title, score, total, date: new Date().toISOString() }); document.getElementById('quiz-taking-modal').classList.add('hidden'); if (score / total >= 0.5) confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#10b981', '#fbbf24', '#ffffff'] }); showToast(`أحسنت! نتيجتك هي: ${score} من ${total}`); window.fetchData(window.currentUser.level); } catch(e) { showToast("حدث خطأ", "error"); } }
     </script>
 </body>
 </html>
