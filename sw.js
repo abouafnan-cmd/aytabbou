@@ -1,23 +1,15 @@
-const CACHE_NAME = 'arabic-edu-cache-v1';
-const urlsToCache = [
-  './',
-  './index.html',
-  './student/dashboard.html',
-  './assets/css/style.css'
-];
+const CACHE_NAME = 'arabic-platform-v1';
 
-// تثبيت ملفات الكاش الأساسية
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(urlsToCache))
-  );
+self.addEventListener('install', (event) => {
+  self.skipWaiting();
 });
 
-// جلب الملفات للعمل حتى لو كان الإنترنت ضعيفاً
-self.addEventListener('fetch', event => {
+self.addEventListener('activate', (event) => {
+  event.waitUntil(clients.claim());
+});
+
+self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request)
-      .then(response => response || fetch(event.request))
+    fetch(event.request).catch(() => caches.match(event.request))
   );
 });
