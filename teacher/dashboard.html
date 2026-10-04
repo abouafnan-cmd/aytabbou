@@ -172,6 +172,10 @@ body { font-family: 'Cairo', sans-serif; }
                     <select id="student-class-select" onchange="autoLoadStudentsList()" class="w-full p-3.5 border border-slate-200 dark:border-slate-600 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white text-sm font-bold text-indigo-900 dark:text-indigo-300">
                         <option value="">-- اختر القسم للاستعراض المباشر --</option>
                     </select>
+                    <div class="flex gap-2 mt-3">
+                        <button onclick="renameClass()" class="px-4 py-2 bg-amber-100 hover:bg-amber-200 text-amber-800 border border-amber-200 rounded-xl text-xs font-bold">✏️ تعديل اسم القسم</button>
+                        <button onclick="deleteClass()" class="px-4 py-2 bg-rose-100 hover:bg-rose-200 text-rose-700 border border-rose-200 rounded-xl text-xs font-bold">🗑️ حذف القسم</button>
+                    </div>
                 </div>
             </div>
 
@@ -332,6 +336,77 @@ body { font-family: 'Cairo', sans-serif; }
                     tbody.innerHTML += `<tr class="hover:bg-slate-50 dark:hover:bg-slate-700"><td class="p-4 font-mono font-bold text-indigo-600 dark:text-indigo-400">${st.code}</td><td class="p-4 font-bold">${st.name}</td><td class="p-4 text-center font-mono font-bold text-emerald-600 dark:text-emerald-400">${st.password || '0000'}</td><td class="p-4 text-center"><button onclick="deleteItem('students', '${docSnap.id}'); setTimeout(autoLoadStudentsList, 500);" class="text-rose-500 font-bold hover:underline">حذف</button></td></tr>`;
                 });
             } catch(e) { tbody.innerHTML = '<tr><td colspan="4" class="text-center text-rose-500 py-4">حدث خطأ في جلب البيانات.</td></tr>'; }
+        }
+
+        window.renameClass = async function() {
+            const level = document.getElementById('student-level-select').value;
+            const select = document.getElementById('student-class-select');
+            const oldName = select.value;
+            if(!oldName) return showToast("اختر القسم أولاً!", "error");
+
+            const input = prompt('أدخل الاسم الجديد للقسم:', oldName);
+            if(input === null) return;
+            const newName = input.trim();
+            if(!newName) return showToast("اسم القسم لا يمكن أن يكون فارغاً!", "error");
+            if(newName === oldName) return;
+            if(Array.from(select.options).some(o => o.value === newName)) return showToast("يوجد قسم بهذا الاسم مسبقاً!", "error");
+
+            showToast("جاري تعديل اسم القسم... ⏳");
+            try {
+                // 1) التلاميذ
+                const stSnap = await getDocs(query(collection(db, "students"), where("level", "==", level), where("className", "==", oldName)));
+                for(const d of stSnap.docs) await updateDoc(doc(db, "students", d.id), { className: newName });
+
+                // 2) الواجبات المسلمة (للحفاظ على ظهور القسم الصحيح في التصحيح)
+                const subSnap = await getDocs(query(collection(db, "submissions"), where("className", "==", oldName)));
+                for(const d of subSnap.docs) {
+                    const lv = d.data().level;
+                    if(!lv || lv === level) await updateDoc(doc(db, "submissions", d.id), { className: newName });
+                }
+
+                // 3) آجال التكليفات الخاصة بالقسم
+                const assSnap = await getDocs(query(collection(db, "assignments"), where("level", "==", level)));
+                for(const d of assSnap.docs) {
+                    const deadlines = d.data().classDeadlines;
+                    if(deadlines && Object.prototype.hasOwnProperty.call(deadlines, oldName)) {
+                        const updated = { ...deadlines };
+                        updated[newName] = updated[oldName];
+                        delete updated[oldName];
+                        await updateDoc(doc(db, "assignments", d.id), { classDeadlines: updated });
+                    }
+                }
+
+                showToast("تم تعديل اسم القسم بنجاح! ✏️");
+                await window.populateClassDropdown(level);
+                const sel = document.getElementById('student-class-select');
+                if(!Array.from(sel.options).some(o => o.value === newName)) {
+                    // قسم بدون تلاميذ بعد
+                    sel.innerHTML += `<option value="${newName}">${newName}</option>`;
+                }
+                sel.value = newName;
+                window.autoLoadStudentsList();
+                window.renderAssignmentClassDeadlines();
+            } catch(e) { showToast("حدث خطأ أثناء تعديل اسم القسم", "error"); }
+        }
+
+        window.deleteClass = async function() {
+            const level = document.getElementById('student-level-select').value;
+            const className = document.getElementById('student-class-select').value;
+            if(!className) return showToast("اختر القسم أولاً!", "error");
+
+            try {
+                const snap = await getDocs(query(collection(db, "students"), where("level", "==", level), where("className", "==", className)));
+                const msg = `متأكد من حذف القسم "${className}" مع جميع تلاميذه (${snap.size})؟\nلا يمكن التراجع عن هذا الإجراء.`;
+                if(!confirm(msg)) return;
+
+                showToast("جاري حذف القسم... ⏳");
+                for(const d of snap.docs) await deleteDoc(doc(db, "students", d.id));
+
+                showToast("تم حذف القسم بنجاح! 🗑️");
+                await window.populateClassDropdown(level);
+                document.getElementById('students-table-body').innerHTML = '<tr><td colspan="4" class="p-4 text-center text-slate-400">اختر قسماً من القائمة المنسدلة أعلاه.</td></tr>';
+                window.renderAssignmentClassDeadlines();
+            } catch(e) { showToast("حدث خطأ أثناء حذف القسم", "error"); }
         }
 
         window.saveAndUploadClass = async function() {
