@@ -3,92 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة اللغة العربية | الأستاذ عبد المجيد أيت عبو</title>
-    
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#059669">
-    
+    <title>منصة اللغة العربية</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- إعدادات الوضع الليلي والخطوط -->
-    <script>
-        tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { cairo: ['Cairo', 'sans-serif'], amiri: ['Amiri', 'serif'] } } } }
-        // تشغيل الوضع الليلي تلقائياً إذا كان محفوظاً
-        if(localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); }
-    </script>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
-    
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#0f8a5a">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@600;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Cairo', sans-serif; }
-        .font-art { font-family: 'Amiri', serif; }
-        /* زخرفة إسلامية خفيفة للخلفية */
-        .bg-pattern { background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2310b981' fill-opacity='0.05' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E"); }
-        .dark .bg-pattern { background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E"); }
+        body { font-family: 'Cairo', sans-serif; background-color: #ffffff; }
+        .font-amiri { font-family: 'Amiri', serif; }
+        .bg-dots { background-color: #f8fafc; background-image: radial-gradient(#cbd5e1 2px, transparent 2px); background-size: 24px 24px; }
+        .btn-sci { background-color: #9bd4e4; border: 4px solid #000; border-radius: 1.25rem; color: #000; transition: transform 0.2s; }
+        .btn-art { background-color: #d2eba3; border: 4px solid #000; border-radius: 1.25rem; color: #000; transition: transform 0.2s; }
+        .btn-sci:hover, .btn-art:hover { transform: scale(1.05); }
     </style>
 </head>
-<body class="bg-slate-50 dark:bg-slate-900 bg-pattern min-h-screen flex items-center justify-center p-4 transition-colors duration-300">
+<body class="bg-dots min-h-screen flex flex-col items-center justify-center p-4">
 
-    <!-- زر تبديل الوضع الليلي -->
-    <button onclick="toggleTheme()" class="absolute top-4 left-4 p-3 bg-white dark:bg-slate-800 text-slate-800 dark:text-yellow-400 rounded-full shadow-md hover:scale-110 transition-transform">
-        <svg id="theme-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-    </button>
+    <div class="w-full max-w-2xl bg-white/95 backdrop-blur-sm p-8 md:p-10 rounded-3xl shadow-xl text-center border border-slate-100">
+        <div class="w-20 h-20 bg-[#0f8a5a] text-white rounded-2xl mx-auto flex items-center justify-center text-5xl font-amiri mb-6 shadow-md">ض</div>
+        <h1 class="text-3xl md:text-4xl font-amiri font-bold text-slate-800 mb-2 leading-tight">مرحباً بك في منصة "اللغة العربية"</h1>
+        <h2 class="text-2xl md:text-3xl font-amiri font-bold text-[#0f8a5a] mb-6">للأستاذ عبد المجيد أيت عبو</h2>
+        <p class="text-sm md:text-base text-slate-500 font-bold mb-8">اختر مستواك الدراسي للوصول إلى الدروس والتكليفات:</p>
 
-    <div class="max-w-xl w-full bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 p-6 md:p-8 space-y-6 transition-colors duration-300">
+        <div class="grid grid-cols-2 gap-4 md:gap-5 max-w-xl mx-auto">
+            <a href="student/dashboard.html?level=common-sci" class="btn-sci py-4 px-2 font-bold text-lg md:text-xl flex items-center justify-center text-center">جذع مشترك<br>علوم</a>
+            <a href="student/dashboard.html?level=1bac-sci" class="btn-sci py-4 px-2 font-bold text-lg md:text-xl flex items-center justify-center text-center">الأولى باكلوريا<br>علوم</a>
+            <a href="student/dashboard.html?level=2bac-sci" class="btn-sci py-4 px-2 font-bold text-lg md:text-xl flex items-center justify-center text-center">الثانية باكلوريا<br>علوم</a>
+            <a href="student/dashboard.html?level=common-lit" class="btn-art py-4 px-2 font-bold text-lg md:text-xl flex items-center justify-center text-center">جذع مشترك<br>آداب</a>
+            <a href="student/dashboard.html?level=1bac-lit" class="btn-art py-4 px-2 font-bold text-lg md:text-xl flex items-center justify-center text-center">الأولى باكلوريا<br>آداب</a>
+            <a href="student/dashboard.html?level=2bac-lit" class="btn-art py-4 px-2 font-bold text-lg md:text-xl flex items-center justify-center text-center">الثانية باكلوريا<br>آداب</a>
+        </div>
         
-        <div class="text-center space-y-3">
-            <div class="w-16 h-16 bg-emerald-600 text-white font-art font-extrabold rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg shadow-emerald-200 dark:shadow-none transition-transform hover:scale-105 cursor-default">
-                ض
+        <div class="mt-10 pt-4 border-t border-slate-200">
+            <a href="teacher/dashboard.html" class="text-sm font-bold text-slate-400 hover:text-[#0f8a5a] transition-colors">تسجيل دخول الأستاذ 🔒</a>
+        </div>
+    </div>
+
+    <div id="install-app-modal" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-4 pb-10 transition-opacity duration-300 opacity-0">
+        <div class="bg-white border-[4px] border-black w-full max-w-sm p-6 rounded-3xl shadow-2xl text-center transform transition-transform duration-300 translate-y-full" id="install-modal-content">
+            <div class="w-16 h-16 bg-[#0f8a5a] text-white font-amiri rounded-2xl flex items-center justify-center text-4xl mx-auto mb-4">📱</div>
+            <h3 class="text-xl font-bold text-slate-800 mb-2">ثبّت المنصة على هاتفك</h3>
+            <p class="text-sm text-slate-600 mb-6 font-semibold leading-relaxed" id="install-instructions">للوصول السريع للدروس والتكليفات، قم بتثبيت المنصة كتطبيق على شاشتك الرئيسية!</p>
+            <div class="space-y-3">
+                <button id="btn-install" class="hidden w-full py-3.5 bg-[#0f8a5a] hover:bg-emerald-700 text-white font-bold rounded-xl border-[3px] border-black shadow-md transition-all">تثبيت التطبيق الآن 🚀</button>
+                <button onclick="closeInstallModal()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 border-[3px] border-black font-bold rounded-xl transition-all">ليس الآن</button>
             </div>
-            <h1 class="text-2xl md:text-3xl font-art font-bold text-slate-800 dark:text-white leading-snug">
-                مرحباً بك في منصة "اللغة العربية" <br>
-                <span class="text-emerald-600 dark:text-emerald-400">للدكتور عبد المجيد أيت عبو</span>
-            </h1>
-            <p class="text-xs md:text-sm text-slate-500 dark:text-slate-400 font-semibold">اختر مستواك الدراسي للوصول إلى الدروس والتكليفات:</p>
-        </div>
-
-        <div class="space-y-2.5">
-            <a href="student/dashboard.html?level=common-sci" class="flex items-center justify-between p-3.5 rounded-xl border border-slate-200 dark:border-slate-600 hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-slate-700 dark:text-slate-200 transition-all group">
-                <span class="font-bold text-sm">📌 جذع مشترك علوم</span>
-            </a>
-            <a href="student/dashboard.html?level=common-lit" class="flex items-center justify-between p-3.5 rounded-xl border border-slate-200 dark:border-slate-600 hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-slate-700 dark:text-slate-200 transition-all group">
-                <span class="font-bold text-sm">📌 جذع مشترك آداب</span>
-            </a>
-            <a href="student/dashboard.html?level=1bac-sci" class="flex items-center justify-between p-3.5 rounded-xl border border-slate-200 dark:border-slate-600 hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-slate-700 dark:text-slate-200 transition-all group">
-                <span class="font-bold text-sm">📌 الأولى باكلوريا علوم</span>
-            </a>
-            <a href="student/dashboard.html?level=1bac-lit" class="flex items-center justify-between p-3.5 rounded-xl border border-slate-200 dark:border-slate-600 hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-slate-700 dark:text-slate-200 transition-all group">
-                <span class="font-bold text-sm">📌 الأولى باكلوريا آداب</span>
-            </a>
-            <a href="student/dashboard.html?level=2bac-sci" class="flex items-center justify-between p-3.5 rounded-xl border border-slate-200 dark:border-slate-600 hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-slate-700 dark:text-slate-200 transition-all group">
-                <span class="font-bold text-sm">📌 الثانية باكلوريا علوم</span>
-            </a>
-            <a href="student/dashboard.html?level=2bac-lit" class="flex items-center justify-between p-3.5 rounded-xl border border-slate-200 dark:border-slate-600 hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-slate-700 dark:text-slate-200 transition-all group">
-                <span class="font-bold text-sm">📌 الثانية باكلوريا آداب</span>
-            </a>
-        </div>
-
-        <div class="text-center pt-2">
-            <a href="admin.html" class="text-xs text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 underline">دخول الإدارة (خاص بالأستاذ)</a>
         </div>
     </div>
 
     <script>
-        function toggleTheme() {
-            document.documentElement.classList.toggle('dark');
-            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-            updateIcon();
+        let deferredPrompt;
+        const installModal = document.getElementById('install-app-modal');
+        const installModalContent = document.getElementById('install-modal-content');
+        const btnInstall = document.getElementById('btn-install');
+        const installInstructions = document.getElementById('install-instructions');
+
+        function closeInstallModal() {
+            installModalContent.classList.add('translate-y-full');
+            installModal.classList.add('opacity-0');
+            setTimeout(() => installModal.classList.add('hidden'), 300);
+            localStorage.setItem('hasSeenInstallPrompt', 'true');
         }
-        function updateIcon() {
-            const icon = document.getElementById('theme-icon');
-            if(document.documentElement.classList.contains('dark')) {
-                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
-            } else {
-                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>';
+
+        function showInstallModal() {
+            if(localStorage.getItem('hasSeenInstallPrompt')) return;
+            installModal.classList.remove('hidden');
+            setTimeout(() => { installModal.classList.remove('opacity-0'); installModalContent.classList.remove('translate-y-full'); }, 50);
+        }
+
+        window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; btnInstall.classList.remove('hidden'); showInstallModal(); });
+
+        btnInstall.addEventListener('click', async () => {
+            if (deferredPrompt) { deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null; closeInstallModal(); }
+        });
+
+        const isIos = () => /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+        const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
+
+        setTimeout(() => {
+            if (isIos() && !isInStandaloneMode()) {
+                installInstructions.innerHTML = 'لتثبيت المنصة في الآيفون: <br> اضغط على زر المشاركة <b>(مربع بسهم للأعلى)</b> بالأسفل، ثم اختر <br><span class="text-[#0f8a5a] font-bold">"إضافة إلى الصفحة الرئيسية ➕"</span>';
+                showInstallModal();
+            } else if (!isIos() && !isInStandaloneMode() && !localStorage.getItem('hasSeenInstallPrompt')) {
+                showInstallModal();
             }
-        }
-        updateIcon();
-        
-        // PWA Script
-        if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js'); }); }
+        }, 2000);
     </script>
 </body>
 </html>
