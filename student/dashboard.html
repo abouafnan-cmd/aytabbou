@@ -7,17 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        cairo: ['Cairo', 'sans-serif'],
-                        amiri: ['Amiri', 'serif']
-                    }
-                }
-            }
-        };
+        tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { cairo: ['Cairo', 'sans-serif'], amiri: ['Amiri', 'serif'] } } } };
         if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
         }
@@ -36,15 +26,18 @@
 
     <div id="toast-container" class="fixed top-5 left-1/2 transform -translate-x-1/2 z-[100] flex flex-col gap-2 pointer-events-none w-full max-w-sm px-4"></div>
 
+    <!-- نافذة تسجيل الدخول -->
     <div id="login-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-40">
         <div class="bg-white dark:bg-slate-800 max-w-md w-full p-8 rounded-2xl shadow-2xl border border-slate-100 dark:border-slate-700 space-y-5">
             <div class="text-center space-y-2">
                 <div class="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 font-art rounded-2xl flex items-center justify-center text-4xl mx-auto mb-2">ض</div>
                 <h2 class="text-xl font-bold dark:text-white">تسجيل الدخول للمنصة</h2>
+                <p class="text-xs font-bold text-slate-500">أدخل المعرف أو اسمك الكامل (بالعربية)</p>
             </div>
             <div class="space-y-4 pt-2">
-                <input type="text" id="student-code-input" placeholder="المعرف الشخصي (مثال: G141078429)" class="w-full p-4 border border-slate-200 dark:border-slate-600 rounded-xl text-center font-mono font-bold outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50 dark:bg-slate-700 dark:text-white uppercase">
-                <input type="password" id="student-password-input" placeholder="كلمة المرور (الافتراضية: 0000)" class="w-full p-4 border border-slate-200 dark:border-slate-600 rounded-xl text-center font-mono font-bold outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50 dark:bg-slate-700 dark:text-white">
+                <input type="text" id="student-code-input" placeholder="المعرف الشخصي أو الاسم الكامل" class="w-full p-4 border border-slate-200 dark:border-slate-600 rounded-xl text-center font-bold outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50 dark:bg-slate-700 dark:text-white">
+                <!-- تم إضافة dir="ltr" لتصحيح مشكلة الرموز مثل @ في كلمة المرور -->
+                <input type="password" id="student-password-input" dir="ltr" placeholder="كلمة المرور (الافتراضية: 0000)" class="w-full p-4 border border-slate-200 dark:border-slate-600 rounded-xl text-center font-mono font-bold outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50 dark:bg-slate-700 dark:text-white">
                 <div class="text-right">
                     <button onclick="showToast('المرجو التواصل مع الأستاذ لاسترجاع كلمة المرور الخاصة بك.', 'error')" class="text-xs text-indigo-600 dark:text-indigo-400 font-bold hover:underline">نسيت كلمة المرور؟</button>
                 </div>
@@ -53,16 +46,18 @@
         </div>
     </div>
 
+    <!-- نافذة إجبارية لتغيير كلمة المرور الافتراضية -->
     <div id="change-password-modal" class="hidden fixed inset-0 bg-slate-900/95 z-[60] flex items-center justify-center p-4 backdrop-blur-md">
         <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl max-w-sm w-full space-y-5 text-center shadow-2xl border-t-4 border-t-emerald-500">
             <div class="text-5xl mb-2">🔐</div>
             <h3 class="font-bold text-xl text-slate-800 dark:text-white">تحديث كلمة المرور</h3>
             <p class="text-sm text-slate-500 dark:text-slate-400 font-semibold leading-relaxed">حفاظاً على خصوصيتك، المرجو تغيير كلمة المرور الافتراضية (0000) إلى كلمة خاصة بك.</p>
-            <input type="password" id="new-password" placeholder="كلمة المرور الجديدة" class="w-full p-4 border border-slate-200 dark:border-slate-600 rounded-xl text-center font-mono font-bold bg-slate-50 dark:bg-slate-700 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500">
+            <input type="password" id="new-password" dir="ltr" placeholder="كلمة المرور الجديدة" class="w-full p-4 border border-slate-200 dark:border-slate-600 rounded-xl text-center font-mono font-bold bg-slate-50 dark:bg-slate-700 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500">
             <button onclick="saveNewPassword()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl shadow-md transition-all">حفظ ومتابعة إلى المنصة</button>
         </div>
     </div>
 
+    <!-- نافذة الاختبار -->
     <div id="quiz-taking-modal" class="hidden fixed inset-0 bg-slate-900/90 z-50 overflow-y-auto p-4">
         <div class="max-w-3xl mx-auto bg-white dark:bg-slate-800 rounded-2xl p-6 mt-10 space-y-6">
             <h2 id="qt-title" class="text-2xl font-art font-bold text-emerald-800 dark:text-emerald-400 border-b dark:border-slate-600 pb-3">عنوان الاختبار</h2>
@@ -72,30 +67,29 @@
         </div>
     </div>
 
+    <!-- فضاء التلميذ الرئيسي -->
     <div id="main-student-content" class="hidden">
         <header class="bg-emerald-700 text-white shadow-lg py-4 px-4 md:px-8 flex justify-between items-center sticky top-0 z-40">
             <h1 class="text-xl font-art font-bold">فضاء التلميذ | اللغة العربية</h1>
             <div class="flex items-center gap-3">
-                <button onclick="toggleTheme()" class="p-2 bg-emerald-800 rounded-full hover:bg-emerald-900 transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-                </button>
+                <button onclick="toggleTheme()" class="p-2 bg-emerald-800 rounded-full hover:bg-emerald-900 transition-colors">🌓</button>
                 <a href="../index.html" class="bg-emerald-800 hover:bg-emerald-900 px-4 py-2 rounded-xl text-xs font-bold shadow-inner">خروج 🏠</a>
             </div>
         </header>
 
         <main class="max-w-5xl mx-auto my-8 p-4 space-y-6">
-            <div class="bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-md border border-emerald-100 dark:border-slate-700 text-center fade-in relative overflow-hidden space-y-4">
+            
+            <!-- بطاقة الترحيب المخصصة بالاسم والقسم -->
+            <div class="bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-md border border-emerald-100 dark:border-slate-700 text-center fade-in relative overflow-hidden space-y-3">
                 <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-100 dark:bg-emerald-900/30 rounded-bl-full -z-0 opacity-50"></div>
                 <div class="relative z-10">
-                    <h2 class="text-2xl md:text-3xl font-art font-extrabold text-emerald-800 dark:text-emerald-400 mb-1" id="welcome-msg">
-                        مرحباً بك: (الاسم الكامل)
+                    <h2 class="text-2xl md:text-3xl font-art font-extrabold text-emerald-800 dark:text-emerald-400" id="welcome-msg">
+                        مرحباً بالتلميذ(ة): ...
                     </h2>
-                    <div class="inline-block bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 px-4 py-1.5 rounded-full mt-2">
-                        <p class="text-sm font-bold text-indigo-700 dark:text-indigo-300" id="welcome-class">
-                            القسم: --
-                        </p>
-                    </div>
-                    <p class="text-base text-slate-600 dark:text-slate-300 font-semibold mt-3">
+                    <p class="text-base font-bold text-indigo-700 dark:text-indigo-300 mt-1" id="welcome-class">
+                        من قسم: ...
+                    </p>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 font-semibold mt-3">
                         أتمنى لك التوفيق والنجاح في مسارك الدراسي ومسيرتك المعرفية 🌟
                     </p>
                 </div>
@@ -120,7 +114,7 @@
                 <div class="bg-emerald-600 p-6 rounded-2xl shadow-md text-white flex justify-between items-center">
                     <div>
                         <h3 class="text-xl font-art font-bold mb-1">الواجبات والتكليفات المطلوبة</h3>
-                        <p class="text-sm text-emerald-100">يرجى مراجعة الأسئلة بدقة والالتزام بالأجل المخصص لقسمك.</p>
+                        <p class="text-sm text-emerald-100">يرجى قراءة الأسئلة بعناية ومراعاة الأجل المخصص لقسمك.</p>
                     </div>
                     <div class="text-4xl">📌</div>
                 </div>
@@ -133,13 +127,27 @@
                 <h3 class="text-xl font-art font-bold text-emerald-900 dark:text-emerald-400 border-b dark:border-slate-600 pb-3 mb-4">نتائجي التراكمية</h3>
                 <table class="w-full text-right text-sm border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden">
                     <thead class="bg-slate-50 dark:bg-slate-700 border-b dark:border-slate-600"><tr><th class="p-3">النشاط (اختبار / واجب)</th><th class="p-3 text-center">النقطة</th></tr></thead>
-                    <tbody id="results-table-body" class="divide-y dark:divide-slate-700"><tr><td colspan="2" class="p-4 text-center">لا توجد نتائج مسجلة.</td></tr></tbody>
+                    <tbody id="results-table-body" class="divide-y dark:divide-slate-700"><tr><td colspan="2" class="p-4 text-center">لا توجد نتائج مسجلة بعد.</td></tr></tbody>
                 </table>
             </section>
         </main>
     </div>
 
-    <script>
+    <!-- نافذة تثبيت التطبيق -->
+    <div id="install-app-modal" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-4 pb-10 transition-opacity duration-300 opacity-0">
+        <div class="bg-white dark:bg-slate-800 w-full max-w-sm p-6 rounded-3xl shadow-2xl border border-emerald-100 dark:border-slate-700 text-center transform transition-transform duration-300 translate-y-full" id="install-modal-content">
+            <div class="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 font-art rounded-2xl flex items-center justify-center text-4xl mx-auto mb-4 shadow-inner">📱</div>
+            <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-2">ثبّت المنصة على هاتفك</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-300 mb-6 font-semibold leading-relaxed" id="install-instructions">
+                للوصول السريع للدروس والتكليفات، قم بتثبيت المنصة كتطبيق على شاشتك الرئيسية!
+            </p>
+            <div class="space-y-3">
+                <button id="btn-install" class="hidden w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition-all">تثبيت التطبيق الآن 🚀</button>
+                <button onclick="closeInstallModal()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-200 text-slate-700 font-bold rounded-xl transition-all">ليس الآن</button>
+            </div>
+        </div>
+    </div>
+<script>
         window.showToast = function(msg, type = 'success') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -147,12 +155,55 @@
             toast.className = `${color} text-white px-5 py-3 rounded-xl shadow-lg font-bold text-sm mb-2 transition-all duration-300 opacity-0 transform -translate-y-5`;
             toast.innerHTML = msg; container.appendChild(toast);
             setTimeout(() => { toast.classList.remove('opacity-0', '-translate-y-5'); }, 10);
-            setTimeout(() => { toast.classList.add('opacity-0'); setTimeout(() => toast.remove(), 300); }, 4000);
+            setTimeout(() => { toast.classList.add('opacity-0'); setTimeout(() => toast.remove(), 3000); }, 3000);
         }
 
         function toggleTheme() { document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light'); }
         function switchStudentTab(secId, btnElement) { document.querySelectorAll('.std-sec').forEach(el => el.classList.add('hidden')); document.getElementById(secId).classList.remove('hidden'); document.querySelectorAll('.std-tab-btn').forEach(btn => { btn.className = "std-tab-btn bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-200 border border-slate-200 dark:border-slate-700 p-3 rounded-xl font-bold text-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-all"; }); btnElement.className = "std-tab-btn active-tab bg-emerald-600 text-white p-3 rounded-xl font-bold text-sm shadow-md transition-all"; }
         function toggleAnswerBox(id) { document.getElementById(`ans_box_${id}`).classList.toggle('hidden'); }
+
+        // أكواد تثبيت التطبيق
+        let deferredPrompt;
+        const installModal = document.getElementById('install-app-modal');
+        const installModalContent = document.getElementById('install-modal-content');
+        const btnInstall = document.getElementById('btn-install');
+        const installInstructions = document.getElementById('install-instructions');
+
+        window.closeInstallModal = function() {
+            installModalContent.classList.add('translate-y-full');
+            installModal.classList.add('opacity-0');
+            setTimeout(() => installModal.classList.add('hidden'), 300);
+            localStorage.setItem('hasSeenInstallPrompt', 'true');
+        }
+
+        function showInstallModal() {
+            if(localStorage.getItem('hasSeenInstallPrompt')) return;
+            installModal.classList.remove('hidden');
+            setTimeout(() => { installModal.classList.remove('opacity-0'); installModalContent.classList.remove('translate-y-full'); }, 50);
+        }
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault(); deferredPrompt = e; btnInstall.classList.remove('hidden'); showInstallModal();
+        });
+
+        btnInstall.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt(); const { outcome } = await deferredPrompt.userChoice;
+                deferredPrompt = null; closeInstallModal();
+            }
+        });
+
+        const isIos = () => /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+        const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
+
+        setTimeout(() => {
+            if (isIos() && !isInStandaloneMode()) {
+                installInstructions.innerHTML = 'لتثبيت المنصة في الآيفون: <br> اضغط على زر المشاركة <b>(مربع بسهم للأعلى)</b> بالأسفل، ثم اختر <br><span class="text-emerald-600 font-bold">"إضافة إلى الصفحة الرئيسية ➕"</span>';
+                showInstallModal();
+            } else if (!isIos() && !isInStandaloneMode() && !localStorage.getItem('hasSeenInstallPrompt')) {
+                showInstallModal();
+            }
+        }, 2500);
     </script>
 
     <script type="module">
@@ -162,38 +213,61 @@
         window.activeQuiz = null;
         window.availableAssignments = {};
 
+        // دالة تنقية الأسماء وتوحيدها لتسهيل الدخول (إزالة الهمزات والتاء المربوطة)
+        function normalizeArabicName(text) {
+            if(!text) return "";
+            return text.replace(/[أإآ]/g, 'ا')
+                       .replace(/ة/g, 'ه')
+                       .replace(/\s+/g, ' ')
+                       .trim();
+        }
+
         function formatArabicDate(dateStr) {
             if (!dateStr) return null;
-            const d = new Date(dateStr);
+            const d = new Date(dateStr + "T00:00:00");
             const days = ["الأحد", "الإثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
             const months = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
             return `${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
         }
 
         window.loginStudent = async function() {
-            const rawCodeInput = document.getElementById('student-code-input').value.trim();
+            const rawInput = document.getElementById('student-code-input').value.trim();
             const passwordInput = document.getElementById('student-password-input').value.trim();
-            const codeInputUpper = rawCodeInput.toUpperCase();
             const urlParams = new URLSearchParams(window.location.search);
             const level = urlParams.get('level') || 'common-sci';
 
-            if (!rawCodeInput) return showToast("أدخل المعرف الشخصي أولاً", "error");
+            if (!rawInput) return showToast("أدخل المعرف الشخصي أو اسمك الكامل", "error");
             if (!passwordInput) return showToast("أدخل كلمة المرور أولاً", "error");
             
             const btn = document.getElementById('login-btn'); 
             btn.innerText = "جاري التحقق...";
 
             try {
-                let q = query(collection(db, "students"), where("level", "==", level), where("code", "==", codeInputUpper));
-                let snap = await getDocs(q);
-                if (snap.empty) {
-                    q = query(collection(db, "students"), where("level", "==", level), where("code", "==", rawCodeInput));
-                    snap = await getDocs(q);
+                let userDoc = null;
+                
+                // 1. البحث أولاً بواسطة المعرف الشخصي (Code)
+                const qCode = query(collection(db, "students"), where("level", "==", level), where("code", "==", rawInput.toUpperCase()));
+                const snapCode = await getDocs(qCode);
+                
+                if (!snapCode.empty) {
+                    userDoc = snapCode.docs[0];
+                } else {
+                    // 2. إذا لم ينجح، نبحث بالاسم الكامل (خوارزمية ذكية تتجاهل الهمزات)
+                    const normalizedInput = normalizeArabicName(rawInput);
+                    const qAll = query(collection(db, "students"), where("level", "==", level));
+                    const snapAll = await getDocs(qAll);
+                    
+                    for (let d of snapAll.docs) {
+                        const stName = normalizeArabicName(d.data().name);
+                        if (stName === normalizedInput) {
+                            userDoc = d;
+                            break;
+                        }
+                    }
                 }
 
-                if (!snap.empty) {
-                    const docSnap = snap.docs[0];
-                    const stData = docSnap.data();
+                if (userDoc) {
+                    const stData = userDoc.data();
                     const actualPassword = stData.password || '0000';
 
                     if (passwordInput !== actualPassword) {
@@ -201,20 +275,20 @@
                         return showToast("كلمة المرور غير صحيحة!", "error");
                     }
 
-                    window.currentUser = { id: docSnap.id, ...stData, password: actualPassword };
+                    window.currentUser = { id: userDoc.id, ...stData, password: actualPassword };
                     document.getElementById('login-modal').classList.add('hidden');
                     
                     if (actualPassword === '0000') {
                         document.getElementById('change-password-modal').classList.remove('hidden');
                     } else {
                         document.getElementById('main-student-content').classList.remove('hidden');
-                        document.getElementById('welcome-msg').innerText = `مرحباً بك: ${window.currentUser.name}`;
-                        document.getElementById('welcome-class').innerText = `القسم: ${window.currentUser.className || 'غير محدد'}`;
+                        document.getElementById('welcome-msg').innerText = `مرحباً بالتلميذ(ة): ${window.currentUser.name}`;
+                        document.getElementById('welcome-class').innerText = `من قسم: ${window.currentUser.className || 'غير محدد'}`;
                         window.fetchData(level);
                         showToast(`أهلاً بك ${window.currentUser.name} في فضاء اللغة العربية! 🌟`);
                     }
                 } else { 
-                    showToast("المعرف غير مسجل في هذا المستوى!", "error"); 
+                    showToast("لم نعثر على هذا المعرف أو الاسم في اللوائح!", "error"); 
                 }
             } catch (e) { 
                 showToast("خطأ في الاتصال بالسحابة", "error"); 
@@ -233,8 +307,8 @@
                 window.currentUser.password = newPass;
                 document.getElementById('change-password-modal').classList.add('hidden');
                 document.getElementById('main-student-content').classList.remove('hidden');
-                document.getElementById('welcome-msg').innerText = `مرحباً بك: ${window.currentUser.name}`;
-                document.getElementById('welcome-class').innerText = `القسم: ${window.currentUser.className || 'غير محدد'}`;
+                document.getElementById('welcome-msg').innerText = `مرحباً بالتلميذ(ة): ${window.currentUser.name}`;
+                document.getElementById('welcome-class').innerText = `من قسم: ${window.currentUser.className || 'غير محدد'}`;
                 window.fetchData(window.currentUser.level);
                 showToast("تم تحديث كلمة المرور بنجاح! 🎉");
             } catch(e) {
@@ -305,7 +379,7 @@
                     const sub = mySubmissions[assId];
                     window.availableAssignments[assId] = v;
 
-                    const myClassName = window.currentUser.className;
+                    const myClassName = (window.currentUser.className || "").trim();
                     let specificDeadline = null;
                     if (v.classDeadlines && myClassName && v.classDeadlines[myClassName]) {
                         specificDeadline = v.classDeadlines[myClassName];
@@ -316,11 +390,12 @@
                     const createDateStr = dateObj.toLocaleDateString('ar-MA', { year: 'numeric', month: 'numeric', day: 'numeric' });
 
                     h += `<div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+                        
                         <div class="flex flex-wrap items-center justify-between gap-2 border-b dark:border-slate-700 pb-3 mb-4">
                             <span class="inline-block bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300 text-xs px-3 py-1 rounded-lg font-bold">${v.component}</span>
                             <div class="flex items-center gap-2">
                                 ${deadlineFormatted 
-                                    ? `<span class="bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900 text-xs px-3 py-1.5 rounded-xl font-bold flex items-center gap-1">⏰ آخر أجل لإنجاز الإعداد: ${deadlineFormatted}</span>` 
+                                    ? `<span class="bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900 text-xs px-3 py-1.5 rounded-xl font-bold flex items-center gap-1 shadow-sm">⏰ آخر أجل لإنجاز الإعداد: ${deadlineFormatted}</span>` 
                                     : `<span class="text-xs text-slate-400">تاريخ النشر: ${createDateStr}</span>`}
                             </div>
                         </div>
@@ -333,7 +408,7 @@
                     if (sub) {
                         if (sub.status === 'graded') {
                             h += `<div class="flex items-center gap-2 text-emerald-700 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-900/20 p-3.5 rounded-xl border border-emerald-100 dark:border-emerald-800/50">
-                                <span>✔️ تم التصحيح، نتيجتك هي: ${sub.score} / 20</span>
+                                <span>✔ تم التصحيح، نتيجتك هي: ${sub.score} / 20</span>
                             </div>`;
                         } else {
                             h += `<div class="flex items-center gap-2 text-indigo-700 dark:text-indigo-400 font-bold bg-indigo-50 dark:bg-indigo-900/20 p-3.5 rounded-xl border border-indigo-100 dark:border-indigo-800/50">
@@ -364,7 +439,7 @@
                             </button>
                             <div id="ans_box_${assId}" class="hidden mt-4 p-4 bg-indigo-50 dark:bg-slate-700 rounded-xl space-y-3 border border-indigo-100 dark:border-slate-600">
                                 <p class="text-xs font-bold text-indigo-800 dark:text-indigo-300 bg-white dark:bg-slate-800 p-2.5 rounded-lg border dark:border-slate-600 leading-relaxed">💡 قم بتصوير إنجازك أو رفعه على مساحتك في (Google Drive)، ثم انسخ الرابط والصقه هنا:</p>
-                                <input type="url" id="link_val_${assId}" placeholder="الصق الرابط هنا (https://...)" class="w-full p-3 border rounded-xl text-sm bg-white dark:bg-slate-800 dark:text-white dark:border-slate-500 text-left focus:ring-2 focus:ring-indigo-500 outline-none" dir="ltr">
+                                <input type="url" id="link_val_${assId}" dir="ltr" placeholder="الصق الرابط هنا (https://...)" class="w-full p-3 border rounded-xl text-sm bg-white dark:bg-slate-800 dark:text-white dark:border-slate-500 text-left focus:ring-2 focus:ring-indigo-500 outline-none">
                                 <button onclick="submitAssLink('${assId}')" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-emerald-600 text-white text-sm font-bold rounded-xl hover:bg-emerald-700 transition-all shadow-md">
                                     <span>🚀 الإرسال إلى الأستاذ</span>
                                 </button>
@@ -376,6 +451,7 @@
                 document.getElementById('assignments-list').innerHTML = h || '<p class="text-slate-500 text-center py-4 font-bold">لا توجد تكليفات مطلوبة حالياً.</p>';
             } catch(e){}
 
+            // الاختبارات
             try {
                 const qzSnap = await getDocs(query(collection(db, "quizzes"), where("level", "==", level))); 
                 let h = ''; 
